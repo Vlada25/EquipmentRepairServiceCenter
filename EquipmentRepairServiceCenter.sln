@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.API", "EquipmentRepairServiceCenter.API\EquipmentRepairServiceCenter.API.csproj", "{2F0C6308-217F-4ED5-9C63-D09CAB522EC3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.Domain", "EquipmentRepairServiceCenter.Domain\EquipmentRepairServiceCenter.Domain.csproj", "{283D19E8-0781-4C70-8BCD-BC3D43616888}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.Database", "EquipmentRepairServiceCenter.Database\EquipmentRepairServiceCenter.Database.csproj", "{A2B16776-F6A5-4D42-B4DE-CE34EDB64B56}"
@@ -13,16 +11,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCente
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.Interfaces", "EquipmentRepairServiceCenter.Interfaces\EquipmentRepairServiceCenter.Interfaces.csproj", "{2021F44E-078A-4F32-96AA-1B8E62AC8D8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.ASP", "EquipmentRepairServiceCenter.ASP\EquipmentRepairServiceCenter.ASP.csproj", "{8ACECFEC-D096-432B-802A-A3AF51D7DC1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.UnitTests", "EquipmentRepairServiceCenter.UnitTests\EquipmentRepairServiceCenter.UnitTests.csproj", "{0C906863-3209-40CD-9A47-6F7F6AD14F20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2F0C6308-217F-4ED5-9C63-D09CAB522EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F0C6308-217F-4ED5-9C63-D09CAB522EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F0C6308-217F-4ED5-9C63-D09CAB522EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F0C6308-217F-4ED5-9C63-D09CAB522EC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{283D19E8-0781-4C70-8BCD-BC3D43616888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{283D19E8-0781-4C70-8BCD-BC3D43616888}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{283D19E8-0781-4C70-8BCD-BC3D43616888}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +37,14 @@ Global
 		{2021F44E-078A-4F32-96AA-1B8E62AC8D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2021F44E-078A-4F32-96AA-1B8E62AC8D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2021F44E-078A-4F32-96AA-1B8E62AC8D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ACECFEC-D096-432B-802A-A3AF51D7DC1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ACECFEC-D096-432B-802A-A3AF51D7DC1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ACECFEC-D096-432B-802A-A3AF51D7DC1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ACECFEC-D096-432B-802A-A3AF51D7DC1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C906863-3209-40CD-9A47-6F7F6AD14F20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C906863-3209-40CD-9A47-6F7F6AD14F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C906863-3209-40CD-9A47-6F7F6AD14F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C906863-3209-40CD-9A47-6F7F6AD14F20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

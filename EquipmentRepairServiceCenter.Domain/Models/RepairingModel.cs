@@ -15,5 +15,6 @@ namespace EquipmentRepairServiceCenter.Domain.Models
         public string Manufacturer { get; set; }
         public string Specifications { get; set; }
         public string ParticularQualities { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }
