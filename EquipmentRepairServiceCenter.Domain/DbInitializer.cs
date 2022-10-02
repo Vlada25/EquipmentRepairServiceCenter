@@ -14,6 +14,8 @@ namespace EquipmentRepairServiceCenter.Domain
         public static List<UsedSparePart> UsedSpareParts { get; private set; }
         public static List<ServicedStore> SericedStores { get; private set; }
         public static List<RegisterUser> RegisterUsers { get; private set; }
+        public static List<Client> Clients { get; private set; }
+        public static List<Employee> Employees { get; private set; }
 
 
         public readonly static string[] _manufacturers =
@@ -424,18 +426,19 @@ namespace EquipmentRepairServiceCenter.Domain
                 int typeIndex = new Random((int)DateTime.Now.Ticks + i).Next(8);
                 int specificationsIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
                 int particularQualitiesIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
+                EquipmentType equipmentType = (EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(typeIndex);
 
                 RepairingModels.Add(new RepairingModel
                 {
                     Id = Guid.NewGuid(),
                     Name = $"" +
-                        $"{EnumExtensions.GetDisplayName(EnumExtensions.SetEquipmentType(typeIndex))} " +
+                        $"{EnumExtensions.GetDisplayName(equipmentType)} " +
                         $"{_manufacturers[manufacturerIndex]}",
-                    Type = EnumExtensions.SetEquipmentType(typeIndex),
+                    Type = equipmentType,
                     Manufacturer = _manufacturers[manufacturerIndex],
-                    Specifications = _specifications[EnumExtensions.SetEquipmentType(typeIndex)][specificationsIndex],
-                    ParticularQualities = _particularQualities[EnumExtensions.SetEquipmentType(typeIndex)][particularQualitiesIndex],
-                    PhotoUrl = _pictures[EnumExtensions.SetEquipmentType(typeIndex)]
+                    Specifications = _specifications[equipmentType][specificationsIndex],
+                    ParticularQualities = _particularQualities[equipmentType][particularQualitiesIndex],
+                    PhotoUrl = _pictures[equipmentType]
                 });
             }
 
@@ -465,7 +468,8 @@ namespace EquipmentRepairServiceCenter.Domain
                 decimal price = new Random((int)DateTime.Now.Ticks + i).Next(25, 347);
                 int sparePartFuncIndex = new Random((int)DateTime.Now.Ticks + i).Next(8);
                 int sparePartIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
-                var sparePartDescription = _sparePartsFunctions[EnumExtensions.SetEquipmentType(sparePartFuncIndex)];
+                EquipmentType equipmentType = (EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(sparePartFuncIndex);
+                var sparePartDescription = _sparePartsFunctions[equipmentType];
 
                 SpareParts.Add(new SparePart
                 {
@@ -473,7 +477,7 @@ namespace EquipmentRepairServiceCenter.Domain
                     Name = sparePartDescription[sparePartIndex].Split('*')[0],
                     Functions = sparePartDescription[sparePartIndex].Split('*')[1],
                     Price = price,
-                    EquipmentType = EnumExtensions.SetEquipmentType(sparePartFuncIndex)
+                    EquipmentType = equipmentType
                 });
             }
 
@@ -512,6 +516,11 @@ namespace EquipmentRepairServiceCenter.Domain
                     PhoneNumber = $"+375 (29) {phone}"
                 });
             }
+        }
+
+        public static void InitUsers(int count)
+        {
+            RegisterUsers = new List<RegisterUser>();
 
             for (int i = 0; i < 100; i++)
             {
@@ -550,6 +559,55 @@ namespace EquipmentRepairServiceCenter.Domain
                             Password = _manNames[nameIndex].ToLower() + i + "123",
                             ConfirmPassword = _manNames[nameIndex].ToLower() + i + "123"
                         });
+                }
+            }
+        }
+
+
+        public static void InitClients(List<User> users)
+        {
+            Clients = new List<Client>();
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                var registerUser = RegisterUsers.FirstOrDefault(ru => ru.UserName.Equals(users[i].UserName));
+                if (registerUser is not null)
+                {
+                    Clients.Add(new Client
+                    {
+                        Id = Guid.NewGuid(),
+                        Surname = registerUser.Surname,
+                        Name = registerUser.Name,
+                        MiddleName = registerUser.MiddleName,
+                        UserId = Guid.Parse(users[i].Id)
+                    });
+                }
+            }
+        }
+
+        public static void InitMasters(List<User> users)
+        {
+            Employees = new List<Employee>();
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                var registerUser = RegisterUsers.FirstOrDefault(ru => ru.UserName.Equals(users[i].UserName));
+                if (registerUser is not null)
+                {
+                    int positionIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
+                    int years = new Random((int)DateTime.Now.Ticks + i).Next(30);
+                    Position position = (Position)Enum.GetValues(typeof(Position)).GetValue(positionIndex);
+
+                    Employees.Add(new Employee
+                    {
+                        Id = Guid.NewGuid(),
+                        Surname = registerUser.Surname,
+                        Name = registerUser.Name,
+                        MiddleName = registerUser.MiddleName,
+                        Position = position,
+                        WorkExperienceInYears = years,
+                        UserId = Guid.Parse(users[i].Id)
+                    });
                 }
             }
         }

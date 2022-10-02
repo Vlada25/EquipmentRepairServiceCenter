@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EquipmentRepairServiceCenter.Domain.Models.User;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace EquipmentRepairServiceCenter.Interfaces
 {
     public interface IAuthenticationService
     {
+        Task<bool> ValidateUser(LoginUser loginUser);
+        Task<string> CreateToken();
     }
 }
