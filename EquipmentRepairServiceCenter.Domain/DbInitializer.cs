@@ -1,11 +1,8 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EquipmentRepairServiceCenter.Domain.Models.People;
+using EquipmentRepairServiceCenter.Domain.Models.User;
 
 namespace EquipmentRepairServiceCenter.Domain
 {
@@ -15,11 +12,77 @@ namespace EquipmentRepairServiceCenter.Domain
         public static List<RepairingModel> RepairingModels { get; private set; }
         public static List<SparePart> SpareParts { get; private set; }
         public static List<UsedSparePart> UsedSpareParts { get; private set; }
+        public static List<ServicedStore> SericedStores { get; private set; }
+        public static List<RegisterUser> RegisterUsers { get; private set; }
 
 
-        public readonly static string[] Manufacturers =
+        public readonly static string[] _manufacturers =
         {
             "Atlant", "Sony", "Philips", "Xiaomi", "Samsung", "Apple", "Panasonyc", "ASUS"
+        };
+
+        public readonly static string[] _towns =
+        {
+            "Minsk", "Gomel", "Brest", "Mogilev", "Zhlobin", "Slonim", "Rechica", "Baranovichi",
+            "Bobruisk", "Vitebsk", "Shklov", "Grodno"
+        };
+
+        public readonly static string[] _streets =
+        {
+            "Volkova", "Pervomaiskaya", "Shosseynaya", "Uritskogo", "Solnechnaya", "Sovietskaya",
+            "Bakunina", "Lenina", "Barykina", "Polevaya", "Rabochiaya", "Kozlova", "Karibskogo"
+        };
+
+        public readonly static string[] _storeNames =
+        {
+            "5 Element", "Elektrosila", "Technosila Plus", "Btv777", "Atlant Store", "Mediamax",
+            "Integral", "Povorot", "Big World", "All For Home", "Fora Plus", "Your Tech", "Deal Tech",
+            "Smail Bel", "TocLine", "Zeon"
+        };
+
+        #region Users
+
+        private readonly static string[] _surnames =
+        {
+            "Smirnov", "Ivanov", "Kuznecov", "Sokolov", "Popov", "Lebedev", "Kozlov", "Novikov", "Morozov",
+            "Petrov", "Volkov", "Soloviev", "Vasiliev", "Zaicev", "Pavlov", "Semenov", "Golubev", "Vinogradov",
+            "Bogdanov", "Vorobiev", "Fedorov", "Michailov", "Belyaev", "Tarasov", "Belov", "Komarov",
+            "Orlov", "Kiselev", "Makarov", "Andreev", "Kovalev", "Iliin", "Gusev"
+        };
+
+        private readonly static string[] _womanNames =
+        {
+            "Anastasiya", "Anna", "Mariya", "Elena", "Daria", "Alina", "Irina", "Ekaterina", "Arina", "Vladislava",
+            "Polina", "Olga", "Julia", "Tatiana", "Natalia", "Viktoria", "Elizaveta", "Ksenia", "Milana", "Veronika",
+            "Alisa", "Valeria", "Aleksandra", "Uliana", "Christina", "Sophia", "Lilia"
+        };
+
+        private readonly static string[] _manNames =
+        {
+            "Aleksandr", "Dmitriy", "Maksim", "Sergey", "Andrew", "Aleksey", "Artem", "Iliya", "Kirill", "Michail",
+            "Nikita", "Matvei", "Roman", "Egor", "Arseniy", "Ivan", "Denis", "Evgeniy", "Daniil", "Timofey",
+            "Vladislav", "Igor", "Vladimir", "Pavel", "Ruslan", "Mark", "Konstantin"
+        };
+
+        private readonly static string[] _middleNames =
+        {
+            "Aleksandrov", "Dmitriev", "Maksimov", "Sergeev", "Andreev", "Alekseev", "Kirillov", "Michailov",
+            "Matveev", "Romanov", "Egorov", "Arseniev", "Ivanov", "Denisov", "Evgeniev", "Danilov",
+            "Timofeev", "Vladislavov", "Igorev", "Vladimirov", "Pavlov", "Raslanov", "Konstantinov"
+        };
+
+        #endregion
+
+        private readonly static Dictionary<EquipmentType, string> _pictures = new Dictionary<EquipmentType, string>
+        {
+            { EquipmentType.Refrigerator, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVLQxG7-kWRtgJKf4mtrPoaNz2_KY0vCvHBg&usqp=CAU" },
+            { EquipmentType.CoffeeMachine, "https://m.sila.by/img/catalog2015/img12/tovar120235.jpg" },
+            { EquipmentType.Television, "https://www.creditasia.uz/upload/iblock/e8f/televizor-samsung-ue50au7100-1.png" },
+            { EquipmentType.Computer, "https://www.ixbt.com/img/r30/00/02/13/87/lenovov13015.jpg" },
+            { EquipmentType.Telephone, "https://xistore.by/upload/resize/element/83713/e41/3f16ad66ebe52bb7cb8ef6743ea77ddf_482_482_40@x2.jpg" },
+            { EquipmentType.Headphones, "https://images.deal.by/252995925_besprovodnye-50-bluetooth.jpg" },
+            { EquipmentType.Iron, "https://img.5element.by/import/images/ut/goods/good_cef1d12f-58ed-11e8-80c4-005056840c70/good_img_2b767908-5900-11e8-80c4-005056840c70_600.jpg" },
+            { EquipmentType.ElectricKettle, "https://images.deal.by/295895806_w640_h640_elektrochajnik-atlanta-ath-2462.jpg" }
         };
 
         private readonly static Dictionary<EquipmentType, string[]> _specifications = new Dictionary<EquipmentType, string[]>
@@ -259,7 +322,6 @@ namespace EquipmentRepairServiceCenter.Domain
             },
         };
 
-
         private readonly static Dictionary<EquipmentType, string[]> _sparePartsFunctions = new Dictionary<EquipmentType, string[]>
         {
             {EquipmentType.Refrigerator, new string[]
@@ -352,11 +414,13 @@ namespace EquipmentRepairServiceCenter.Domain
             RepairingModels = new List<RepairingModel>();
             SpareParts = new List<SparePart>();
             UsedSpareParts = new List<UsedSparePart>();
+            SericedStores = new List<ServicedStore>();
+            RegisterUsers = new List<RegisterUser>();
 
 
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 50; i++)
             {
-                int manufacturerIndex = new Random((int)DateTime.Now.Ticks + i).Next(Manufacturers.Length);
+                int manufacturerIndex = new Random((int)DateTime.Now.Ticks + i).Next(_manufacturers.Length);
                 int typeIndex = new Random((int)DateTime.Now.Ticks + i).Next(8);
                 int specificationsIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
                 int particularQualitiesIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
@@ -366,15 +430,16 @@ namespace EquipmentRepairServiceCenter.Domain
                     Id = Guid.NewGuid(),
                     Name = $"" +
                         $"{EnumExtensions.GetDisplayName(EnumExtensions.SetEquipmentType(typeIndex))} " +
-                        $"{Manufacturers[manufacturerIndex]}",
+                        $"{_manufacturers[manufacturerIndex]}",
                     Type = EnumExtensions.SetEquipmentType(typeIndex),
-                    Manufacturer = Manufacturers[manufacturerIndex],
+                    Manufacturer = _manufacturers[manufacturerIndex],
                     Specifications = _specifications[EnumExtensions.SetEquipmentType(typeIndex)][specificationsIndex],
-                    ParticularQualities = _particularQualities[EnumExtensions.SetEquipmentType(typeIndex)][particularQualitiesIndex]
+                    ParticularQualities = _particularQualities[EnumExtensions.SetEquipmentType(typeIndex)][particularQualitiesIndex],
+                    PhotoUrl = _pictures[EnumExtensions.SetEquipmentType(typeIndex)]
                 });
             }
 
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 100; i++)
             {
                 int repairingModelIndex = new Random((int)DateTime.Now.Ticks + i).Next(RepairingModels.Count);
                 decimal price = new Random((int)DateTime.Now.Ticks + i).Next(25, 347);
@@ -395,7 +460,7 @@ namespace EquipmentRepairServiceCenter.Domain
                 });
             }
 
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < 100; i++)
             {
                 decimal price = new Random((int)DateTime.Now.Ticks + i).Next(25, 347);
                 int sparePartFuncIndex = new Random((int)DateTime.Now.Ticks + i).Next(8);
@@ -412,9 +477,9 @@ namespace EquipmentRepairServiceCenter.Domain
                 });
             }
 
-            for (int i = 0; i < 5000; i++)
+            for (int i = 0; i < 1000; i++)
             {
-                int faultIndex = new Random((int)DateTime.Now.Ticks + i).Next(500);
+                int faultIndex = new Random((int)DateTime.Now.Ticks + i).Next(Faults.Count);
                 var fault = Faults[faultIndex];
 
                 List<SparePart> fitSpareParts = SpareParts
@@ -430,6 +495,62 @@ namespace EquipmentRepairServiceCenter.Domain
                     FaultId = fault.Id,
                     SparePartId = sparePart.Id
                 });
+            }
+
+            for (int i = 0; i < _storeNames.Length; i++)
+            {
+                int townIndex = new Random((int)DateTime.Now.Ticks + i).Next(_towns.Length);
+                int streetIndex = new Random((int)DateTime.Now.Ticks + i).Next(_streets.Length);
+                int houseNumber = new Random((int)DateTime.Now.Ticks + i).Next(1, 50);
+                int phone = new Random((int)DateTime.Now.Ticks + i).Next(1000000, 10000000);
+
+                SericedStores.Add(new ServicedStore
+                {
+                    Id = Guid.NewGuid(),
+                    Name = _storeNames[i],
+                    Address = _towns[townIndex] + ", " + _streets[streetIndex] + ", " + houseNumber,
+                    PhoneNumber = $"+375 (29) {phone}"
+                });
+            }
+
+            for (int i = 0; i < 100; i++)
+            {
+                int sex = new Random((int)DateTime.Now.Ticks + i).Next(2);
+                int surnameIndex = new Random((int)DateTime.Now.Ticks + i).Next(_surnames.Length);
+                int middleNameIndex = new Random((int)DateTime.Now.Ticks + i).Next(_middleNames.Length);
+
+                if (sex == 0)
+                {
+                    int nameIndex = new Random((int)DateTime.Now.Ticks + i).Next(_womanNames.Length);
+
+                    RegisterUsers.Add(
+                        new RegisterUser
+                        {
+                            Surname = _surnames[surnameIndex] + "a",
+                            Name = _womanNames[nameIndex],
+                            MiddleName = _middleNames[middleNameIndex] + "na",
+                            UserName = _womanNames[nameIndex].ToLower() + i,
+                            Email = _womanNames[nameIndex].ToLower() + i + "@gmail.com",
+                            Password = _womanNames[nameIndex].ToLower() + i + "123",
+                            ConfirmPassword = _womanNames[nameIndex].ToLower() + i + "123"
+                        });
+                }
+                else
+                {
+                    int nameIndex = new Random((int)DateTime.Now.Ticks + i).Next(_manNames.Length);
+
+                    RegisterUsers.Add(
+                        new RegisterUser
+                        {
+                            Surname = _surnames[surnameIndex],
+                            Name = _manNames[nameIndex],
+                            MiddleName = _middleNames[middleNameIndex] + "ich",
+                            UserName = _manNames[nameIndex].ToLower() + i,
+                            Email = _manNames[nameIndex].ToLower() + i + "@gmail.com",
+                            Password = _manNames[nameIndex].ToLower() + i + "123",
+                            ConfirmPassword = _manNames[nameIndex].ToLower() + i + "123"
+                        });
+                }
             }
         }
     }

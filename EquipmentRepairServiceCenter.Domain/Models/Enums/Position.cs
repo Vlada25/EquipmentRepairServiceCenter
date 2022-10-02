@@ -8,5 +8,8 @@ namespace EquipmentRepairServiceCenter.Domain.Models.Enums
 {
     public enum Position
     {
+        Engeneer,
+        SystemsEngineer,
+        ElectronicsEngineer
     }
 }
