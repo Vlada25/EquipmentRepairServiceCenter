@@ -57,6 +57,8 @@ namespace EquipmentRepairServiceCenter.Domain
             CreateMap<UsedSparePartForCreationDto, UsedSparePart>();
 
             CreateMap<User, UserDto>();
+            CreateMap<RegisterUser, User>();
+            CreateMap<LoginUser, User>();
         }
     }
 }

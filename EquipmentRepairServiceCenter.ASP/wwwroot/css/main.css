@@ -1,0 +1,33 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    background-color: #E3F2FF;
+    font-family: sans-serif;
+    color: #272773;
+}
+
+header {
+    padding: 20px 3% 20px 3%;
+    background-color: #C9DFFF;
+}
+
+h1 {
+    font-weight: normal;
+    margin: 0;
+}
+
+h2 {
+    font-weight: normal;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #272773;
+}
+
+﻿.error-mes-span {
+    margin-left: 5px;
+    font-size: 90%;
+    color: red;
+}

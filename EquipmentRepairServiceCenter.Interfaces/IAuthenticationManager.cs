@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Interfaces
 {
-    public interface IAuthenticationService
+    public interface IAuthenticationManager
     {
         Task<bool> ValidateUser(LoginUser loginUser);
         Task<string> CreateToken();

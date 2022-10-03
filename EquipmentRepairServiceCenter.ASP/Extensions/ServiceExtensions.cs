@@ -38,7 +38,7 @@ namespace EquipmentRepairServiceCenter.ASP.Extensions
         public static void ConfigureDbManagers(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<RoleManager<IdentityRole>>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
             services.AddScoped<IRepositoryManager, RepositoryManager>();
 
             services.AddScoped<IClientsService, ClientsService>();

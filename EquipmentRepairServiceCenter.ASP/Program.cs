@@ -37,11 +37,20 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.Use(async (context, next) =>
+{
+    var token = context.Request.Cookies["X-Access-Token"];
+    if (!string.IsNullOrEmpty(token))
+        context.Request.Headers.Add("Authorization", "Bearer " + token);
+
+    await next();
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/");
+        pattern: "{controller=Home}/{action=StartPage}/");
 
 app.Run();
