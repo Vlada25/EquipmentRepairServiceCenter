@@ -29,19 +29,13 @@ var mappingConfig = new MapperConfiguration(mc =>
 IMapper autoMapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(autoMapper);
 
+builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 app.UseStaticFiles();
 app.UseRouting();
-
-app.Use(async (context, next) =>
-{
-    var token = context.Request.Cookies["X-Access-Token"];
-    if (!string.IsNullOrEmpty(token))
-        context.Request.Headers.Add("Authorization", "Bearer " + token);
-
-    await next();
-});
 
 app.UseAuthentication();
 app.UseAuthorization();

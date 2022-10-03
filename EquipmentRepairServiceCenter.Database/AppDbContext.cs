@@ -27,6 +27,11 @@ namespace EquipmentRepairServiceCenter.Database
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Client).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Employee).WithMany().OnDelete(DeleteBehavior.NoAction);
+
             DbInitializer.Initialize();
 
             modelBuilder.ApplyConfiguration(new FaultsConfig());

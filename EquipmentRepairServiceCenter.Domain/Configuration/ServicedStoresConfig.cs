@@ -13,7 +13,7 @@ namespace EquipmentRepairServiceCenter.Domain.Configuration
     {
         public void Configure(EntityTypeBuilder<ServicedStore> builder)
         {
-            builder.HasData(DbInitializer.SpareParts);
+            builder.HasData(DbInitializer.SericedStores);
         }
     }
 }
