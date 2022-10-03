@@ -1,50 +1,86 @@
 ﻿using AutoMapper;
+using EquipmentRepairServiceCenter.Domain.Models.User;
 using EquipmentRepairServiceCenter.DTO.User;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentRepairServiceCenter.ASP.Services
 {
     public class UsersService : IUsersService
     {
-        private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public UsersService(IRepositoryManager repositoryManager,
+        public UsersService(UserManager<User> userManager,
             IMapper mapper)
         {
-            _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            var entity = await _repositoryManager.UsersRepository.GetById(id, trackChanges: false);
+            var user = await _userManager.FindByIdAsync(id.ToString());
 
-            if (entity == null)
+            if (user == null)
             {
                 return false;
             }
 
-            _repositoryManager.UsersRepository.Delete(entity);
-            await _repositoryManager.SaveAsync();
+            await _userManager.DeleteAsync(user);
 
             return true;
         }
 
-        public async Task<IEnumerable<UserDto>> GetAll()
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
-            var entities = await _repositoryManager.UsersRepository.GetAll(false);
+            var users = await _userManager.Users.ToListAsync();
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
 
-            return _mapper.Map<IEnumerable<UserDto>>(entities);
+            return usersDto;
         }
 
-
-        public async Task<UserDto> GetById(Guid id)
+        public async Task<IEnumerable<UserDto>> GetAllEmployeesAsync()
         {
-            var entity = await _repositoryManager.UsersRepository.GetById(id, false);
+            var users = _userManager.Users;
+            List<User> masters = new List<User>();
 
-            return _mapper.Map<UserDto>(entity);
+            foreach (var user in users)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                if (userRoles.Contains("Employee"))
+                {
+                    masters.Add(user);
+                }
+            }
+
+            return _mapper.Map<IEnumerable<UserDto>>(masters);
+        }
+
+        public async Task<UserDto> GetByIdAsync(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<UserDto>(user); ;
+        }
+
+        public async Task<UserDto> GetByLoginAsync(string login)
+        {
+            var user = await _userManager.FindByNameAsync(login);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<UserDto>(user);
         }
     }
 }

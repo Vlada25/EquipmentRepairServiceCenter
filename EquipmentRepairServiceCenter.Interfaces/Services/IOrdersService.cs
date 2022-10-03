@@ -13,6 +13,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Services
         Task<IEnumerable<Order>> GetAll();
         Task<Order> GetById(Guid id);
         Task<Order> Create(OrderForCreationDto entityForCreation);
+        Task CreateMany();
         Task<bool> Delete(Guid id);
         Task<bool> Update(OrderForUpdateDto entityForUpdate);
     }

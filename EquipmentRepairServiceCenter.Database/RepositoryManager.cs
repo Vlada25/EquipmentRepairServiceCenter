@@ -21,7 +21,6 @@ namespace EquipmentRepairServiceCenter.Database
         private IServicedStoresRepository _servicedStoresRepository;
         private ISparePartsRepository _sparePartsRepository;
         private IUsedSparePartsRepository _usedSparePartsRepository;
-        private IUsersRepository _usersRepository;
 
         public RepositoryManager(AppDbContext dbContext)
         {
@@ -121,18 +120,6 @@ namespace EquipmentRepairServiceCenter.Database
                     _usedSparePartsRepository = new UsedSparePartsRepository(_dbContext);
                 }
                 return _usedSparePartsRepository;
-            }
-        }
-
-        public IUsersRepository UsersRepository
-        {
-            get
-            {
-                if (_usersRepository == null)
-                {
-                    _usersRepository = new UsersRepository(_dbContext);
-                }
-                return _usersRepository;
             }
         }
 

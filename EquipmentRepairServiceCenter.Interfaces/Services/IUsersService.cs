@@ -9,8 +9,10 @@ namespace EquipmentRepairServiceCenter.Interfaces.Services
 {
     public interface IUsersService
     {
-        Task<IEnumerable<UserDto>> GetAll();
-        Task<UserDto> GetById(Guid id);
-        Task<bool> Delete(Guid id);
+        Task<IEnumerable<UserDto>> GetAllAsync();
+        Task<UserDto> GetByIdAsync(Guid id);
+        Task<UserDto> GetByLoginAsync(string login);
+        Task<bool> DeleteAsync(Guid id);
+        Task<IEnumerable<UserDto>> GetAllEmployeesAsync();
     }
 }

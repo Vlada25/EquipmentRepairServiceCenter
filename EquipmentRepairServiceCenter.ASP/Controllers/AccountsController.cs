@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Models.User;
 using EquipmentRepairServiceCenter.Interfaces;
+using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,18 +12,25 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     {
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAuthenticationManager _authManager;
+
+        private readonly IClientsService _clientsService;
+        private readonly IEmployeesService _employeesService;
+        private readonly IOrdersService _ordersService;
 
         public AccountsController(IAuthenticationManager authManager,
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IMapper mapper)
+            IMapper mapper,
+            IOrdersService ordersService,
+            IClientsService clientsService,
+            IEmployeesService employeesService)
         {
             _authManager = authManager;
             _userManager = userManager;
-            _roleManager = roleManager;
             _mapper = mapper;
+            _ordersService = ordersService;
+            _clientsService = clientsService;
+            _employeesService = employeesService;
         }
 
         [HttpGet]
@@ -80,6 +89,60 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             }
 
             return RedirectToRoute(new { controller = "Accounts", action = "Login" });
+        }
+
+        [HttpPost("[controller]/[action]")]
+        public async Task<IActionResult> CreateFakeUsers()
+        {
+            await RegisterFakeUser(new RegisterUser
+            {
+                Surname = "Leonenko",
+                Name = "Vladislava",
+                MiddleName = "Jurievna",
+                UserName = "aladka03",
+                Email = "aladka03@gmail.com",
+                Password = "admin1111",
+                ConfirmPassword = "admin1111"
+            }, 1);
+
+            DbInitializer.InitUsers(20);
+            foreach (RegisterUser registerUser in DbInitializer.RegisterUsers)
+            {
+                await RegisterFakeUser(registerUser, 2);
+            }
+            await _employeesService.CreateByUsers();
+
+            DbInitializer.InitUsers(50);
+            foreach (RegisterUser registerUser in DbInitializer.RegisterUsers)
+            {
+                await RegisterFakeUser(registerUser, 0);
+            }
+            await _clientsService.CreateByUsers();
+
+            await _ordersService.CreateMany();
+
+            return Ok();
+        }
+
+        private async Task RegisterFakeUser(RegisterUser registerUser, int role)
+        {
+            var user = _mapper.Map<User>(registerUser);
+
+            var result = await _userManager.CreateAsync(user, registerUser.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+                throw new Exception(ModelState.ToString());
+            }
+
+            if (role == 1)
+                await _userManager.AddToRolesAsync(user, new string[] {"Admin"});
+            if (role == 2)
+                await _userManager.AddToRolesAsync(user, new string[] { "Employee" });
         }
     }
 }

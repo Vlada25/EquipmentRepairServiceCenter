@@ -17,7 +17,6 @@ namespace EquipmentRepairServiceCenter.Interfaces
         IServicedStoresRepository ServicedStoresRepository { get; }
         ISparePartsRepository SparePartsRepository { get; }
         IUsedSparePartsRepository UsedSparePartsRepository { get; }
-        IUsersRepository UsersRepository { get; }
 
         Task SaveAsync();
     }

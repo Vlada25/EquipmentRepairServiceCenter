@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Order;
 using EquipmentRepairServiceCenter.Interfaces;
@@ -26,6 +27,21 @@ namespace EquipmentRepairServiceCenter.ASP.Services
             await _repositoryManager.SaveAsync();
 
             return entity;
+        }
+
+        public async Task CreateMany()
+        {
+            var faults = await _repositoryManager.FaultsRepository.GetAll(false);
+            var servicedStores = await _repositoryManager.ServicedStoresRepository.GetAll(false);
+
+            DbInitializer.InitOrders(faults.ToList(), servicedStores.ToList());
+
+            foreach (Order order in DbInitializer.Orders)
+            {
+                await _repositoryManager.OrdersRepository.Create(order);
+            }
+
+            await _repositoryManager.SaveAsync();
         }
 
         public async Task<bool> Delete(Guid id)

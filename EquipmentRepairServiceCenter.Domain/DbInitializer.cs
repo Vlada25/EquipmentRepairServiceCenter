@@ -12,10 +12,11 @@ namespace EquipmentRepairServiceCenter.Domain
         public static List<RepairingModel> RepairingModels { get; private set; }
         public static List<SparePart> SpareParts { get; private set; }
         public static List<UsedSparePart> UsedSpareParts { get; private set; }
-        public static List<ServicedStore> SericedStores { get; private set; }
+        public static List<ServicedStore> ServicedStores { get; private set; }
         public static List<RegisterUser> RegisterUsers { get; private set; }
         public static List<Client> Clients { get; private set; }
         public static List<Employee> Employees { get; private set; }
+        public static List<Order> Orders { get; private set; }
 
 
         public readonly static string[] _manufacturers =
@@ -416,7 +417,7 @@ namespace EquipmentRepairServiceCenter.Domain
             RepairingModels = new List<RepairingModel>();
             SpareParts = new List<SparePart>();
             UsedSpareParts = new List<UsedSparePart>();
-            SericedStores = new List<ServicedStore>();
+            ServicedStores = new List<ServicedStore>();
             RegisterUsers = new List<RegisterUser>();
 
 
@@ -508,7 +509,7 @@ namespace EquipmentRepairServiceCenter.Domain
                 int houseNumber = new Random((int)DateTime.Now.Ticks + i).Next(1, 50);
                 int phone = new Random((int)DateTime.Now.Ticks + i).Next(1000000, 10000000);
 
-                SericedStores.Add(new ServicedStore
+                ServicedStores.Add(new ServicedStore
                 {
                     Id = Guid.NewGuid(),
                     Name = _storeNames[i],
@@ -522,7 +523,7 @@ namespace EquipmentRepairServiceCenter.Domain
         {
             RegisterUsers = new List<RegisterUser>();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < count; i++)
             {
                 int sex = new Random((int)DateTime.Now.Ticks + i).Next(2);
                 int surnameIndex = new Random((int)DateTime.Now.Ticks + i).Next(_surnames.Length);
@@ -585,7 +586,7 @@ namespace EquipmentRepairServiceCenter.Domain
             }
         }
 
-        public static void InitMasters(List<User> users)
+        public static void InitEmployees(List<User> users)
         {
             Employees = new List<Employee>();
 
@@ -609,6 +610,65 @@ namespace EquipmentRepairServiceCenter.Domain
                         UserId = Guid.Parse(users[i].Id)
                     });
                 }
+            }
+        }
+
+        public static void InitOrders(List<Fault> faults, List<ServicedStore> servicedStores)
+        {
+            Orders = new List<Order>();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                int day = new Random((int)DateTime.Now.Ticks + i).Next(1, 29);
+                int month = new Random((int)DateTime.Now.Ticks + i).Next(1, 13);
+                int year = new Random((int)DateTime.Now.Ticks + i).Next(2017, 2022);
+                int repairingTime = new Random((int)DateTime.Now.Ticks + i).Next(5, 31);
+                int serialNumber = new Random((int)DateTime.Now.Ticks + i).Next(1000000, 10000000);
+
+                int newDay = day + repairingTime;
+                int newMonth = month;
+                int newYear = year;
+
+                int clientIndex = new Random((int)DateTime.Now.Ticks + i).Next(Clients.Count);
+                int employeeIndex = new Random((int)DateTime.Now.Ticks + i).Next(Employees.Count);
+                int faultIndex = new Random((int)DateTime.Now.Ticks + i).Next(faults.Count);
+                int servicedStoreIndex = new Random((int)DateTime.Now.Ticks + i).Next(servicedStores.Count);
+
+                int guarantee = new Random((int)DateTime.Now.Ticks + i).Next(2);
+
+                int[] periods = { 1, 2, 6, 12, 18, 24 };
+                int guaranteePeriod = new Random((int)DateTime.Now.Ticks + i).Next(periods.Length);
+                decimal price = new Random((int)DateTime.Now.Ticks + i).Next(5, 51);
+
+                if (day + repairingTime > 28)
+                {
+                    newDay = day + repairingTime - 28;
+                    
+                    if (month + 1 == 13)
+                    {
+                        newYear = year + 1;
+                        newMonth = 1;
+                    }
+                    else
+                    {
+                        newMonth = month + 1;
+                    }
+                }
+
+                Orders.Add(new Order
+                {
+                    Id = new Guid(),
+                    OrderDate = new DateTime(year, month, day),
+                    EquipmentSerialNumber = serialNumber,
+                    EquipmentReturnDate = new DateTime(newYear, newMonth, newDay),
+                    ClientId = Clients[clientIndex].Id,
+                    FaultId = faults[faultIndex].Id,
+                    ServicedStoreId = servicedStores[servicedStoreIndex].Id,
+                    Guarantee = guarantee == 0 ? false : true,
+                    GuaranteePeriodInMonth = guarantee == 0 ? 0 : periods[guaranteePeriod],
+                    Price = price,
+                    EmployeeId = Employees[employeeIndex].Id
+                });
             }
         }
     }

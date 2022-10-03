@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Models.People;
+using EquipmentRepairServiceCenter.Domain.Models.User;
 using EquipmentRepairServiceCenter.DTO.Client;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentRepairServiceCenter.ASP.Services
 {
@@ -10,12 +14,15 @@ namespace EquipmentRepairServiceCenter.ASP.Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
         public ClientsService(IRepositoryManager repositoryManager,
-            IMapper mapper)
+            IMapper mapper,
+            UserManager<User> userManager)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<Client> Create(ClientForCreationDto entityForCreation)
@@ -26,6 +33,19 @@ namespace EquipmentRepairServiceCenter.ASP.Services
             await _repositoryManager.SaveAsync();
 
             return entity;
+        }
+
+        public async Task CreateByUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            DbInitializer.InitClients(users);
+
+            foreach (Client entity in DbInitializer.Clients)
+            {
+                await _repositoryManager.ClientsRepository.Create(entity);
+            }
+
+            await _repositoryManager.SaveAsync();
         }
 
         public async Task<bool> Delete(Guid id)
