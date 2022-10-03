@@ -1,6 +1,69 @@
-﻿namespace EquipmentRepairServiceCenter.ASP.Services
+﻿using AutoMapper;
+using EquipmentRepairServiceCenter.Domain.Models;
+using EquipmentRepairServiceCenter.DTO.Order;
+using EquipmentRepairServiceCenter.Interfaces;
+using EquipmentRepairServiceCenter.Interfaces.Services;
+
+namespace EquipmentRepairServiceCenter.ASP.Services
 {
-    public class OrdersService
+    public class OrdersService : IOrdersService
     {
+        private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
+
+        public OrdersService(IRepositoryManager repositoryManager,
+            IMapper mapper)
+        {
+            _repositoryManager = repositoryManager;
+            _mapper = mapper;
+        }
+
+        public async Task<Order> Create(OrderForCreationDto entityForCreation)
+        {
+            var entity = _mapper.Map<Order>(entityForCreation);
+
+            await _repositoryManager.OrdersRepository.Create(entity);
+            await _repositoryManager.SaveAsync();
+
+            return entity;
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            var entity = await _repositoryManager.OrdersRepository.GetById(id, trackChanges: false);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _repositoryManager.OrdersRepository.Delete(entity);
+            await _repositoryManager.SaveAsync();
+
+            return true;
+        }
+
+        public async Task<IEnumerable<Order>> GetAll() =>
+            await _repositoryManager.OrdersRepository.GetAll(false);
+
+        public async Task<Order> GetById(Guid id) =>
+            await _repositoryManager.OrdersRepository.GetById(id, false);
+
+        public async Task<bool> Update(OrderForUpdateDto entityForUpdate)
+        {
+            var entity = await _repositoryManager.OrdersRepository.GetById(entityForUpdate.Id, trackChanges: true);
+
+            if (entity == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(entityForUpdate, entity);
+
+            _repositoryManager.OrdersRepository.Update(entity);
+            await _repositoryManager.SaveAsync();
+
+            return true;
+        }
     }
 }

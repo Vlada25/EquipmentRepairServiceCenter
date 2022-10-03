@@ -1,5 +1,8 @@
-﻿using EquipmentRepairServiceCenter.Database;
+﻿using EquipmentRepairServiceCenter.ASP.Services;
+using EquipmentRepairServiceCenter.Database;
 using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Interfaces;
+using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -35,10 +38,18 @@ namespace EquipmentRepairServiceCenter.ASP.Extensions
         public static void ConfigureDbManagers(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<RoleManager<IdentityRole>>();
-            //services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
 
-            //services.AddScoped<IUsersService, UsersService>();
-            //services.AddScoped<IRolesService, RolesService>();
+            services.AddScoped<IClientsService, ClientsService>();
+            services.AddScoped<IEmployeesService, EmployeesService>();
+            services.AddScoped<IFaultsService, FaultsService>();
+            services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<IRepairingModelsService, RepairingModelsService>();
+            services.AddScoped<IServicedStoresService, ServicedStoresService>();
+            services.AddScoped<ISparePartsService, SparePartsService>();
+            services.AddScoped<IUsedSparePartsService, UsedSparePartsService>();
+            services.AddScoped<IUsersService, UsersService>();
         }
 
         public static void ConfigureIdentity(this IServiceCollection services)
