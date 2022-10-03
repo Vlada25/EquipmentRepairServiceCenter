@@ -12,8 +12,6 @@ namespace EquipmentRepairServiceCenter.Interfaces.Repositories
         Task<IEnumerable<User>> GetAll(bool trackChanges);
         Task<User> GetById(Guid id, bool trackChanges);
         Task Create(User entity);
-        Task Create(IEnumerable<User> entities);
-        Task Delete(User entity);
-        Task Update(User entity);
+        void Delete(User entity);
     }
 }

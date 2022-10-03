@@ -12,8 +12,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Repositories
         Task<IEnumerable<SparePart>> GetAll(bool trackChanges);
         Task<SparePart> GetById(Guid id, bool trackChanges);
         Task Create(SparePart entity);
-        Task Create(IEnumerable<SparePart> entities);
-        Task Delete(SparePart entity);
-        Task Update(SparePart entity);
+        void Delete(SparePart entity);
+        void Update(SparePart entity);
     }
 }

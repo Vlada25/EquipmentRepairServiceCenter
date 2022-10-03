@@ -9,10 +9,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EquipmentRepairServiceCenter.Domain\EquipmentRepairServiceCenter.Domain.csproj" />
+    <ProjectReference Include="..\EquipmentRepairServiceCenter.Interfaces\EquipmentRepairServiceCenter.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

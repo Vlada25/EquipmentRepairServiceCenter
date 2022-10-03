@@ -12,8 +12,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Repositories
         Task<IEnumerable<RepairingModel>> GetAll(bool trackChanges);
         Task<RepairingModel> GetById(Guid id, bool trackChanges);
         Task Create(RepairingModel entity);
-        Task Create(IEnumerable<RepairingModel> entities);
-        Task Delete(RepairingModel entity);
-        Task Update(RepairingModel entity);
+        void Delete(RepairingModel entity);
+        void Update(RepairingModel entity);
     }
 }

@@ -12,8 +12,6 @@ namespace EquipmentRepairServiceCenter.Interfaces.Repositories
         Task<IEnumerable<UsedSparePart>> GetAll(bool trackChanges);
         Task<UsedSparePart> GetById(Guid id, bool trackChanges);
         Task Create(UsedSparePart entity);
-        Task Create(IEnumerable<UsedSparePart> entities);
-        Task Delete(UsedSparePart entity);
-        Task Update(UsedSparePart entity);
+        void Delete(UsedSparePart entity);
     }
 }
