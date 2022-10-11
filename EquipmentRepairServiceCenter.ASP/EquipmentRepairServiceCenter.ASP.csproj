@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Views\Clients\" />
-    <Folder Include="Views\Employees\" />
     <Folder Include="Views\Faults\" />
     <Folder Include="Views\Users\" />
     <Folder Include="Views\SpareParts\" />

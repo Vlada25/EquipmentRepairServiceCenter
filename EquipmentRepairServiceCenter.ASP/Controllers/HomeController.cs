@@ -8,7 +8,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            // some text
             return View();
         }
 

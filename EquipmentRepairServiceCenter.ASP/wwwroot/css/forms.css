@@ -5,13 +5,19 @@
 
 .getting-form {
     margin-bottom: 25px;
+    box-sizing: border-box;
+    padding-left: 10px;
 }
 
 .getting-form input {
-    width: 500px;
-    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .input-props {
-    width: 300px;
+    width: 200px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-top: 10px;
 }
