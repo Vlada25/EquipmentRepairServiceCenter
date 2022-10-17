@@ -39,3 +39,24 @@ a {
 #main {
     padding: 0 3% 0 3%;
 }
+
+.a_addit {
+    font-weight: bold;
+    margin-left: 10px;
+    margin-bottom: 15px;
+}
+
+.main-menu{
+    width: 30%;
+    margin: 30px 0 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.main-menu li {
+    padding: 10px 20px 10px 20px;
+    margin-top: 5px;
+    background-color: #C9DFFF;
+    border-radius: 5px;
+    font-size: 120%;
+}

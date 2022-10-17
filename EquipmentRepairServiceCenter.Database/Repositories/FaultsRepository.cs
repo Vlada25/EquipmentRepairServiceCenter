@@ -18,10 +18,10 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
         public async Task Create(Fault entity) => await CreateEntity(entity);
 
         public async Task<IEnumerable<Fault>> GetAll(bool trackChanges) =>
-            await GetAllEntities(trackChanges).ToListAsync();
+            await GetAllEntities(trackChanges).Include(f => f.RepairingModel).ToListAsync();
 
         public async Task<Fault> GetById(Guid id, bool trackChanges) =>
-            await GetByCondition(e => e.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
+            await GetByCondition(e => e.Id.Equals(id), trackChanges).Include(f => f.RepairingModel).SingleOrDefaultAsync();
 
         public void Delete(Fault entity) => DeleteEntity(entity);
 

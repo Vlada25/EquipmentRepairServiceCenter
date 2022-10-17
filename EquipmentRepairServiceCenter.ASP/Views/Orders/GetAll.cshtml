@@ -1,0 +1,74 @@
+﻿@model OrdersClientsEmployees
+
+@{
+    ViewData["Title"] = "Orders";
+
+    var clientsFio = Model.Clients
+       .Select(i => new SelectListItem() 
+       { Text = $"{i.Surname} {i.Name} {i.MiddleName}", 
+         Value = $"{i.Surname} {i.Name} {i.MiddleName}" })
+       .ToList();
+
+    var employeesInfo = Model.Employees
+       .Select(i => new SelectListItem() 
+       { Text = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}", 
+         Value = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}" })
+       .ToList();
+}
+
+<div>
+    <h3 class="h3-above-table">Orders</h3>
+
+    <form class="getting-form" asp-action="GetAllByProps" method="get">
+        <input type="date" name="dateTime"/>
+        <select class="select-props" name="clientFio" asp-items="@clientsFio">
+            <option selected></option>
+        </select>
+        <select class="select-props" name="employeeFio" asp-items="@employeesInfo">
+            <option selected></option>
+        </select>
+        <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
+    </form>  
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Order Date</th>
+                <th>Equipment Serial Number</th>
+                <th>Equipment Return Date</th>
+                <th>Client</th>
+                <th>Fault</th>
+                <th>Serviced Store</th>
+                <th>Employee</th>
+                <th>Price</th>
+                <th>Guarantee (months)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in @Model.Orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.OrderDate</td>
+                    <td>@order.EquipmentSerialNumber</td>
+                    <td>@order.EquipmentReturnDate</td>
+                    <td>@order.Client.Surname @order.Client.Name @order.Client.MiddleName</td>
+                    <td>@order.Fault.Name, @order.Fault.RepairingModel.Name</td>
+                    <td>@order.ServicedStore.Name</td>
+                    <td>@order.Employee.Surname @order.Employee.Name @order.Employee.MiddleName, @order.Employee.Position</td>
+                    <td>@order.Price</td>
+                    @if (@order.Guarantee)
+                    {
+                        <td>@order.GuaranteePeriodInMonth</td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/Index">Back</a>
+</div>

@@ -24,7 +24,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBySurname(string surname, string name, string middleName, int workExperience)
+        public async Task<IActionResult> GetAllByProps(string surname, string name, string middleName, int workExperience)
         {
             var employees = await _employeesService.GetAll();
 

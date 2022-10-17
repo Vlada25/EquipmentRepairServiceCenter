@@ -1,0 +1,31 @@
+﻿@model RepairingModelDto
+
+@{
+    ViewData["Title"] = "Repairing Model";
+}
+
+<div>
+    <h3 class="h3-above-table">Repairing Model</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Specifications</th>
+                <th>Particular Qualities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Id</td>
+                <td>@Model.Name</td>
+                <td>@Model.Manufacturer</td>
+                <td>@Model.Specifications</td>
+                <td>@Model.ParticularQualities</td>
+            </tr>
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/Index">Back</a>
+</div>

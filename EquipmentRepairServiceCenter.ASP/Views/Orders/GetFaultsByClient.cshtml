@@ -1,0 +1,47 @@
+﻿@model OrdersClientsEmployees
+
+@{
+    ViewData["Title"] = "Faults By Client";
+
+    var fio = Model.Clients
+       .Select(i => new SelectListItem() 
+       { Text = $"{i.Surname} {i.Name} {i.MiddleName}", 
+         Value = $"{i.Surname} {i.Name} {i.MiddleName}" })
+       .ToList();
+}
+
+<div>
+    <h3 class="h3-above-table">Faults By Client</h3>
+
+    <form class="getting-form" asp-action="GetFaultsByClientFio" method="get">
+        <select class="select-props" name="clientFio" asp-items="@fio"></select>
+        <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
+    </form>  
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Repairing Model</th>
+                <th>Repairing Methods</th>
+                <th>Price</th>
+                <th>Client</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in @Model.Orders)
+            {
+                <tr>
+                    <td>@order.Fault.Id</td>
+                    <td>@order.Fault.Name</td>
+                    <td>@order.Fault.RepairingModel.Name</td>
+                    <td>@order.Fault.RepairingMethods</td>
+                    <td>@order.Fault.Price</td>
+                    <td>@order.Client.Surname @order.Client.Name @order.Client.MiddleName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/Index">Back</a>
+</div>

@@ -1,0 +1,42 @@
+﻿@model List<Fault>
+
+@{
+    ViewData["Title"] = "Faults";
+}
+
+<div>
+    <h3 class="h3-above-table">Faults</h3>
+
+    <form class="getting-form" asp-action="GetAllByProps" method="get">
+        <input class="input-props" type="text" name="repairingModelName" placeholder="Name (or part of name) of repairing model"/>
+        <input class="input-props" type="text" name="name" placeholder="Fault name or part of fault name"/>
+        <input class="input-props" type="text" name="repairingMethods" placeholder="Part of srring of repairing methods"/>
+        <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
+        <a class="a_addit" href="/Orders/GetFaultsByClient">Search by clients</a>
+    </form>  
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Repairing Model</th>
+                <th>Repairing Methods</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var fault in @Model)
+            {
+                <tr>
+                    <td>@fault.Id</td>
+                    <td>@fault.Name</td>
+                    <td><a href="/RepairingModels/GetById?id=@fault.RepairingModelId" style="text-decoration: underline;">@fault.RepairingModel.Name</a></td>
+                    <td>@fault.RepairingMethods</td>
+                    <td>@fault.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/Index">Back</a>
+</div>

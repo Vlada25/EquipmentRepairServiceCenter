@@ -5,13 +5,19 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
     public class HomeController : Controller
     {
-        [Authorize]
+        //[Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult StartPage()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminsPage()
         {
             return View();
         }

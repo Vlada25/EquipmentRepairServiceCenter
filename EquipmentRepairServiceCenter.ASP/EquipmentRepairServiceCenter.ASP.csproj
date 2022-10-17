@@ -22,12 +22,9 @@
 
   <ItemGroup>
     <Folder Include="Views\Clients\" />
-    <Folder Include="Views\Faults\" />
     <Folder Include="Views\Users\" />
     <Folder Include="Views\SpareParts\" />
     <Folder Include="Views\ServicedStores\" />
-    <Folder Include="Views\RepairingModels\" />
-    <Folder Include="Views\Orders\" />
   </ItemGroup>
 
 </Project>

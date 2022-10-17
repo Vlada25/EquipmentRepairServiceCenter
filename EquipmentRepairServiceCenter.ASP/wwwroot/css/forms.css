@@ -15,7 +15,15 @@
 }
 
 .input-props {
-    width: 200px;
+    width: 300px;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+
+.select-props {
+    width: 350px;
     padding: 5px 5px 5px 5px;
     border-radius: 5px;
     border: 1px solid black;

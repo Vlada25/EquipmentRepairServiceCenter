@@ -1,12 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
     public class RepairingModelsController : Controller
     {
-        public IActionResult Index()
+        private readonly IRepairingModelsService _repairingModelsService;
+
+        public RepairingModelsController(IRepairingModelsService repairingModelsService)
         {
-            return View();
+            _repairingModelsService = repairingModelsService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var repairingModel = await _repairingModelsService.GetById(id);
+
+            return View(repairingModel);
         }
     }
 }
