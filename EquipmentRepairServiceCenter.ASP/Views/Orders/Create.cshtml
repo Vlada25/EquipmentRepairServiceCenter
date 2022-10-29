@@ -1,0 +1,66 @@
+﻿@model OrderCreatedForView
+
+@{
+    ViewData["Title"] = "Orders";
+
+    var employeesInfo = Model.Employees
+       .Select(i => new SelectListItem() 
+       { Text = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}", 
+         Value = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}" })
+       .ToList();
+
+    var equipmentTypes = Model.EquipmentTypes
+        .Select(i => new SelectListItem() { Text = i, Value = i });
+
+    var manufacturers = Model.Manufacturers
+        .Select(i => new SelectListItem() { Text = i, Value = i });
+}
+
+<div>
+    <h3 class="h3-above-table">Do Order</h3>
+
+    <form class="creation-form" method="post" asp-action="Register">
+        <div class="field-container">
+            <label asp-for="RepairingModelType">Equipnemt Type</label>
+            <div>
+                <select class="select-props" asp-for="RepairingModelType" asp-items="@equipmentTypes"></select>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="RepairingModelManufacturer">Equipment Manufacturer</label>
+            <div>
+                <select class="select-props" asp-for="RepairingModelManufacturer" asp-items="@manufacturers"></select>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="RepairingModelSpecifications">Equipment Specifications</label>
+            <div>
+                <input class="input-props" asp-for="RepairingModelSpecifications"/>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="RepairingModelParticularQualities">Equipment Particular Qualities</label>
+            <div>
+                <input class="input-props" asp-for="RepairingModelParticularQualities"/>
+                <span class="error-mes-span" asp-validation-for="RepairingModelParticularQualities"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="RepairingModelPhotoUrl">Photo Url</label>
+            <div>
+                <input class="input-props" asp-for="RepairingModelPhotoUrl"/>
+                <span class="error-mes-span" asp-validation-for="RepairingModelPhotoUrl"></span>
+            </div>
+        </div>
+
+        <div class="action-btn-container">
+            <button class="action-btn" type="submit">Register</button>
+        </div>
+    </form>
+    
+    <a class="back-btn" href="/Home/Index">Back</a>
+</div>

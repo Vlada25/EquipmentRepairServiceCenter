@@ -60,3 +60,7 @@ a {
     border-radius: 5px;
     font-size: 120%;
 }
+
+img {
+    width: 100px;
+}

@@ -19,7 +19,7 @@ namespace EquipmentRepairServiceCenter.Domain
         public static List<Order> Orders { get; private set; }
 
 
-        public readonly static string[] _manufacturers =
+        public readonly static string[] Manufacturers =
         {
             "Atlant", "Sony", "Philips", "Xiaomi", "Samsung", "Apple", "Panasonyc", "ASUS"
         };
@@ -208,7 +208,7 @@ namespace EquipmentRepairServiceCenter.Domain
             },
         };
 
-        private readonly static Dictionary<EquipmentType, string[]> _faultsRepairingMethods = new Dictionary<EquipmentType, string[]>
+        public readonly static Dictionary<EquipmentType, string[]> FaultsRepairingMethods = new Dictionary<EquipmentType, string[]>
         {
             {EquipmentType.Refrigerator, new string[]
                 {
@@ -423,7 +423,7 @@ namespace EquipmentRepairServiceCenter.Domain
 
             for (int i = 0; i < 50; i++)
             {
-                int manufacturerIndex = new Random((int)DateTime.Now.Ticks + i).Next(_manufacturers.Length);
+                int manufacturerIndex = new Random((int)DateTime.Now.Ticks + i).Next(Manufacturers.Length);
                 int typeIndex = new Random((int)DateTime.Now.Ticks + i).Next(8);
                 int specificationsIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
                 int particularQualitiesIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
@@ -434,9 +434,9 @@ namespace EquipmentRepairServiceCenter.Domain
                     Id = Guid.NewGuid(),
                     Name = $"" +
                         $"{EnumExtensions.GetDisplayName(equipmentType)} " +
-                        $"{_manufacturers[manufacturerIndex]}",
+                        $"{Manufacturers[manufacturerIndex]}",
                     Type = equipmentType,
-                    Manufacturer = _manufacturers[manufacturerIndex],
+                    Manufacturer = Manufacturers[manufacturerIndex],
                     Specifications = _specifications[equipmentType][specificationsIndex],
                     ParticularQualities = _particularQualities[equipmentType][particularQualitiesIndex],
                     PhotoUrl = _pictures[equipmentType]
@@ -449,7 +449,7 @@ namespace EquipmentRepairServiceCenter.Domain
                 decimal price = new Random((int)DateTime.Now.Ticks + i).Next(25, 347);
 
                 RepairingModel repairingModel = RepairingModels[repairingModelIndex];
-                string[] faultsRepMethods = _faultsRepairingMethods[repairingModel.Type];
+                string[] faultsRepMethods = FaultsRepairingMethods[repairingModel.Type];
 
                 int repMethodIndex = new Random((int)DateTime.Now.Ticks + i).Next(faultsRepMethods.Length);
                 string repMethod = faultsRepMethods[repMethodIndex];
@@ -586,7 +586,7 @@ namespace EquipmentRepairServiceCenter.Domain
             }
         }
 
-        public static void InitEmployees(List<User> users)
+        public static void InitEmployees(List<User> users, List<ServicedStore> servicedStores)
         {
             Employees = new List<Employee>();
 
@@ -598,6 +598,7 @@ namespace EquipmentRepairServiceCenter.Domain
                     int positionIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
                     int years = new Random((int)DateTime.Now.Ticks + i).Next(30);
                     Position position = (Position)Enum.GetValues(typeof(Position)).GetValue(positionIndex);
+                    int servicedStoreIndex = new Random((int)DateTime.Now.Ticks + i).Next(servicedStores.Count);
 
                     Employees.Add(new Employee
                     {
@@ -607,7 +608,8 @@ namespace EquipmentRepairServiceCenter.Domain
                         MiddleName = registerUser.MiddleName,
                         Position = position,
                         WorkExperienceInYears = years,
-                        UserId = Guid.Parse(users[i].Id)
+                        UserId = Guid.Parse(users[i].Id),
+                        ServicedStoreId = servicedStores[servicedStoreIndex].Id
                     });
                 }
             }

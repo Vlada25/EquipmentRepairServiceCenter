@@ -14,7 +14,9 @@
     <h3 class="h3-above-table">Faults By Client</h3>
 
     <form class="getting-form" asp-action="GetFaultsByClientFio" method="get">
-        <select class="select-props" name="clientFio" asp-items="@fio"></select>
+        <select class="select-props" name="clientFio" asp-items="@fio">
+            <option selected disabled style="color: gray;">Client</option>
+        </select>
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
     </form>  
 
@@ -43,5 +45,5 @@
             }
         </tbody>
     </table>
-    <a class="back-btn" href="/Home/Index">Back</a>
+    <a class="back-btn" href="/Faults/GetAll">Back</a>
 </div>

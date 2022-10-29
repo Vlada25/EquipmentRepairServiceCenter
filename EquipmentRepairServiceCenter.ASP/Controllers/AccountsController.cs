@@ -105,7 +105,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 ConfirmPassword = "admin1111"
             }, 1);
 
-            DbInitializer.InitUsers(20);
+            DbInitializer.InitUsers(100);
             foreach (RegisterUser registerUser in DbInitializer.RegisterUsers)
             {
                 await RegisterFakeUser(registerUser, 2);

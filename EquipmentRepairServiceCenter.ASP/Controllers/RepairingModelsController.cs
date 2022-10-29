@@ -19,5 +19,13 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             return View(repairingModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var repairingModels = await _repairingModelsService.GetAll();
+
+            return View(repairingModels);
+        }
     }
 }

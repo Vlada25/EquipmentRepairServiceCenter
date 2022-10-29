@@ -38,7 +38,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
         public async Task CreateByUsers()
         {
             var users = await _userManager.Users.ToListAsync();
-            DbInitializer.InitEmployees(users);
+            var servicedStores = await _repositoryManager.ServicedStoresRepository.GetAll(false);
+
+            DbInitializer.InitEmployees(users, servicedStores.ToList());
 
             foreach (Employee entity in DbInitializer.Employees)
             {

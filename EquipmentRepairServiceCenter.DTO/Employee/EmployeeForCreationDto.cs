@@ -14,5 +14,6 @@ namespace EquipmentRepairServiceCenter.DTO.Employee
         public Guid UserId { get; set; }
         public string Position { get; set; }
         public int WorkExperienceInYears { get; set; }
+        public Guid ServicedStoreId { get; set; }
     }
 }

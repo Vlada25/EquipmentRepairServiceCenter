@@ -41,6 +41,8 @@ namespace EquipmentRepairServiceCenter.ASP.Extensions
             services.AddScoped<IAuthenticationManager, AuthenticationManager>();
             services.AddScoped<IRepositoryManager, RepositoryManager>();
 
+            services.AddHttpContextAccessor();
+
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IEmployeesService, EmployeesService>();
             services.AddScoped<IFaultsService, FaultsService>();

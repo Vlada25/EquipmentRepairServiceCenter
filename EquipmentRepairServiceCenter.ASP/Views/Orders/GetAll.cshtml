@@ -20,12 +20,16 @@
     <h3 class="h3-above-table">Orders</h3>
 
     <form class="getting-form" asp-action="GetAllByProps" method="get">
-        <input type="date" name="dateTime"/>
+        <div class="date-container">
+            <span>Order date:</span>
+            <input type="date" name="dateTime" style="margin-left: 15px;"/>
+        </div>
+   
         <select class="select-props" name="clientFio" asp-items="@clientsFio">
-            <option selected></option>
+            <option selected>Client</option>
         </select>
         <select class="select-props" name="employeeFio" asp-items="@employeesInfo">
-            <option selected></option>
+            <option selected>Employee</option>
         </select>
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
     </form>  
@@ -70,5 +74,5 @@
             }
         </tbody>
     </table>
-    <a class="back-btn" href="/Home/Index">Back</a>
+    <a class="back-btn" href="/Home/AdminsPage">Back</a>
 </div>

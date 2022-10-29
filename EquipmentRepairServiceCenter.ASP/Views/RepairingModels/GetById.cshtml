@@ -15,6 +15,7 @@
                 <th>Manufacturer</th>
                 <th>Specifications</th>
                 <th>Particular Qualities</th>
+                <th>Photo</th>
             </tr>
         </thead>
         <tbody>
@@ -24,8 +25,9 @@
                 <td>@Model.Manufacturer</td>
                 <td>@Model.Specifications</td>
                 <td>@Model.ParticularQualities</td>
+                <td><img src="@Model.PhotoUrl" alt="@Model.Name"/></td>
             </tr>
         </tbody>
     </table>
-    <a class="back-btn" href="/Home/Index">Back</a>
+    <a class="back-btn" href="/Faults/GetAll">Back</a>
 </div>
