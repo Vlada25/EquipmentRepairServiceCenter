@@ -4,22 +4,30 @@
     ViewData["Title"] = "Orders";
 
     var employeesInfo = Model.Employees
-       .Select(i => new SelectListItem() 
-       { Text = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}", 
-         Value = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}" })
-       .ToList();
+       .Select(i => new SelectListItem()
+               {
+                   Text = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}",
+                   Value = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}"
+               });
 
     var equipmentTypes = Model.EquipmentTypes
         .Select(i => new SelectListItem() { Text = i, Value = i });
 
     var manufacturers = Model.Manufacturers
         .Select(i => new SelectListItem() { Text = i, Value = i });
+
+    var servicedStores = Model.ServicedStores
+        .Select(i => new SelectListItem()
+                {
+                    Text = $"{i.Name}; {i.Address}",
+                    Value = $"{i.Name}; {i.Address}"
+                });
 }
 
 <div>
-    <h3 class="h3-above-table">Do Order</h3>
+    <h3>Order</h3>
 
-    <form class="creation-form" method="post" asp-action="Register">
+    <form class="creation-form" method="post" asp-action="Create">
         <div class="field-container">
             <label asp-for="RepairingModelType">Equipnemt Type</label>
             <div>
@@ -57,8 +65,30 @@
             </div>
         </div>
 
+        <div class="field-container">
+            <label asp-for="FaultName">Fault</label>
+            <div>
+                <input class="input-props" asp-for="FaultName" />
+                <span class="error-mes-span" asp-validation-for="FaultName"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="EmployeeInfo">Employee</label>
+            <div>
+                <select class="select-props" asp-for="EmployeeInfo" asp-items="@employeesInfo"></select>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="ServicedStore">Serviced Store</label>
+            <div>
+                <select class="select-props" asp-for="ServicedStore" asp-items="@servicedStores"></select>
+            </div>
+        </div>
+
         <div class="action-btn-container">
-            <button class="action-btn" type="submit">Register</button>
+            <button class="action-btn" type="submit">Submit</button>
         </div>
     </form>
     

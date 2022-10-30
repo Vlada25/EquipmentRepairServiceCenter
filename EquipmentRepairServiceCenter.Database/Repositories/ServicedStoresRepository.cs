@@ -2,11 +2,6 @@
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Database.Repositories
 {
@@ -27,5 +22,8 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
 
         public void Update(ServicedStore entity) =>
             UpdateEntity(entity);
+
+        public async Task<ServicedStore> GetByNameAndAddress(string name, string address) =>
+            await GetByCondition(e => e.Name.Equals(name) && e.Address.Equals(address), false).SingleOrDefaultAsync();
     }
 }

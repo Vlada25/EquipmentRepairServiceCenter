@@ -645,7 +645,7 @@ namespace EquipmentRepairServiceCenter.Domain
                 if (day + repairingTime > 28)
                 {
                     newDay = day + repairingTime - 28;
-                    
+
                     if (month + 1 == 13)
                     {
                         newYear = year + 1;

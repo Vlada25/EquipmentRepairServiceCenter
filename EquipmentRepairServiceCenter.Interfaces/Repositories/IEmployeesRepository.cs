@@ -1,9 +1,4 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Models.People;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Interfaces.Repositories
 {
@@ -11,6 +6,8 @@ namespace EquipmentRepairServiceCenter.Interfaces.Repositories
     {
         Task<IEnumerable<Employee>> GetAll(bool trackChanges);
         Task<Employee> GetById(Guid id, bool trackChanges);
+        Task<Employee> GetByUserId(Guid userId, bool trackChanges);
+        Task<Employee> GetByFullNameAndPosition(string surname, string name, string middleName, int position);
         Task Create(Employee entity);
         void Delete(Employee entity);
         void Update(Employee entity);

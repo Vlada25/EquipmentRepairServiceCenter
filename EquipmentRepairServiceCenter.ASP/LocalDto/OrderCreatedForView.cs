@@ -1,4 +1,4 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models.People;
+﻿using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Employee;
 
 namespace EquipmentRepairServiceCenter.ASP.LocalDto
@@ -16,10 +16,13 @@ namespace EquipmentRepairServiceCenter.ASP.LocalDto
 
         // Fault
         public string FaultName { get; set; }
-        public string Faults { get; set; }
 
         // Employee
         public string EmployeeInfo { get; set; }
         public List<EmployeeDto> Employees { get; set; }
+
+        // ServicedStore
+        public string ServicedStore { get; set; }
+        public List<ServicedStore> ServicedStores { get; set; }
     }
 }

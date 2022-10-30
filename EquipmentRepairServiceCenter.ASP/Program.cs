@@ -1,7 +1,6 @@
 using AutoMapper;
 using EquipmentRepairServiceCenter.ASP.Extensions;
 using EquipmentRepairServiceCenter.Domain;
-using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +50,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/");
+        pattern: "{controller=Home}/{action=StartPage}/");
 
 app.Run();

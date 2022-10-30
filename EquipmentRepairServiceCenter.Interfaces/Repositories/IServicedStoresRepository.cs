@@ -1,9 +1,4 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Interfaces.Repositories
 {
@@ -11,6 +6,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Repositories
     {
         Task<IEnumerable<ServicedStore>> GetAll(bool trackChanges);
         Task<ServicedStore> GetById(Guid id, bool trackChanges);
+        Task<ServicedStore> GetByNameAndAddress(string name, string address);
         Task Create(ServicedStore entity);
         void Delete(ServicedStore entity);
         void Update(ServicedStore entity);

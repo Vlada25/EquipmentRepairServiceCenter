@@ -1,5 +1,4 @@
-﻿using EquipmentRepairServiceCenter.DTO.Employee;
-using EquipmentRepairServiceCenter.Interfaces.Services;
+﻿using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +31,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             if (name is null) name = Guid.NewGuid().ToString();
             if (middleName is null) middleName = Guid.NewGuid().ToString();
 
-            return View("GetAll", employees.Where(e => 
+            return View("GetAll", employees.Where(e =>
                 e.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase) ||
                 e.Name.Contains(name, StringComparison.OrdinalIgnoreCase) ||
                 e.MiddleName.Contains(middleName, StringComparison.OrdinalIgnoreCase) ||

@@ -2,11 +2,6 @@
 using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Database.Repositories
 {
@@ -27,5 +22,12 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
 
         public void Update(Employee entity) =>
             UpdateEntity(entity);
+
+        public async Task<Employee> GetByFullNameAndPosition(string surname, string name, string middleName, int position) =>
+            await GetByCondition(e => e.Surname.Equals(surname) && e.Name.Equals(name) &&
+                e.MiddleName.Equals(middleName) && (int)e.Position == position, false).FirstOrDefaultAsync();
+
+        public async Task<Employee> GetByUserId(Guid userId, bool trackChanges) =>
+            await GetByCondition(e => e.UserId.Equals(userId), trackChanges).FirstOrDefaultAsync();
     }
 }

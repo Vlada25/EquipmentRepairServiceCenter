@@ -1,0 +1,65 @@
+﻿@model OrderUpdatedForView
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div>
+    <h3>Order</h3>
+
+    <form class="creation-form" method="post" asp-action="Update">
+        <div class="field-container">
+            <label>Repairing Model:</label>
+            <label>&nbsp;&nbsp;Name: @Model.RepairingModelName</label>
+            <label>&nbsp;&nbsp;Specifications: @Model.RepairingModelName</label>
+            <label>&nbsp;&nbsp;Particular Qualities: @Model.RepairingModelName</label>
+            <br />
+            <label>Fault Name: @Model.FaultName</label>
+            <br />
+        </div>
+        
+        <div class="field-container">
+            <label>Id</label>
+                <input class="input-props" type="text" name="id" value="@Model.Id" readonly />
+            <br>
+        </div>
+        
+        <div class="field-container">
+            <label asp-for="RepairingMethods">Repairing Methods</label>
+            <div>
+                <input class="input-props" asp-for="RepairingMethods" />
+                <span class="error-mes-span" asp-validation-for="RepairingMethods"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="RepairingTimeInDays">Repairing Time (Days)</label>
+            <div>
+                <input class="input-props" type="number" asp-for="RepairingTimeInDays" />
+                <span class="error-mes-span" asp-validation-for="RepairingTimeInDays"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Price">Price</label>
+            <div>
+                <input class="input-props" type="number" asp-for="Price" />
+                <span class="error-mes-span" asp-validation-for="Price"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="GuaranteeInMonth">Guarantee (Months)</label>
+            <div>
+                <input class="input-props" type="number" asp-for="GuaranteeInMonth" />
+                <span class="error-mes-span" asp-validation-for="GuaranteeInMonth"></span>
+            </div>
+        </div>
+
+        <div class="action-btn-container">
+            <button class="action-btn" type="submit">Submit</button>
+        </div>
+    </form>
+
+    <a class="back-btn" href="/Home/Index">Back</a>
+</div>

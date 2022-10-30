@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EquipmentRepairServiceCenter.Domain.Models.User;
 using EquipmentRepairServiceCenter.DTO.User;
-using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -1,0 +1,72 @@
+﻿@model List<Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div>
+    <h3 class="h3-above-table">Orders</h3>
+
+    <form class="getting-form" asp-action="GetForEmployeeSearch" method="get">
+        <div class="date-container">
+            <span>Order date:</span>
+            <input type="date" name="dateTime" style="margin-left: 15px;" />
+        </div>
+        <br />
+        <div class="date-container">
+            <span>Status:</span>
+            <select class="select-props" name="clientFio" style="margin-left: 15px;">
+                <option selected>All</option>
+                <option>In Waiting</option>
+            </select>
+        </div>
+        <br />
+        <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order Date</th>
+                <th>Equipment Serial Number</th>
+                <th>Equipment Return Date</th>
+                <th>Client</th>
+                <th>Fault</th>
+                <th>Serviced Store</th>
+                <th>Employee</th>
+                <th>Price</th>
+                <th>Guarantee (months)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in @Model)
+            {
+                <tr>
+                    <td>@order.OrderDate</td>
+                    <td>
+                        @order.EquipmentSerialNumber
+                        <br>
+                        @if (order.Price == 0){
+                            <a href="/Orders/Update?orderId=@order.Id">(Fill additional info)</a>
+                        }
+                    </td>
+                    <td>@order.EquipmentReturnDate</td>
+                    <td>@order.Client.Surname @order.Client.Name @order.Client.MiddleName</td>
+                    <td>@order.Fault.Name, @order.Fault.RepairingModel.Name</td>
+                    <td>@order.ServicedStore.Name</td>
+                    <td>@order.Employee.Surname @order.Employee.Name @order.Employee.MiddleName, @order.Employee.Position</td>
+                    <td>@order.Price</td>
+                    @if (@order.Guarantee)
+                    {
+                        <td>@order.GuaranteePeriodInMonth</td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/AdminsPage">Back</a>
+</div>

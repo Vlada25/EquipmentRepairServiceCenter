@@ -2,8 +2,12 @@
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
+using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.DTO.Fault;
+using EquipmentRepairServiceCenter.DTO.Order;
+using EquipmentRepairServiceCenter.DTO.RepairingModel;
 using EquipmentRepairServiceCenter.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -14,17 +18,29 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         private readonly IOrdersService _ordersService;
         private readonly IClientsService _clientsService;
         private readonly IEmployeesService _employeesService;
+        private readonly IServicedStoresService _servicedStoresService;
+        private readonly IFaultsService _faultsService;
+        private readonly IRepairingModelsService _repairingModelsService;
+        private readonly UserManager<User> _userManager;
         private readonly HttpContext _httpContext;
 
         public OrdersController(IOrdersService ordersService,
             IClientsService clientsService,
             IEmployeesService employeesService,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IServicedStoresService servicedStoresService,
+            IFaultsService faultsService,
+            UserManager<User> userManager,
+            IRepairingModelsService repairingModelsService)
         {
             _ordersService = ordersService;
             _clientsService = clientsService;
             _employeesService = employeesService;
             _httpContext = httpContextAccessor.HttpContext;
+            _servicedStoresService = servicedStoresService;
+            _faultsService = faultsService;
+            _userManager = userManager;
+            _repairingModelsService = repairingModelsService;
         }
 
         [HttpGet]
@@ -42,6 +58,46 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             };
 
             return View(ordersClients);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetForEmployee()
+        {
+            var userName = _httpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var employee = await _employeesService.GetByUserId(Guid.Parse(user.Id));
+
+            var orders = await _ordersService.GetByEmployeeId(employee.Id);
+
+            return View(orders);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetForEmployeeSearch(DateTime dateTime, string status)
+        {
+            var userName = _httpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var employee = await _employeesService.GetByUserId(Guid.Parse(user.Id));
+
+            var orders = await _ordersService.GetByEmployeeId(employee.Id);
+
+            if (dateTime > new DateTime(2016, 12, 12))
+                orders = orders.Where(o => o.OrderDate.Equals(dateTime));
+
+            if (status != "All")
+                orders = orders.Where(o => o.Price == 0);
+
+            return View("GetForEmployee", orders.ToList());
         }
 
         [HttpGet]
@@ -69,8 +125,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View("GetFaultsByClient", new OrdersClientsEmployees
                 {
-                    Orders= orders.ToList(),
-                    Clients= clients.ToList()
+                    Orders = orders.ToList(),
+                    Clients = clients.ToList()
                 });
             }
 
@@ -78,7 +134,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             OrdersClientsEmployees ordersClients = new OrdersClientsEmployees
             {
-                Orders = orders.Where(o => 
+                Orders = orders.Where(o =>
                     o.Client.Surname.Equals(fio[0])
                     && o.Client.Name.Equals(fio[1])
                     && o.Client.MiddleName.Equals(fio[2])).ToList(),
@@ -146,24 +202,31 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
+            var userName = _httpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            if (userRoles.Contains("Employee"))
+            {
+                return RedirectToRoute(new { controller = "Orders", action = "GetForEmployee" });
+            }
+
             var employees = await _employeesService.GetAll();
             var eqTypes = new List<string>();
-            var faultNames = new List<string>();
+            var servicedStores = await _servicedStoresService.GetAll();
 
             foreach (int i in Enum.GetValues(typeof(EquipmentType)))
                 eqTypes.Add(EnumExtensions.GetDisplayName((EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(i)));
-
-            foreach (var val in DbInitializer.FaultsRepairingMethods.Values)
-            {
-
-            }
 
             OrderCreatedForView orderCreated = new OrderCreatedForView
             {
                 Employees = employees.ToList(),
                 EquipmentTypes = eqTypes,
                 Manufacturers = DbInitializer.Manufacturers.ToList(),
-                 
+                ServicedStores = servicedStores.ToList(),
             };
 
             return View(orderCreated);
@@ -176,7 +239,92 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 .Where(claim => claim.Type.Equals(ClaimTypes.Name))
                 .Select(claim => claim.Value).SingleOrDefault();
 
-            return View();
+            var user = await _userManager.FindByNameAsync(userName);
+            var client = await _clientsService.GetByUserId(Guid.Parse(user.Id));
+
+            string[] servicedStoreInfo = orderCreated.ServicedStore.Split("; ");
+            var servicedStore = await _servicedStoresService.GetByNameAndAddress(
+                servicedStoreInfo[0], servicedStoreInfo[1]);
+
+            string[] employeeInfo = orderCreated.EmployeeInfo.Split(", ");
+            string[] employeeFullName = employeeInfo[0].Split(' ');
+            var employee = await _employeesService.GetByFullNameAndPosition(
+                employeeFullName[0], employeeFullName[1], employeeFullName[2], employeeInfo[1]);
+
+            var repairingModel = await _repairingModelsService.Create(new RepairingModelForCreationDto
+            {
+                Name = orderCreated.RepairingModelType + " " + orderCreated.RepairingModelManufacturer,
+                Type = orderCreated.RepairingModelType,
+                Manufacturer = orderCreated.RepairingModelManufacturer,
+                Specifications = orderCreated.RepairingModelSpecifications,
+                ParticularQualities = orderCreated.RepairingModelParticularQualities,
+                PhotoUrl = orderCreated.RepairingModelPhotoUrl
+            });
+
+            var fault = await _faultsService.Create(new FaultForCreationDto
+            {
+                Name = orderCreated.FaultName,
+                RepairingModelId = repairingModel.Id,
+                RepairingMethods = "-",
+                Price = 0
+            });
+
+            var order = new OrderForCreationDto
+            {
+                OrderDate = DateTime.Now,
+                EquipmentSerialNumber = new Random((int)DateTime.Now.Ticks).Next(1000000, 10000000),
+                EquipmentReturnDate = new DateTime(),
+                ClientId = client.Id,
+                FaultId = fault.Id,
+                ServicedStoreId = servicedStore.Id,
+                Guarantee = false,
+                GuaranteePeriodInMonth = 0,
+                Price = 0,
+                EmployeeId = employee.Id
+            };
+
+            await _ordersService.Create(order);
+
+            return View("InfoPage");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid orderId)
+        {
+            var order = await _ordersService.GetById(orderId);
+
+            return View(new OrderUpdatedForView
+            {
+                Id = orderId,
+                RepairingModelName = order.Fault.RepairingModel.Name,
+                RepairingModelSpecifications = order.Fault.RepairingModel.Specifications,
+                RepairingModelParticularQualities = order.Fault.RepairingModel.ParticularQualities,
+                FaultName = order.Fault.Name
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(OrderUpdatedForView orderUpdated)
+        {
+            var order = await _ordersService.GetById(orderUpdated.Id);
+
+            await _faultsService.Update(new FaultForUpdateDto
+            {
+                Id = order.FaultId,
+                RepairingMethods = orderUpdated.RepairingMethods,
+                Price = orderUpdated.Price
+            });
+
+            await _ordersService.Update(new OrderForUpdateDto
+            {
+                Id = order.Id,
+                Price = orderUpdated.Price,
+                EquipmentReturnDate = order.OrderDate.AddDays(orderUpdated.RepairingTimeInDays),
+                Guarantee = orderUpdated.GuaranteeInMonth == 0 ? false : true,
+                GuaranteePeriodInMonth = orderUpdated.GuaranteeInMonth
+            });
+
+            return View("InfoPage");
         }
     }
 }

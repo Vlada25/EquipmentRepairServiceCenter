@@ -69,6 +69,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
         public async Task<Client> GetById(Guid id) =>
             await _repositoryManager.ClientsRepository.GetById(id, false);
 
+        public async Task<Client> GetByUserId(Guid userId) =>
+            await _repositoryManager.ClientsRepository.GetByUserId(userId, trackChanges: false);
+
         public async Task<bool> Update(ClientForUpdateDto entityForUpdate)
         {
             var entity = await _repositoryManager.OrdersRepository.GetById(entityForUpdate.Id, trackChanges: true);

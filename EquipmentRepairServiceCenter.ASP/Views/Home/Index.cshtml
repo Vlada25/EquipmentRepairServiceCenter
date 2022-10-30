@@ -1,4 +1,21 @@
-﻿<ul class="main-menu">
-    <li><a href="/Orders/Create">Do Order</a></li>
-    <li><a href="/Home/AdminsPage">Page For Admins</a></li>
-</ul>
+﻿@model ExpandedUser
+
+<h2 style ="margin-top: 50px;">
+    Hello, @Model.UserName!
+</h2>
+
+<div class="index-container">
+    <div class="user-info-container">
+        <b style="font-size: 110%;">User Info</b>
+        <hr />
+        <p>@Model.Surname @Model.Name @Model.MiddleName</p>
+        <p>@Model.Email</p>
+        <br />
+        <p>Status: @Model.Role</p>
+    </div>
+
+    <ul class="main-menu">
+        <li><a href="/Orders/Create">Order</a></li>
+        <li><a href="/Home/AdminsPage">Page For Admins</a></li>
+    </ul>
+</div>

@@ -1,10 +1,4 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models;
-using EquipmentRepairServiceCenter.DTO.RepairingModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EquipmentRepairServiceCenter.DTO.RepairingModel;
 
 namespace EquipmentRepairServiceCenter.Interfaces.Services
 {

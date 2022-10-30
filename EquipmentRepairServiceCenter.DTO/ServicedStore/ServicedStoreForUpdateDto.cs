@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EquipmentRepairServiceCenter.DTO.ServicedStore
+﻿namespace EquipmentRepairServiceCenter.DTO.ServicedStore
 {
     public class ServicedStoreForUpdateDto
     {

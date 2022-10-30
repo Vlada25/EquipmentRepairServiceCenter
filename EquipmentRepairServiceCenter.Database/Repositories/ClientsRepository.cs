@@ -2,11 +2,6 @@
 using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Database.Repositories
 {
@@ -27,5 +22,8 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
 
         public void Update(Client entity) =>
             UpdateEntity(entity);
+
+        public async Task<Client> GetByUserId(Guid userId, bool trackChanges) =>
+            await GetByCondition(e => e.UserId.Equals(userId), trackChanges).SingleOrDefaultAsync();
     }
 }

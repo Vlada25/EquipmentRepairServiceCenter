@@ -1,11 +1,5 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Models.People;
-using EquipmentRepairServiceCenter.Domain.Models.User;
 using EquipmentRepairServiceCenter.DTO.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Interfaces.Services
 {
@@ -13,6 +7,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Services
     {
         Task<IEnumerable<Client>> GetAll();
         Task<Client> GetById(Guid id);
+        Task<Client> GetByUserId(Guid userId);
         Task<Client> Create(ClientForCreationDto entityForCreation);
         Task CreateByUsers();
         Task<bool> Delete(Guid id);

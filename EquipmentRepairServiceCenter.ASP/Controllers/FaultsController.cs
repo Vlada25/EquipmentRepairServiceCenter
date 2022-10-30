@@ -29,7 +29,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             if (name is null) name = Guid.NewGuid().ToString();
             if (repairingMethods is null) repairingMethods = Guid.NewGuid().ToString();
 
-            return View("GetAll", faults.Where(f => 
+            return View("GetAll", faults.Where(f =>
                 f.RepairingModel.Name.Contains(repairingModelName, StringComparison.OrdinalIgnoreCase) ||
                 f.Name.Contains(name, StringComparison.OrdinalIgnoreCase) ||
                 f.RepairingMethods.Contains(repairingMethods, StringComparison.OrdinalIgnoreCase))

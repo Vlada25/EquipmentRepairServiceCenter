@@ -62,6 +62,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
         public async Task<IEnumerable<Order>> GetAll() =>
             await _repositoryManager.OrdersRepository.GetAll(false);
 
+        public async Task<IEnumerable<Order>> GetByEmployeeId(Guid employeeId) =>
+            await _repositoryManager.OrdersRepository.GetByEmployeeId(employeeId);
+
         public async Task<Order> GetById(Guid id) =>
             await _repositoryManager.OrdersRepository.GetById(id, false);
 

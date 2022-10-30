@@ -1,10 +1,5 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.ServicedStore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.Interfaces.Services
 {
@@ -12,6 +7,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Services
     {
         Task<IEnumerable<ServicedStore>> GetAll();
         Task<ServicedStore> GetById(Guid id);
+        Task<ServicedStore> GetByNameAndAddress(string name, string address);
         Task<ServicedStore> Create(ServicedStoreForCreationDto entityForCreation);
         Task<bool> Delete(Guid id);
         Task<bool> Update(ServicedStoreForUpdateDto entityForUpdate);

@@ -140,7 +140,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             }
 
             if (role == 1)
-                await _userManager.AddToRolesAsync(user, new string[] {"Admin"});
+                await _userManager.AddToRolesAsync(user, new string[] { "Admin" });
             if (role == 2)
                 await _userManager.AddToRolesAsync(user, new string[] { "Employee" });
         }

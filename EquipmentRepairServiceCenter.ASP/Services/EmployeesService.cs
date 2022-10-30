@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EquipmentRepairServiceCenter.Domain;
+using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Domain.Models.User;
 using EquipmentRepairServiceCenter.DTO.Employee;
@@ -71,7 +72,12 @@ namespace EquipmentRepairServiceCenter.ASP.Services
 
             return _mapper.Map<IEnumerable<EmployeeDto>>(entities);
         }
-            
+
+        public async Task<Employee> GetByFullNameAndPosition(string surname, string name, string middleName, string position)
+        {
+            int pos = (int)EnumExtensions.SetPosition(position, true);
+            return await _repositoryManager.EmployeesRepository.GetByFullNameAndPosition(surname, name, middleName, pos);
+        }
 
         public async Task<EmployeeDto> GetById(Guid id)
         {
@@ -79,7 +85,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
 
             return _mapper.Map<EmployeeDto>(entity);
         }
-            
+
+        public async Task<Employee> GetByUserId(Guid userId) =>
+            await _repositoryManager.EmployeesRepository.GetByUserId(userId, false);
 
         public async Task<bool> Update(EmployeeForUpdateDto entityForUpdate)
         {
