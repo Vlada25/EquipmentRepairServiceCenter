@@ -61,6 +61,21 @@ a {
     font-size: 120%;
 }
 
+.main-menu-admin {
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.main-menu-admin li {
+    padding: 10px 20px 10px 20px;
+    margin-top: 5px;
+    background-color: #C9DFFF;
+    border-radius: 5px;
+    font-size: 120%;
+}
+
 img {
     width: 100px;
 }

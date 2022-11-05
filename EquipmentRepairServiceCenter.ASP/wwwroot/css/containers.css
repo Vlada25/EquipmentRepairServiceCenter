@@ -45,3 +45,17 @@
     font-size: 110%;
     border-right: 1px solid #272773;
 }
+
+.admins-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.inner-admins-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

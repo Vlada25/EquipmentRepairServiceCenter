@@ -1,9 +1,9 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Employee;
 
-namespace EquipmentRepairServiceCenter.ASP.LocalDto
+namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
-    public class OrderCreatedForView
+    public class OrderCreatedViewModel
     {
         // RepairingModel
         public string RepairingModelType { get; set; }

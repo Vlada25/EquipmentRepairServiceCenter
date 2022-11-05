@@ -1,6 +1,6 @@
-﻿namespace EquipmentRepairServiceCenter.ASP.LocalDto
+﻿namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
-    public class ExpandedUser
+    public class ExpandedUserViewModel
     {
         public string UserName { get; set; }
         public string Email { get; set; }

@@ -1,4 +1,4 @@
-﻿using EquipmentRepairServiceCenter.ASP.LocalDto;
+﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain.Models.User;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +41,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 var employee = await _employeesService.GetByUserId(Guid.Parse(user.Id));
 
-                return View(new ExpandedUser
+                return View(new ExpandedUserViewModel
                 {
                     UserName = userName,
                     Email = user.Email,
@@ -52,9 +52,22 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
+            if (userRoles.Contains("Admin"))
+            {
+                return View(new ExpandedUserViewModel
+                {
+                    UserName = userName,
+                    Email = user.Email,
+                    Surname = "Leonenko",
+                    Name = "Vladislava",
+                    MiddleName = "Urievna",
+                    Role = "Admin"
+                });
+            }
+
             var client = await _clientsService.GetByUserId(Guid.Parse(user.Id));
 
-            return View(new ExpandedUser
+            return View(new ExpandedUserViewModel
             {
                 UserName = userName,
                 Email = user.Email,

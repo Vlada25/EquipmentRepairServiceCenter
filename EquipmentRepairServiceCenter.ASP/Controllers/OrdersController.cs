@@ -1,4 +1,4 @@
-﻿using EquipmentRepairServiceCenter.ASP.LocalDto;
+﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
@@ -50,7 +50,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             var clients = await _clientsService.GetAll();
             var employees = await _employeesService.GetAll();
 
-            OrdersClientsEmployees ordersClients = new OrdersClientsEmployees
+            OrdersClientsEmployeesViewModel ordersClients = new OrdersClientsEmployeesViewModel
             {
                 Orders = orders.ToList(),
                 Clients = clients.ToList(),
@@ -106,7 +106,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             var orders = await _ordersService.GetAll();
             var clients = await _clientsService.GetAll();
 
-            OrdersClientsEmployees ordersClients = new OrdersClientsEmployees
+            OrdersClientsEmployeesViewModel ordersClients = new OrdersClientsEmployeesViewModel
             {
                 Orders = orders.ToList(),
                 Clients = clients.ToList()
@@ -123,7 +123,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             if (clientFio == null)
             {
-                return View("GetFaultsByClient", new OrdersClientsEmployees
+                return View("GetFaultsByClient", new OrdersClientsEmployeesViewModel
                 {
                     Orders = orders.ToList(),
                     Clients = clients.ToList()
@@ -132,7 +132,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             var fio = clientFio.Split(' ');
 
-            OrdersClientsEmployees ordersClients = new OrdersClientsEmployees
+            OrdersClientsEmployeesViewModel ordersClients = new OrdersClientsEmployeesViewModel
             {
                 Orders = orders.Where(o =>
                     o.Client.Surname.Equals(fio[0])
@@ -189,7 +189,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                     && o.Employee.MiddleName.Equals(eFio[2]));
             }
 
-            OrdersClientsEmployees ordersClients = new OrdersClientsEmployees
+            OrdersClientsEmployeesViewModel ordersClients = new OrdersClientsEmployeesViewModel
             {
                 Orders = orders.ToList(),
                 Clients = clients.ToList(),
@@ -221,7 +221,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             foreach (int i in Enum.GetValues(typeof(EquipmentType)))
                 eqTypes.Add(EnumExtensions.GetDisplayName((EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(i)));
 
-            OrderCreatedForView orderCreated = new OrderCreatedForView
+            OrderCreatedViewModel orderCreated = new OrderCreatedViewModel
             {
                 Employees = employees.ToList(),
                 EquipmentTypes = eqTypes,
@@ -233,7 +233,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(OrderCreatedForView orderCreated)
+        public async Task<IActionResult> Create(OrderCreatedViewModel orderCreated)
         {
             var userName = _httpContext.User.Claims
                 .Where(claim => claim.Type.Equals(ClaimTypes.Name))
@@ -293,7 +293,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             var order = await _ordersService.GetById(orderId);
 
-            return View(new OrderUpdatedForView
+            return View(new OrderUpdatedViewModel
             {
                 Id = orderId,
                 RepairingModelName = order.Fault.RepairingModel.Name,
@@ -304,7 +304,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(OrderUpdatedForView orderUpdated)
+        public async Task<IActionResult> Update(OrderUpdatedViewModel orderUpdated)
         {
             var order = await _ordersService.GetById(orderUpdated.Id);
 

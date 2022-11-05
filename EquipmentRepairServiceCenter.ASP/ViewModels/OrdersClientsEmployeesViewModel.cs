@@ -2,9 +2,9 @@
 using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.DTO.Employee;
 
-namespace EquipmentRepairServiceCenter.ASP.LocalDto
+namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
-    public class OrdersClientsEmployees
+    public class OrdersClientsEmployeesViewModel
     {
         public List<Order> Orders { get; set; }
         public List<Client> Clients { get; set; }

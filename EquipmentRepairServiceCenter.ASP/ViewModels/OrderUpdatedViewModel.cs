@@ -1,6 +1,6 @@
-﻿namespace EquipmentRepairServiceCenter.ASP.LocalDto
+﻿namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
-    public class OrderUpdatedForView
+    public class OrderUpdatedViewModel
     {
         public Guid Id { get; set; }
 
