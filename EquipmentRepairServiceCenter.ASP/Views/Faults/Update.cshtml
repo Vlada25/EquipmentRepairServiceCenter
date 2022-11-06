@@ -1,30 +1,17 @@
-﻿@model FaultCreatedViewModel
+﻿@model FaultForUpdateDto
 
 @{
     ViewData["Title"] = "Faults";
-
-    var repairingModels = Model.RepairingModels
-        .Select(i => new SelectListItem() { 
-            Text = $"{i.Id}, {i.Name}", 
-            Value = $"{i.Id}, {i.Name}" });
 }
 
 <div style="margin-bottom: 50px;">
-    <h3>Fault Creation</h3>
+    <h3>Fault Update</h3>
 
-    <form class="creation-form" method="post" asp-action="Create">
+    <form class="creation-form" method="post" asp-action="Update">
         <div class="field-container">
-            <label asp-for="Name"></label>
+            <label asp-for="Id"></label>
             <div>
-                <input class="input-props" asp-for="Name" />
-                <span class="error-mes-span" asp-validation-for="Name"></span>
-            </div>
-        </div>
-
-        <div class="field-container">
-            <label asp-for="RepairingModel">Repairing Model</label>
-            <div>
-                <select class="select-props" asp-for="RepairingModel" asp-items="@repairingModels"></select>
+                <input class="input-props" asp-for="Id" readonly />
             </div>
         </div>
 
@@ -45,7 +32,7 @@
         </div>
 
         <div class="action-btn-container">
-            <button class="action-btn" type="submit">Create</button>
+            <button class="action-btn" type="submit">Update</button>
             <a class="back-btn" href="/Home/AdminsPage">Back</a>
         </div>
     </form>
