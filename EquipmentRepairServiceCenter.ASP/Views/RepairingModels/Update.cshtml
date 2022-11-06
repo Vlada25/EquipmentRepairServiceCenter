@@ -1,30 +1,17 @@
-﻿@model RepairingModelCreatedViewModel
+﻿@model RepairingModelForUpdateDto
 
 @{
     ViewData["Title"] = "Repairing Models";
-
-    var equipmentTypes = Model.EquipmentTypes
-        .Select(i => new SelectListItem() { Text = i, Value = i });
-
-    var manufacturers = Model.Manufacturers
-        .Select(i => new SelectListItem() { Text = i, Value = i });
 }
 
-<div style="margin-bottom: 50px;">
-    <h3>Repairing Model Creation</h3>
+<div>
+    <h3>Repairing Model Update</h3>
 
-    <form class="creation-form" method="post" asp-action="Create">
+    <form class="creation-form" method="post" asp-action="Update">
         <div class="field-container">
-            <label asp-for="Type"></label>
+            <label asp-for="Id"></label>
             <div>
-                <select class="select-props" asp-for="Type" asp-items="@equipmentTypes"></select>
-            </div>
-        </div>
-
-        <div class="field-container">
-            <label asp-for="Manufacturer"></label>
-            <div>
-                <select class="select-props" asp-for="Manufacturer" asp-items="@manufacturers"></select>
+                <input class="input-props" asp-for="Id" readonly/>
             </div>
         </div>
 
@@ -53,8 +40,13 @@
         </div>
 
         <div class="action-btn-container">
-            <button class="action-btn" type="submit">Create</button>
-            <a class="back-btn" href="/Home/AdminsPage">Back</a>
+            <button class="action-btn" type="submit">Update</button>
+            <a class="back-btn" href="/RepairingModels/GetAllForUpdate">Back</a>
         </div>
     </form>
+
+    @if (ViewData["Message"] != null)
+    {
+        <h5>@ViewData["Message"]</h5>
+    }
 </div>
