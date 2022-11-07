@@ -25,7 +25,7 @@ namespace EquipmentRepairServiceCenter.Domain
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(e => e.Position, opt => opt.MapFrom(x => EnumExtensions.GetDisplayName(x.Position)));
             CreateMap<EmployeeForCreationDto, Employee>()
-                .ForMember(e => e.Position, opt => opt.MapFrom(x => EnumExtensions.SetPosition(x.Position, false)));
+                .ForMember(e => e.Position, opt => opt.MapFrom(x => EnumExtensions.SetPosition(x.Position, true)));
             CreateMap<EmployeeForUpdateDto, Employee>();
 
             CreateMap<RepairingModel, RepairingModelDto>()

@@ -24,9 +24,9 @@
         </div>
 
         <div class="field-container">
-            <label asp-for="Price"></label>
+            <label asp-for="Price">Price (old price: @Model.Price)</label>
             <div>
-                <input class="input-props" asp-for="Price" type="number" />
+                <input class="input-props" asp-for="Price" type="number"/>
                 <span class="error-mes-span" asp-validation-for="Price"></span>
             </div>
         </div>

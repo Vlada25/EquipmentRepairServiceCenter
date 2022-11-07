@@ -569,20 +569,18 @@ namespace EquipmentRepairServiceCenter.Domain
         {
             Clients = new List<Client>();
 
-            for (int i = 0; i < users.Count; i++)
+            foreach (var registerUser in RegisterUsers)
             {
-                var registerUser = RegisterUsers.FirstOrDefault(ru => ru.UserName.Equals(users[i].UserName));
-                if (registerUser is not null)
+                var userId = users.FirstOrDefault(u => u.UserName == registerUser.UserName).Id;
+
+                Clients.Add(new Client
                 {
-                    Clients.Add(new Client
-                    {
-                        Id = Guid.NewGuid(),
-                        Surname = registerUser.Surname,
-                        Name = registerUser.Name,
-                        MiddleName = registerUser.MiddleName,
-                        UserId = Guid.Parse(users[i].Id)
-                    });
-                }
+                    Id = Guid.NewGuid(),
+                    Surname = registerUser.Surname,
+                    Name = registerUser.Name,
+                    MiddleName = registerUser.MiddleName,
+                    UserId = Guid.Parse(userId)
+                });
             }
         }
 
@@ -590,28 +588,29 @@ namespace EquipmentRepairServiceCenter.Domain
         {
             Employees = new List<Employee>();
 
-            for (int i = 0; i < users.Count; i++)
+            int index = 0;
+            foreach (var registerUser in RegisterUsers)
             {
-                var registerUser = RegisterUsers.FirstOrDefault(ru => ru.UserName.Equals(users[i].UserName));
-                if (registerUser is not null)
-                {
-                    int positionIndex = new Random((int)DateTime.Now.Ticks + i).Next(3);
-                    int years = new Random((int)DateTime.Now.Ticks + i).Next(30);
-                    Position position = (Position)Enum.GetValues(typeof(Position)).GetValue(positionIndex);
-                    int servicedStoreIndex = new Random((int)DateTime.Now.Ticks + i).Next(servicedStores.Count);
+                var userId = users.FirstOrDefault(u => u.UserName == registerUser.UserName).Id;
 
-                    Employees.Add(new Employee
-                    {
-                        Id = Guid.NewGuid(),
-                        Surname = registerUser.Surname,
-                        Name = registerUser.Name,
-                        MiddleName = registerUser.MiddleName,
-                        Position = position,
-                        WorkExperienceInYears = years,
-                        UserId = Guid.Parse(users[i].Id),
-                        ServicedStoreId = servicedStores[servicedStoreIndex].Id
-                    });
-                }
+                int positionIndex = new Random((int)DateTime.Now.Ticks + index).Next(3);
+                int years = new Random((int)DateTime.Now.Ticks + index).Next(30);
+                Position position = (Position)Enum.GetValues(typeof(Position)).GetValue(positionIndex);
+                int servicedStoreIndex = new Random((int)DateTime.Now.Ticks + index).Next(servicedStores.Count);
+
+                Employees.Add(new Employee
+                {
+                    Id = Guid.NewGuid(),
+                    Surname = registerUser.Surname,
+                    Name = registerUser.Name,
+                    MiddleName = registerUser.MiddleName,
+                    Position = position,
+                    WorkExperienceInYears = years,
+                    UserId = Guid.Parse(userId),
+                    ServicedStoreId = servicedStores[servicedStoreIndex].Id
+                });
+
+                index++;
             }
         }
 

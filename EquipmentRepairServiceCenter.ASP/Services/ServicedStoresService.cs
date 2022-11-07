@@ -54,7 +54,7 @@ namespace EquipmentRepairServiceCenter.ASP.Services
 
         public async Task<bool> Update(ServicedStoreForUpdateDto entityForUpdate)
         {
-            var entity = await _repositoryManager.OrdersRepository.GetById(entityForUpdate.Id, trackChanges: true);
+            var entity = await _repositoryManager.ServicedStoresRepository.GetById(entityForUpdate.Id, trackChanges: true);
 
             if (entity == null)
             {
@@ -63,7 +63,7 @@ namespace EquipmentRepairServiceCenter.ASP.Services
 
             _mapper.Map(entityForUpdate, entity);
 
-            _repositoryManager.OrdersRepository.Update(entity);
+            _repositoryManager.ServicedStoresRepository.Update(entity);
             await _repositoryManager.SaveAsync();
 
             return true;

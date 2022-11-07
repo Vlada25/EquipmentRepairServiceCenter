@@ -1,16 +1,33 @@
-﻿@model RegisterUser
+﻿@model RegisterEmployeeViewModel
+
+@{
+    ViewData["Title"] = "Employees";
+
+    var positions = Model.Positions
+        .Select(i => new SelectListItem()
+                { Text = i, Value = i });
+
+    var servicedStores = Model.ServicedStores
+        .Select(i => new SelectListItem()
+                {
+                    Text = $"{i.Name}; {i.Address}",
+                    Value = $"{i.Name}; {i.Address}"
+                });
+}
 
 <div style="margin-bottom: 50px;">
-    <h3>Registration</h3>
+    <h3>Employee Registration</h3>
+
     @if (ViewData["Message"] != null)
     {
         <h5 style="color: red">@ViewData["Message"]</h5>
     }
-    <form class="creation-form" method="post" asp-action="Register">
+
+    <form class="creation-form" method="post" asp-action="RegisterEmployee">
         <div class="field-container">
             <label asp-for="Surname"></label>
             <div>
-                <input class="input-props" asp-for="Surname"/>
+                <input class="input-props" asp-for="Surname" />
                 <span class="error-mes-span" asp-validation-for="Surname"></span>
             </div>
         </div>
@@ -18,7 +35,7 @@
         <div class="field-container">
             <label asp-for="Name"></label>
             <div>
-                <input class="input-props" asp-for="Name"/>
+                <input class="input-props" asp-for="Name" />
                 <span class="error-mes-span" asp-validation-for="Name"></span>
             </div>
         </div>
@@ -26,7 +43,7 @@
         <div class="field-container">
             <label asp-for="MiddleName">Middle name</label>
             <div>
-                <input class="input-props" asp-for="MiddleName"/>
+                <input class="input-props" asp-for="MiddleName" />
                 <span class="error-mes-span" asp-validation-for="MiddleName"></span>
             </div>
         </div>
@@ -34,7 +51,7 @@
         <div class="field-container">
             <label asp-for="UserName">Login</label>
             <div>
-                <input class="input-props" asp-for="UserName"/>
+                <input class="input-props" asp-for="UserName" />
                 <span class="error-mes-span" asp-validation-for="UserName"></span>
             </div>
         </div>
@@ -42,15 +59,29 @@
         <div class="field-container">
             <label asp-for="Email"></label>
             <div>
-                <input class="input-props" asp-for="Email"/>
+                <input class="input-props" asp-for="Email" />
                 <span class="error-mes-span" asp-validation-for="Email"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Position"></label>
+            <div>
+                <select class="select-props" asp-for="Position" asp-items="@positions"></select>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="ServicedStore">Serviced Store</label>
+            <div>
+                <select class="select-props" asp-for="ServicedStore" asp-items="@servicedStores"></select>
             </div>
         </div>
 
         <div class="field-container">
             <label asp-for="Password"></label>
             <div>
-                <input class="input-props" asp-for="Password"/>
+                <input class="input-props" asp-for="Password" />
                 <span class="error-mes-span" asp-validation-for="Password"></span>
             </div>
         </div>
@@ -58,7 +89,7 @@
         <div class="field-container">
             <label asp-for="ConfirmPassword"></label>
             <div>
-                <input class="input-props" asp-for="ConfirmPassword"/>
+                <input class="input-props" asp-for="ConfirmPassword" />
                 <span class="error-mes-span" asp-validation-for="ConfirmPassword"></span>
             </div>
         </div>
