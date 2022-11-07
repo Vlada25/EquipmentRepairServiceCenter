@@ -235,6 +235,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OrderCreatedViewModel orderCreated)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             var userName = _httpContext.User.Claims
                 .Where(claim => claim.Type.Equals(ClaimTypes.Name))
                 .Select(claim => claim.Value).SingleOrDefault();
@@ -306,6 +311,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(OrderUpdatedViewModel orderUpdated)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             var order = await _ordersService.GetById(orderUpdated.Id);
 
             await _faultsService.Update(new FaultForUpdateDto

@@ -121,6 +121,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(EmployeeUpdatedViewModel employee)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             string[] servicedStoreInfo = employee.ServicedStore.Split("; ");
             var servicedStore = await _servicedStoresService.GetByNameAndAddress(
                 servicedStoreInfo[0], servicedStoreInfo[1]);

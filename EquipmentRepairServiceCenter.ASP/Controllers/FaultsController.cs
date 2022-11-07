@@ -104,6 +104,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(FaultCreatedViewModel fault)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             Guid repModelId = Guid.Parse(fault.RepairingModel.Split(", ")[0]);
 
             await _faultsService.Create(new FaultForCreationDto
@@ -133,6 +138,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(FaultForUpdateDto fault)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             bool isExists = await _faultsService.Update(fault);
 
             if (!isExists)

@@ -86,6 +86,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RepairingModelCreatedViewModel repairingModelCreated)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             await _repairingModelsService.Create(new RepairingModelForCreationDto
             {
                 Name = repairingModelCreated.Type + " " + repairingModelCreated.Manufacturer,
@@ -116,6 +121,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(RepairingModelForUpdateDto repairingModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             bool isExists = await _repairingModelsService.Update(repairingModel);
 
             if (!isExists)

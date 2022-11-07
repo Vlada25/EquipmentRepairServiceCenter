@@ -5,6 +5,7 @@ namespace EquipmentRepairServiceCenter.Domain.Models.User
     public class LoginUser
     {
         [Required(ErrorMessage = "Not specified login")]
+        [MaxLength(20, ErrorMessage = "Max length: 20 characters")]
         public string UserName { get; set; }
 
 

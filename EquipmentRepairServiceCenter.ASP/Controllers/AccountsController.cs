@@ -53,9 +53,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginUser loginUser)
         {
-            if (loginUser == null)
+            if (!ModelState.IsValid)
             {
-                ViewData["Message"] = "LoginUser object sent from client is null.";
                 return View();
             }
 
@@ -84,6 +83,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUser registerUser)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             var user = _mapper.Map<User>(registerUser);
 
             var result = await _userManager.CreateAsync(user, registerUser.Password);
@@ -121,6 +125,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterEmployee(RegisterEmployeeViewModel registerUser)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             var user = _mapper.Map<User>(new RegisterUser
             {
                 Name = registerUser.Name,

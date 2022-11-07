@@ -11,18 +11,22 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
     public class RegisterEmployeeViewModel
     {
         [Required(ErrorMessage = "Not specified surname")]
+        [MaxLength(30, ErrorMessage = "Max length: 30 characters")]
         public string Surname { get; set; }
 
 
         [Required(ErrorMessage = "Not specified surname")]
+        [MaxLength(30, ErrorMessage = "Max length: 30 characters")]
         public string Name { get; set; }
 
 
         [Required(ErrorMessage = "Not specified surname")]
+        [MaxLength(30, ErrorMessage = "Max length: 30 characters")]
         public string MiddleName { get; set; }
 
 
         [Required(ErrorMessage = "Not specified user name")]
+        [MaxLength(20, ErrorMessage = "Max length: 20 characters")]
         public string UserName { get; set; }
 
 

@@ -29,3 +29,9 @@
     border: 1px solid black;
     margin-top: 10px;
 }
+
+﻿.error-mes-span {
+    margin-left: 5px;
+    font-size: 90%;
+    color: red;
+}
