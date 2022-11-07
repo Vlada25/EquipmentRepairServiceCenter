@@ -2,10 +2,13 @@
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Fault;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
+    [Authorize]
     public class FaultsController : Controller
     {
         private readonly IFaultsService _faultsService;
@@ -123,6 +126,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(Guid id)
         {
             var fault = await _faultsService.GetById(id);
@@ -136,6 +140,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(FaultForUpdateDto fault)
         {
             if (!ModelState.IsValid)
@@ -154,6 +159,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool isExists = await _faultsService.Delete(id);

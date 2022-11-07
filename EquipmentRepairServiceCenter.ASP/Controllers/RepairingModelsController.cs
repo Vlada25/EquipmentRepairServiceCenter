@@ -5,10 +5,13 @@ using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
 using EquipmentRepairServiceCenter.DTO.RepairingModel;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
+    [Authorize]
     public class RepairingModelsController : Controller
     {
         private readonly IRepairingModelsService _repairingModelsService;
@@ -105,6 +108,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(Guid id)
         {
             var repairingModel = await _repairingModelsService.GetById(id);
@@ -119,6 +123,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(RepairingModelForUpdateDto repairingModel)
         {
             if (!ModelState.IsValid)
@@ -138,6 +143,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             bool isExists = await _repairingModelsService.Delete(id);

@@ -7,12 +7,15 @@ using EquipmentRepairServiceCenter.DTO.Fault;
 using EquipmentRepairServiceCenter.DTO.Order;
 using EquipmentRepairServiceCenter.DTO.RepairingModel;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Security.Claims;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrdersService _ordersService;
@@ -294,6 +297,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(Guid orderId)
         {
             var order = await _ordersService.GetById(orderId);
@@ -309,6 +313,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(OrderUpdatedViewModel orderUpdated)
         {
             if (!ModelState.IsValid)

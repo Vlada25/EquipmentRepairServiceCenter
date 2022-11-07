@@ -26,9 +26,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             _clientsService = clientsService;
         }
 
-        // TODO: attribute authorize
-
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var userName = _httpContext.User.Claims
@@ -84,7 +82,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             return View();
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult AdminsPage()
         {
             return View();
