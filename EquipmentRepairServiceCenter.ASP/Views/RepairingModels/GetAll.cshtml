@@ -1,11 +1,13 @@
 ﻿@model List<RepairingModelDto>
 
 @{
-    ViewData["Title"] = "Employees";
+    ViewData["Title"] = "Repairing Models";
 }
 
 <div>
-    <h3 class="h3-above-table">Employees</h3>
+    <h3 class="h3-above-table">Repairing Models</h3>
+
+    <a class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -16,6 +18,8 @@
                 <th>Specifications</th>
                 <th>ParticularQualities</th>
                 <th>Photo</th>
+                <th>Update</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +32,8 @@
                     <td>@repairingModel.Specifications</td>
                     <td>@repairingModel.ParticularQualities</td>
                     <td><img src="@repairingModel.PhotoUrl" alt="@repairingModel.Name"/></td>
+                    <td><a class="ud-button">Update</a></td>
+                    <td><a class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>

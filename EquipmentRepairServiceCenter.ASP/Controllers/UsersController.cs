@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
     public class UsersController : Controller
     {
-        public IActionResult Index()
+        private readonly IUsersService _usersService;
+
+        public UsersController(IUsersService usersService)
         {
-            return View();
+            _usersService = usersService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return View(await _usersService.GetAllAsync());
         }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeesService _employeesService;

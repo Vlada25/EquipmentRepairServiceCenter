@@ -8,7 +8,7 @@ using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class FaultsController : Controller
     {
         private readonly IFaultsService _faultsService;

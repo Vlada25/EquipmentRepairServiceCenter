@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrdersService _ordersService;

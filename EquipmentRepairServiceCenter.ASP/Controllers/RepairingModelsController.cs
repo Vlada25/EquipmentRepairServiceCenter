@@ -11,7 +11,7 @@ using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class RepairingModelsController : Controller
     {
         private readonly IRepairingModelsService _repairingModelsService;

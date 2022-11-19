@@ -1,0 +1,34 @@
+﻿@model List<Client>
+
+<div>
+    <h3 class="h3-above-table">Clients</h3>
+
+    <a class="a-create">Create</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Surname</th>
+                <th>Name</th>
+                <th>Middle Name</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in @Model)
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.Surname</td>
+                    <td>@employee.Name</td>
+                    <td>@employee.MiddleName</td>
+                    <td><a class="ud-button">Update</a></td>
+                    <td><a class="ud-button">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/AdminsPage">Back</a>
+</div>

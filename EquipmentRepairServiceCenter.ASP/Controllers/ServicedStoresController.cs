@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
     public class ServicedStoresController : Controller
     {
-        public IActionResult Index()
+        private readonly IServicedStoresService _servicedStoresService;
+
+        public ServicedStoresController(IServicedStoresService servicedStoresService)
         {
-            return View();
+            _servicedStoresService = servicedStoresService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return View(await _servicedStoresService.GetAll());
         }
     }
 }

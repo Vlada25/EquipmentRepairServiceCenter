@@ -13,10 +13,11 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
         public async Task Create(UsedSparePart entity) => await CreateEntity(entity);
 
         public async Task<IEnumerable<UsedSparePart>> GetAll(bool trackChanges) =>
-            await GetAllEntities(trackChanges).ToListAsync();
+            await GetAllEntities(trackChanges).Include(u => u.SparePart).Include(u => u.Fault).ToListAsync();
 
         public async Task<UsedSparePart> GetById(Guid id, bool trackChanges) =>
-            await GetByCondition(e => e.Id.Equals(id), trackChanges).SingleOrDefaultAsync();
+            await GetByCondition(e => e.Id.Equals(id), trackChanges)
+                .Include(u => u.SparePart).Include(u => u.Fault).SingleOrDefaultAsync();
 
         public void Delete(UsedSparePart entity) => DeleteEntity(entity);
 

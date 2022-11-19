@@ -20,11 +20,4 @@
     <ProjectReference Include="..\EquipmentRepairServiceCenter.Database\EquipmentRepairServiceCenter.Database.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Clients\" />
-    <Folder Include="Views\Users\" />
-    <Folder Include="Views\SpareParts\" />
-    <Folder Include="Views\ServicedStores\" />
-  </ItemGroup>
-
 </Project>

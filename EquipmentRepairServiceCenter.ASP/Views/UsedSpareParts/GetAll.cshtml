@@ -1,0 +1,40 @@
+﻿@model List<UsedSparePart>
+
+@{
+    ViewData["Title"] = "Used Spare Parts";
+}
+
+<div>
+    <h3 class="h3-above-table">Used Spare Parts</h3>
+
+    <a class="a-create">Create</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name of spare part</th>
+                <th>Spare part functions</th>
+                <th>Name of fault</th>
+                <th>Price</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usedSparePart in @Model)
+            {
+                <tr>
+                    <td>@usedSparePart.Id</td>
+                    <td>@usedSparePart.SparePart.Name</td>
+                    <td>@usedSparePart.SparePart.Functions</td>
+                    <td>@usedSparePart.Fault.Name</td>
+                    <td>@usedSparePart.Fault.Price + @usedSparePart.SparePart.Price</td>
+                    <td><a class="ud-button">Update</a></td>
+                    <td><a class="ud-button">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/AdminsPage">Back</a>
+</div>

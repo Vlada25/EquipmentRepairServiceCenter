@@ -1,0 +1,38 @@
+﻿@model List<ServicedStore>
+
+@{
+    ViewData["Title"] = "Serviced Stores";
+}
+
+<div>
+    <h3 class="h3-above-table">Serviced Stores</h3>
+
+    <a class="a-create">Create</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var servicedStore in @Model)
+            {
+                <tr>
+                    <td>@servicedStore.Id</td>
+                    <td>@servicedStore.Name</td>
+                    <td>@servicedStore.Address</td>
+                    <td>@servicedStore.PhoneNumber</td>
+                    <td><a class="ud-button">Update</a></td>
+                    <td><a class="ud-button">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="back-btn" href="/Home/AdminsPage">Back</a>
+</div>

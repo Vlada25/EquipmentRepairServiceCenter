@@ -72,3 +72,31 @@
     color: white;
     transition: all 0.3s;
 }
+
+.ud-button {
+    color: rebeccapurple;
+    text-decoration: none;
+}
+
+.ud-button:hover {
+    text-decoration: underline;
+}
+
+.a-create {
+    color: rebeccapurple;
+    text-decoration: none;
+    margin-left: 1%;
+}
+
+.a-create:hover {
+    text-decoration: underline;
+}
+
+
+.a-button {
+    padding: 10px 20px 10px 20px;
+    margin-top: 5px;
+    background-color: #C9DFFF;
+    border-radius: 5px;
+    font-size: 120%;
+}

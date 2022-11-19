@@ -8,8 +8,8 @@ using System.Security.Claims;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    public class HomeController : Controller
-    {
+    public class HomeController : Controller // TODO: sorting
+    { // TODO: confirm removing
         private readonly HttpContext _httpContext;
         private readonly UserManager<User> _userManager;
         private readonly IEmployeesService _employeesService;
@@ -53,15 +53,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             if (userRoles.Contains("Admin"))
             {
-                return View(new ExpandedUserViewModel
-                {
-                    UserName = userName,
-                    Email = user.Email,
-                    Surname = "Leonenko",
-                    Name = "Vladislava",
-                    MiddleName = "Urievna",
-                    Role = "Admin"
-                });
+                return View("AdminsPage");
             }
 
             var client = await _clientsService.GetByUserId(Guid.Parse(user.Id));
@@ -82,7 +74,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult AdminsPage()
         {
             return View();

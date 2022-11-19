@@ -12,6 +12,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             _clientsService = clientsService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var clients = await _clientsService.GetAll();
