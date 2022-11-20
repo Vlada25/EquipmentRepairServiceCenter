@@ -27,6 +27,10 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
+            ViewData["f_repairingModelName"] = Request.Cookies["f_repairingModelName"];
+            ViewData["f_name"] = Request.Cookies["f_name"];
+            ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
+
             var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}");
 
             return View(faults);
@@ -36,24 +40,39 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
+            ViewData["f_repairingModelName"] = Request.Cookies["f_repairingModelName"];
+            ViewData["f_name"] = Request.Cookies["f_name"];
+            ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
+
             var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}");
 
             return View("GetAll", faults);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllByProps(string repairingModelName, string name, string repairingMethods)
+        public async Task<IActionResult> GetAllByProps(string f_repairingModelName, string f_name, string f_repairingMethods)
         {
             var faults = await _faultsService.GetAll();
 
-            if (repairingModelName is null) repairingModelName = Guid.NewGuid().ToString();
-            if (name is null) name = Guid.NewGuid().ToString();
-            if (repairingMethods is null) repairingMethods = Guid.NewGuid().ToString();
+            if (f_repairingModelName is null) f_repairingModelName = Guid.NewGuid().ToString();
+            if (f_name is null) f_name = Guid.NewGuid().ToString();
+            if (f_repairingMethods is null) f_repairingMethods = Guid.NewGuid().ToString();
+
+            if (f_repairingModelName is not null)
+                Response.Cookies.Append("f_repairingModelName", f_repairingModelName);
+            if (f_name is not null)
+                Response.Cookies.Append("f_name", f_name);
+            if (f_repairingMethods is not null)
+                Response.Cookies.Append("f_repairingMethods", f_repairingMethods);
+
+            ViewData["f_repairingModelName"] = Request.Cookies["f_repairingModelName"];
+            ViewData["f_name"] = Request.Cookies["f_name"];
+            ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
 
             return View("GetAll", faults.Where(f =>
-                f.RepairingModel.Name.Contains(repairingModelName, StringComparison.OrdinalIgnoreCase) ||
-                f.Name.Contains(name, StringComparison.OrdinalIgnoreCase) ||
-                f.RepairingMethods.Contains(repairingMethods, StringComparison.OrdinalIgnoreCase))
+                f.RepairingModel.Name.Contains(f_repairingModelName, StringComparison.OrdinalIgnoreCase) ||
+                f.Name.Contains(f_name, StringComparison.OrdinalIgnoreCase) ||
+                f.RepairingMethods.Contains(f_repairingMethods, StringComparison.OrdinalIgnoreCase))
                 .ToList());
         }
 

@@ -28,6 +28,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
+            ViewData["e_surname"] = Request.Cookies["e_surname"];
+            ViewData["e_name"] = Request.Cookies["e_name"];
+            ViewData["e_middleName"] = Request.Cookies["e_middleName"];
+            ViewData["e_workExperience"] = Request.Cookies["e_workExperience"];
+
             var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}");
 
             return View(employees);
@@ -37,25 +42,44 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
+            ViewData["e_surname"] = Request.Cookies["e_surname"];
+            ViewData["e_name"] = Request.Cookies["e_name"];
+            ViewData["e_middleName"] = Request.Cookies["e_middleName"];
+            ViewData["e_workExperience"] = Request.Cookies["e_workExperience"];
+
             var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}");
 
             return View("GetAll", employees);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllByProps(string surname, string name, string middleName, int workExperience)
+        public async Task<IActionResult> GetAllByProps(string e_surname, string e_name, string e_middleName, int e_workExperience)
         {
             var employees = await _employeesService.GetAll();
 
-            if (surname is null) surname = Guid.NewGuid().ToString();
-            if (name is null) name = Guid.NewGuid().ToString();
-            if (middleName is null) middleName = Guid.NewGuid().ToString();
+            if (e_surname is null) e_surname = Guid.NewGuid().ToString();
+            if (e_name is null) e_name = Guid.NewGuid().ToString();
+            if (e_middleName is null) e_middleName = Guid.NewGuid().ToString();
+
+            if (e_surname is not null)
+                Response.Cookies.Append("e_surname", e_surname);
+            if (e_name is not null)
+                Response.Cookies.Append("e_name", e_name);
+            if (e_middleName is not null)
+                Response.Cookies.Append("e_middleName", e_middleName);
+            if (e_workExperience != 0)
+                Response.Cookies.Append("e_workExperience", e_workExperience.ToString());
+
+            ViewData["e_surname"] = Request.Cookies["e_surname"];
+            ViewData["e_name"] = Request.Cookies["e_name"];
+            ViewData["e_middleName"] = Request.Cookies["e_middleName"];
+            ViewData["e_workExperience"] = Request.Cookies["e_workExperience"];
 
             return View("GetAll", employees.Where(e =>
-                e.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase) ||
-                e.Name.Contains(name, StringComparison.OrdinalIgnoreCase) ||
-                e.MiddleName.Contains(middleName, StringComparison.OrdinalIgnoreCase) ||
-                e.WorkExperienceInYears == workExperience).ToList());
+                e.Surname.Contains(e_surname, StringComparison.OrdinalIgnoreCase) ||
+                e.Name.Contains(e_name, StringComparison.OrdinalIgnoreCase) ||
+                e.MiddleName.Contains(e_middleName, StringComparison.OrdinalIgnoreCase) ||
+                e.WorkExperienceInYears == e_workExperience).ToList());
         }
 
         [HttpGet]

@@ -8,6 +8,8 @@
        { Text = $"{i.Surname} {i.Name} {i.MiddleName}", 
          Value = $"{i.Surname} {i.Name} {i.MiddleName}" })
        .ToList();
+
+    string client = ViewData["f_clientFio"] is null ? "Client" : ViewData["f_clientFio"].ToString();
 }
 
 <div>
@@ -15,7 +17,7 @@
 
     <form class="getting-form" asp-action="GetFaultsByClientFio" method="get">
         <select class="select-props" name="clientFio" asp-items="@fio">
-            <option selected disabled style="color: gray;">Client</option>
+            <option selected disabled style="color: gray;">@client</option>
         </select>
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
     </form>  

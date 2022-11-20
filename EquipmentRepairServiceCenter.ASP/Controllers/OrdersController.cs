@@ -52,6 +52,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
+            ViewData["o_clientFio"] = Request.Cookies["o_clientFio"];
+            ViewData["o_employeeFio"] = Request.Cookies["o_employeeFio"];
 
             var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}");
             var clients = await _clientsService.GetAll();
@@ -71,6 +73,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
+            ViewData["o_clientFio"] = Request.Cookies["o_clientFio"];
+            ViewData["o_employeeFio"] = Request.Cookies["o_employeeFio"];
 
             var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}");
             var clients = await _clientsService.GetAll();
@@ -147,6 +151,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             var orders = await _ordersService.GetAll();
             var clients = await _clientsService.GetAll();
 
+            if (clientFio is not null)
+                Response.Cookies.Append("f_clientFio", clientFio);
+
+            ViewData["f_clientFio"] = Request.Cookies["f_clientFio"];
+
             if (clientFio == null)
             {
                 return View("GetFaultsByClient", new OrdersClientsEmployeesViewModel
@@ -172,19 +181,27 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAllByProps(DateTime dateTime, string clientFio, string employeeFio)
+        public async Task<IActionResult> GetAllByProps(DateTime o_dateTime, string o_clientFio, string o_employeeFio)
         {
             var orders = await _ordersService.GetAll();
             var clients = await _clientsService.GetAll();
             var employees = await _employeesService.GetAll();
 
-            if (dateTime > new DateTime(2016, 12, 12))
-                orders = orders.Where(o => o.OrderDate.Equals(dateTime));
+            if (o_dateTime > new DateTime(2016, 12, 12))
+                orders = orders.Where(o => o.OrderDate.Equals(o_dateTime));
 
-            if (clientFio != "Client" && employeeFio != "Employee")
+            if (o_clientFio is not null)
+                Response.Cookies.Append("o_clientFio", o_clientFio);
+            if (o_employeeFio is not null)
+                Response.Cookies.Append("o_employeeFio", o_employeeFio);
+
+            ViewData["o_clientFio"] = Request.Cookies["o_clientFio"];
+            ViewData["o_employeeFio"] = Request.Cookies["o_employeeFio"];
+
+            if (o_clientFio != "Client" && o_employeeFio != "Employee")
             {
-                var cFio = clientFio.Split(' ');
-                var eFio = employeeFio.Split(' ');
+                var cFio = o_clientFio.Split(' ');
+                var eFio = o_employeeFio.Split(' ');
                 eFio[2] = eFio[2].Substring(0, eFio[2].Length - 1);
 
                 orders = orders.Where(o =>
@@ -195,18 +212,18 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                     && o.Employee.Name.Equals(eFio[1])
                     && o.Employee.MiddleName.Equals(eFio[2]));
             }
-            else if (clientFio != "Client" && employeeFio == "Employee")
+            else if (o_clientFio != "Client" && o_employeeFio == "Employee")
             {
-                var cFio = clientFio.Split(' ');
+                var cFio = o_clientFio.Split(' ');
 
                 orders = orders.Where(o =>
                     o.Client.Surname.Equals(cFio[0])
                     && o.Client.Name.Equals(cFio[1])
                     && o.Client.MiddleName.Equals(cFio[2]));
             }
-            else if (clientFio == "Client" && employeeFio != "Employee")
+            else if (o_clientFio == "Client" && o_employeeFio != "Employee")
             {
-                var eFio = employeeFio.Split(' ');
+                var eFio = o_employeeFio.Split(' ');
                 eFio[2] = eFio[2].Substring(0, eFio[2].Length - 1);
 
                 orders = orders.Where(o =>

@@ -10,9 +10,9 @@
     <h3 class="h3-above-table">Faults</h3>
 
     <form class="getting-form" asp-action="GetAllByProps" method="get">
-        <input class="input-props" type="text" name="repairingModelName" placeholder="Name (or part of name) of repairing model"/>
-        <input class="input-props" type="text" name="name" placeholder="Fault name or part of fault name"/>
-        <input class="input-props" type="text" name="repairingMethods" placeholder="Part of srring of repairing methods"/>
+        <input class="input-props" type="text" name="f_repairingModelName" placeholder="Name (or part of name) of repairing model" value="@ViewData["f_repairingModelName"]" />
+        <input class="input-props" type="text" name="f_name" placeholder="Fault name or part of fault name" value="@ViewData["f_name"]" />
+        <input class="input-props" type="text" name="f_repairingMethods" placeholder="Part of srring of repairing methods" value="@ViewData["f_repairingMethods"]" />
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
         <a class="a_addit" href="/Orders/GetFaultsByClient">Search by clients</a>
     </form>  

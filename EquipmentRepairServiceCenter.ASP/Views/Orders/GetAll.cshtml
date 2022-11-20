@@ -16,6 +16,9 @@
        .ToList();
 
     int index = 1;
+
+    string client = ViewData["o_clientFio"] is null ? "Client" : ViewData["o_clientFio"].ToString();
+    string employee = ViewData["o_employeeFio"] is null ? "Employee" : ViewData["o_employeeFio"].ToString();
 }
 
 <div style="padding-bottom: 30px;">
@@ -24,14 +27,14 @@
     <form class="getting-form" asp-action="GetAllByProps" method="get">
         <div class="date-container">
             <span>Order date:</span>
-            <input type="date" name="dateTime" style="margin-left: 15px;"/>
+            <input type="date" name="o_dateTime" style="margin-left: 15px;"/>
         </div>
    
-        <select class="select-props" name="clientFio" asp-items="@clientsFio">
-            <option selected>Client</option>
+        <select class="select-props" name="o_clientFio" asp-items="@clientsFio">
+            <option selected>@client</option>
         </select>
-        <select class="select-props" name="employeeFio" asp-items="@employeesInfo">
-            <option selected>Employee</option>
+        <select class="select-props" name="o_employeeFio" asp-items="@employeesInfo">
+            <option selected>@employee</option>
         </select>
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
     </form>  

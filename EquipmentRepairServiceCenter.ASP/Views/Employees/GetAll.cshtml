@@ -4,16 +4,17 @@
     ViewData["Title"] = "Employees";
 
     int index = 1;
+    int workExp = ViewData["e_workExperience"] is null ? 0 : int.Parse(ViewData["e_workExperience"].ToString());
 }
 
 <div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Employees</h3>
 
     <form class="getting-form" asp-action="GetAllByProps" method="get">
-        <input class="input-props" type="text" name="surname" placeholder="Surname or part of surname"/>
-        <input class="input-props" type="text" name="name" placeholder="Name or part of name"/>
-        <input class="input-props" type="text" name="middleName" placeholder="Middle name or part of middle name"/>
-        <input class="input-props" type="text" name="workExperience" placeholder="Work experience (years)"/>
+        <input class="input-props" type="text" name="e_surname" placeholder="Surname or part of surname" value="@ViewData["e_surname"]" />
+        <input class="input-props" type="text" name="e_name" placeholder="Name or part of name" value="@ViewData["e_name"]" />
+        <input class="input-props" type="text" name="e_middleName" placeholder="Middle name or part of middle name" value="@ViewData["e_middleName"]" />
+        <input class="input-props" type="number" name="e_workExperience" placeholder="Work experience (years)" value="@workExp"/>
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
     </form>  
 
@@ -54,5 +55,5 @@
     </table>
 
     <a href="/Employees/GetMore" class="a-create">Show 20 more entries</a>
-    <a class="back-btn" href="/Employees/GetAll">Back</a>
+    <a class="back-btn" href="/Home/AdminsPage">Back</a>
 </div>
