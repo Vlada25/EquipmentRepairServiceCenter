@@ -2,9 +2,11 @@
 
 @{
     ViewData["Title"] = "Faults";
+
+    int index = 1;
 }
 
-<div>
+<div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Faults</h3>
 
     <form class="getting-form" asp-action="GetAllByProps" method="get">
@@ -20,6 +22,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Number</th>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Repairing Model</th>
@@ -33,6 +36,7 @@
             @foreach (var fault in @Model)
             {
                 <tr>
+                    <td>@index</td>
                     <td>@fault.Id</td>
                     <td>@fault.Name</td>
                     <td><a href="/RepairingModels/GetById?id=@fault.RepairingModelId" style="text-decoration: underline;">@fault.RepairingModel.Name</a></td>
@@ -41,8 +45,12 @@
                     <td><a href="/Faults/Update?id=@fault.Id" class="ud-button">Update</a></td>
                     <td><a href="/Faults/Delete?id=@fault.Id" class="ud-button">Delete</a></td>
                 </tr>
+
+                index++;
             }
         </tbody>
     </table>
+
+    <a href="/Faults/GetMore" class="a-create">Show 20 more entries</a>
     <a class="back-btn" href="/Home/AdminsPage">Back</a>
 </div>

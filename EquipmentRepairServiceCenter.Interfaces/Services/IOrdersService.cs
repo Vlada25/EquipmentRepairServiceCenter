@@ -6,6 +6,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Services
     public interface IOrdersService
     {
         Task<IEnumerable<Order>> GetAll();
+        Task<IEnumerable<Order>> Get(int rowsCount, string cacheKey);
         Task<IEnumerable<Order>> GetByEmployeeId(Guid employeeId);
         Task<Order> GetById(Guid id);
         Task<Order> Create(OrderForCreationDto entityForCreation);

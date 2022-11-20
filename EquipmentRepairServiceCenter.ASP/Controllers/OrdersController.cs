@@ -27,6 +27,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         private readonly UserManager<User> _userManager;
         private readonly HttpContext _httpContext;
 
+        private static int _rowsCount = 0;
+
         public OrdersController(IOrdersService ordersService,
             IClientsService clientsService,
             IEmployeesService employeesService,
@@ -49,7 +51,9 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var orders = await _ordersService.GetAll();
+            _rowsCount = 20;
+
+            var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}");
             var clients = await _clientsService.GetAll();
             var employees = await _employeesService.GetAll();
 
@@ -61,6 +65,25 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             };
 
             return View(ordersClients);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMore()
+        {
+            _rowsCount += 20;
+
+            var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}");
+            var clients = await _clientsService.GetAll();
+            var employees = await _employeesService.GetAll();
+
+            OrdersClientsEmployeesViewModel ordersClients = new OrdersClientsEmployeesViewModel
+            {
+                Orders = orders.ToList(),
+                Clients = clients.ToList(),
+                Employees = employees.ToList()
+            };
+
+            return View("GetAll", ordersClients);
         }
 
         [HttpGet]
@@ -338,6 +361,30 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 Guarantee = orderUpdated.GuaranteeInMonth == 0 ? false : true,
                 GuaranteePeriodInMonth = orderUpdated.GuaranteeInMonth
             });
+
+            return View("InfoPage");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(Guid id)
+        {
+            ViewData["Message"] = id.ToString();
+            Response.Cookies.Append("order_id", id.ToString());
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete()
+        {
+            Request.Cookies.TryGetValue("order_id", out string id);
+
+            bool isExists = await _faultsService.Delete(Guid.Parse(id));
+
+            if (!isExists)
+            {
+                return View();
+            }
 
             return View("InfoPage");
         }

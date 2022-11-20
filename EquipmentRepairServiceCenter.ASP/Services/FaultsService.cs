@@ -43,6 +43,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
             return true;
         }
 
+        public async Task<IEnumerable<Fault>> Get(int rowsCount, string cacheKey) =>
+            await _repositoryManager.FaultsRepository.Get(rowsCount, cacheKey);
+
         public async Task<IEnumerable<Fault>> GetAll() =>
             await _repositoryManager.FaultsRepository.GetAll(false);
 

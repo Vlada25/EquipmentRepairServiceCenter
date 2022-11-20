@@ -15,6 +15,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     {
         private readonly IEmployeesService _employeesService;
         private readonly IServicedStoresService _servicedStoresService;
+        private static int _rowsCount = 0;
 
         public EmployeesController(IEmployeesService employeesService,
             IServicedStoresService servicedStoresService)
@@ -26,9 +27,19 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var employees = await _employeesService.GetAll();
+            _rowsCount = 20;
+            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}");
 
             return View(employees);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMore()
+        {
+            _rowsCount += 20;
+            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}");
+
+            return View("GetAll", employees);
         }
 
         [HttpGet]

@@ -66,6 +66,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
             return true;
         }
 
+        public async Task<IEnumerable<EmployeeDto>> Get(int rowsCount, string cacheKey) =>
+            _mapper.Map<IEnumerable<EmployeeDto>>(await _repositoryManager.EmployeesRepository.Get(rowsCount, cacheKey));
+
         public async Task<IEnumerable<EmployeeDto>> GetAll()
         {
             var entities = await _repositoryManager.EmployeesRepository.GetAll(false);

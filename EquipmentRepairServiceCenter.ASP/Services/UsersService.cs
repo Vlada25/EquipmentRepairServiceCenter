@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.User;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EquipmentRepairServiceCenter.ASP.Services
 {
@@ -31,6 +33,14 @@ namespace EquipmentRepairServiceCenter.ASP.Services
             await _userManager.DeleteAsync(user);
 
             return true;
+        }
+
+        public async Task<IEnumerable<UserDto>> Get(int rowsCount, string cacheKey)
+        {
+            var users = await _userManager.Users.Take(rowsCount).ToListAsync();
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(users);
+
+            return usersDto;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync()

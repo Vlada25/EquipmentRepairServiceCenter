@@ -15,6 +15,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     public class RepairingModelsController : Controller
     {
         private readonly IRepairingModelsService _repairingModelsService;
+        private static int _rowsCount = 0;
 
         public RepairingModelsController(IRepairingModelsService repairingModelsService)
         {
@@ -32,9 +33,19 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var repairingModels = await _repairingModelsService.GetAll();
+            _rowsCount = 20;
+            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}");
 
             return View(repairingModels);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMore()
+        {
+            _rowsCount += 20;
+            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}");
+
+            return View("GetAll", repairingModels);
         }
 
         [HttpGet]

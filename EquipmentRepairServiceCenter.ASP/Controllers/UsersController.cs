@@ -7,6 +7,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService _usersService;
+        private static int _rowsCount = 0;
 
         public UsersController(IUsersService usersService)
         {
@@ -16,7 +17,15 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return View(await _usersService.GetAllAsync());
+            _rowsCount = 20;
+            return View(await _usersService.Get(_rowsCount, $"Users{_rowsCount}"));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMore()
+        {
+            _rowsCount += 20;
+            return View("GetAll", await _usersService.Get(_rowsCount, $"Users{_rowsCount}"));
         }
 
         [HttpGet]

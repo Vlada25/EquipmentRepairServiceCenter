@@ -14,9 +14,11 @@
        { Text = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}", 
          Value = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}" })
        .ToList();
+
+    int index = 1;
 }
 
-<div>
+<div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Orders</h3>
 
     <form class="getting-form" asp-action="GetAllByProps" method="get">
@@ -34,11 +36,12 @@
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
     </form>  
 
-    <a class="a-create">Create</a>
+    <a href="/Orders/Create" class="a-create">Create</a>
 
     <table class="table">
         <thead>
             <tr>
+                <th>Number</th>
                 <th>Id</th>
                 <th>Order Date</th>
                 <th>Equipment Serial Number</th>
@@ -57,6 +60,7 @@
             @foreach (var order in @Model.Orders)
             {
                 <tr>
+                    <td>@index</td>
                     <td>@order.Id</td>
                     <td>@order.OrderDate</td>
                     <td>@order.EquipmentSerialNumber</td>
@@ -74,11 +78,15 @@
                     {
                         <td>-</td>
                     }
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td><a href="/Orders/Update?id=@order.Id" class="ud-button">Update</a></td>
+                    <td><a href="/Orders/Delete?id=@order.Id" class="ud-button">Delete</a></td>
                 </tr>
+
+                index++;
             }
         </tbody>
     </table>
+
+    <a href="/Orders/GetMore" class="a-create">Show 20 more entries</a>
     <a class="back-btn" href="/Home/AdminsPage">Back</a>
 </div>

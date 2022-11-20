@@ -2,13 +2,14 @@
 using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EquipmentRepairServiceCenter.Database.Repositories
 {
     public class EmployeesRepository : RepositoryBase<Employee>, IEmployeesRepository
     {
-        public EmployeesRepository(AppDbContext dbContext)
-            : base(dbContext) { }
+        public EmployeesRepository(AppDbContext dbContext, IMemoryCache memoryCache)
+            : base(dbContext, memoryCache) { }
 
         public async Task Create(Employee entity) => await CreateEntity(entity);
 
@@ -29,5 +30,19 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
 
         public async Task<Employee> GetByUserId(Guid userId, bool trackChanges) =>
             await GetByCondition(e => e.UserId.Equals(userId), trackChanges).FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<Employee>> Get(int rowsCount, string cacheKey)
+        {
+            if (!memoryCache.TryGetValue(cacheKey, out IEnumerable<Employee> entities))
+            {
+                entities = await dbContext.Set<Employee>().Take(rowsCount).ToListAsync();
+                if (entities != null)
+                {
+                    memoryCache.Set(cacheKey, entities,
+                        new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(CachingTime)));
+                }
+            }
+            return entities;
+        }
     }
 }

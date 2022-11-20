@@ -1,16 +1,21 @@
 ﻿using EquipmentRepairServiceCenter.Interfaces.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System.Linq.Expressions;
 
 namespace EquipmentRepairServiceCenter.Database.Repositories.Base
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        protected AppDbContext dbContext;
+        protected readonly AppDbContext dbContext;
+        protected readonly IMemoryCache memoryCache;
+        protected const int CachingTime = 300;
 
-        public RepositoryBase(AppDbContext dbContext)
+        public RepositoryBase(AppDbContext dbContext, 
+            IMemoryCache memoryCache)
         {
             this.dbContext = dbContext;
+            this.memoryCache = memoryCache;
         }
 
         public async Task CreateEntity(T entity)

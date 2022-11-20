@@ -2,9 +2,11 @@
 
 @{
     ViewData["Title"] = "Users";
+
+    int index = 1;
 }
 
-<div>
+<div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Users</h3>
 
     <a href="/Accounts/RegisterUser" class="a-create">Create</a>
@@ -12,6 +14,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Number</th>
                 <th>Id</th>
                 <th>UserName</th>
                 <th>Email</th>
@@ -22,13 +25,18 @@
             @foreach (var user in @Model)
             {
                 <tr>
+                    <td>@index</td>
                     <td>@user.Id</td>
                     <td>@user.UserName</td>
                     <td>@user.Email</td>
                     <td><a href="/Users/Delete?id=@user.Id" class="ud-button">Delete</a></td>
                 </tr>
+
+                index++;
             }
         </tbody>
     </table>
+
+    <a href="/Users/GetMore" class="a-create">Show 20 more entries</a>
     <a class="back-btn" href="/Home/AdminsPage">Back</a>
 </div>

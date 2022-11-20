@@ -2,9 +2,11 @@
 
 @{
     ViewData["Title"] = "Used Spare Parts";
+
+    int index = 1;
 }
 
-<div>
+<div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Used Spare Parts</h3>
 
     <a href="/UsedSpareParts/Create" class="a-create">Create</a>
@@ -12,6 +14,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Number</th>
                 <th>Id</th>
                 <th>Name of spare part</th>
                 <th>Spare part functions</th>
@@ -24,6 +27,7 @@
             @foreach (var usedSparePart in @Model)
             {
                 <tr>
+                    <td>@index</td>
                     <td>@usedSparePart.Id</td>
                     <td>@usedSparePart.SparePart.Name</td>
                     <td>@usedSparePart.SparePart.Functions</td>
@@ -31,8 +35,12 @@
                     <td>@usedSparePart.Fault.Price + @usedSparePart.SparePart.Price</td>
                     <td><a href="/UsedSpareParts/Delete?id=@usedSparePart.Id" class="ud-button">Delete</a></td>
                 </tr>
+
+                index++;
             }
         </tbody>
     </table>
+
+    <a href="/UsedSpareParts/GetMore" class="a-create">Show 20 more entries</a>
     <a class="back-btn" href="/UsedSpareParts/GetAll">Back</a>
 </div>

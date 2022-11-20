@@ -1,12 +1,14 @@
 ﻿using EquipmentRepairServiceCenter.Database.Repositories;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EquipmentRepairServiceCenter.Database
 {
     public class RepositoryManager : IRepositoryManager
     {
         private AppDbContext _dbContext;
+        private IMemoryCache _memoryCache;
 
         private IClientsRepository _clientsRepository;
         private IEmployeesRepository _employeesRepository;
@@ -17,9 +19,10 @@ namespace EquipmentRepairServiceCenter.Database
         private ISparePartsRepository _sparePartsRepository;
         private IUsedSparePartsRepository _usedSparePartsRepository;
 
-        public RepositoryManager(AppDbContext dbContext)
+        public RepositoryManager(AppDbContext dbContext, IMemoryCache memoryCache)
         {
             _dbContext = dbContext;
+            _memoryCache = memoryCache;
         }
 
         public IClientsRepository ClientsRepository
@@ -28,7 +31,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_clientsRepository == null)
                 {
-                    _clientsRepository = new ClientsRepository(_dbContext);
+                    _clientsRepository = new ClientsRepository(_dbContext, _memoryCache);
                 }
                 return _clientsRepository;
             }
@@ -40,7 +43,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_employeesRepository == null)
                 {
-                    _employeesRepository = new EmployeesRepository(_dbContext);
+                    _employeesRepository = new EmployeesRepository(_dbContext, _memoryCache);
                 }
                 return _employeesRepository;
             }
@@ -52,7 +55,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_faultsRepository == null)
                 {
-                    _faultsRepository = new FaultsRepository(_dbContext);
+                    _faultsRepository = new FaultsRepository(_dbContext, _memoryCache);
                 }
                 return _faultsRepository;
             }
@@ -64,7 +67,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_ordersRepository == null)
                 {
-                    _ordersRepository = new OrdersRepository(_dbContext);
+                    _ordersRepository = new OrdersRepository(_dbContext, _memoryCache);
                 }
                 return _ordersRepository;
             }
@@ -76,7 +79,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_servicedStoresRepository == null)
                 {
-                    _servicedStoresRepository = new ServicedStoresRepository(_dbContext);
+                    _servicedStoresRepository = new ServicedStoresRepository(_dbContext, _memoryCache);
                 }
                 return _servicedStoresRepository;
             }
@@ -88,7 +91,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_sparePartsRepository == null)
                 {
-                    _sparePartsRepository = new SparePartsRepository(_dbContext);
+                    _sparePartsRepository = new SparePartsRepository(_dbContext, _memoryCache);
                 }
                 return _sparePartsRepository;
             }
@@ -100,7 +103,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_repairingModelsRepository == null)
                 {
-                    _repairingModelsRepository = new RepairingModelsRepository(_dbContext);
+                    _repairingModelsRepository = new RepairingModelsRepository(_dbContext, _memoryCache);
                 }
                 return _repairingModelsRepository;
             }
@@ -112,7 +115,7 @@ namespace EquipmentRepairServiceCenter.Database
             {
                 if (_usedSparePartsRepository == null)
                 {
-                    _usedSparePartsRepository = new UsedSparePartsRepository(_dbContext);
+                    _usedSparePartsRepository = new UsedSparePartsRepository(_dbContext, _memoryCache);
                 }
                 return _usedSparePartsRepository;
             }

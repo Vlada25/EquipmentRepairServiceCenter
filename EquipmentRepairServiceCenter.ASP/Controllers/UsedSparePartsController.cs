@@ -10,6 +10,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         private readonly IUsedSparePartsService _usedSparePartsService;
         private readonly IFaultsService _faultsService;
         private readonly ISparePartsService _sparePartsService;
+        private static int _rowsCount = 0;
 
         public UsedSparePartsController(IUsedSparePartsService usedSparePartsService, 
             IFaultsService faultsService, 
@@ -23,7 +24,15 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return View(await _usedSparePartsService.GetAll());
+            _rowsCount = 20;
+            return View(await _usedSparePartsService.Get(_rowsCount, $"UsedSpareParts{_rowsCount}"));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMore()
+        {
+            _rowsCount += 20;
+            return View("GetAll", await _usedSparePartsService.Get(_rowsCount, $"UsedSpareParts{_rowsCount}"));
         }
 
         [HttpGet]

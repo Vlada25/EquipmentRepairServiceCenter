@@ -31,6 +31,8 @@ builder.Services.AddSingleton(autoMapper);
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache();
+
 var app = builder.Build();
 
 app.UseStaticFiles();

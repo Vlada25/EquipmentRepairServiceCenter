@@ -43,6 +43,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
             return true;
         }
 
+        public async Task<IEnumerable<SparePartDto>> Get(int rowsCount, string cacheKey) =>
+            _mapper.Map<IEnumerable<SparePartDto>>(await _repositoryManager.SparePartsRepository.Get(rowsCount, cacheKey));
+
         public async Task<IEnumerable<SparePartDto>> GetAll()
         {
             var entities = await _repositoryManager.SparePartsRepository.GetAll(false);

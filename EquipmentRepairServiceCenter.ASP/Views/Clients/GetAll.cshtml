@@ -1,6 +1,12 @@
 ﻿@model List<Client>
 
-<div>
+@{
+    ViewData["Title"] = "Employees";
+
+    int index = 1;
+}
+
+<div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Clients</h3>
 
     <a href="/Accounts/RegisterClient" class="a-create">Create</a>
@@ -8,6 +14,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Number</th>
                 <th>Id</th>
                 <th>Surname</th>
                 <th>Name</th>
@@ -20,6 +27,7 @@
             @foreach (var client in @Model)
             {
                 <tr>
+                    <th>@index</th>
                     <td>@client.Id</td>
                     <td>@client.Surname</td>
                     <td>@client.Name</td>
@@ -27,8 +35,12 @@
                     <td><a href="/Clients/Update?id=@client.Id" class="ud-button">Update</a></td>
                     <td><a href="/Clients/Delete?id=@client.Id" class="ud-button">Delete</a></td>
                 </tr>
+
+                index++;
             }
         </tbody>
     </table>
+
+    <a href="/Clients/GetMore" class="a-create">Show 20 more entries</a>
     <a class="back-btn" href="/Home/AdminsPage">Back</a>
 </div>

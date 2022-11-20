@@ -7,6 +7,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     public class ClientsController : Controller
     {
         private readonly IClientsService _clientsService;
+        private static int _rowsCount = 0;
 
         public ClientsController(IClientsService clientsService)
         {
@@ -16,8 +17,19 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var clients = await _clientsService.GetAll();
+            _rowsCount = 20;
+            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}");
+
             return View(clients);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMore()
+        {
+            _rowsCount += 20;
+            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}");
+
+            return View("GetAll", clients);
         }
 
         [HttpGet]

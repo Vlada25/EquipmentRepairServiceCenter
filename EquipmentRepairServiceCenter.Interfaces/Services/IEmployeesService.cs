@@ -6,6 +6,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Services
     public interface IEmployeesService
     {
         Task<IEnumerable<EmployeeDto>> GetAll();
+        Task<IEnumerable<EmployeeDto>> Get(int rowsCount, string cacheKey);
         Task<EmployeeDto> GetById(Guid id);
         Task<Employee> GetByUserId(Guid userId);
         Task<Employee> GetByFullNameAndPosition(string surname, string name, string middleName, string position);

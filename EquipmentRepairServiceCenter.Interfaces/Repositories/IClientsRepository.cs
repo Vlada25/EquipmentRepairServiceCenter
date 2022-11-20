@@ -1,10 +1,12 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models.People;
+﻿using EquipmentRepairServiceCenter.Domain.Models;
+using EquipmentRepairServiceCenter.Domain.Models.People;
 
 namespace EquipmentRepairServiceCenter.Interfaces.Repositories
 {
     public interface IClientsRepository
     {
         Task<IEnumerable<Client>> GetAll(bool trackChanges);
+        Task<IEnumerable<Client>> Get(int rowsCount, string cacheKey);
         Task<Client> GetById(Guid id, bool trackChanges);
         Task<Client> GetByUserId(Guid userId, bool trackChanges);
         Task Create(Client entity);

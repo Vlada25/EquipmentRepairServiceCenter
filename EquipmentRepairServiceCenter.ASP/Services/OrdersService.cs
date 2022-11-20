@@ -59,6 +59,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
             return true;
         }
 
+        public async Task<IEnumerable<Order>> Get(int rowsCount, string cacheKey) =>
+            await _repositoryManager.OrdersRepository.Get(rowsCount, cacheKey);
+
         public async Task<IEnumerable<Order>> GetAll() =>
             await _repositoryManager.OrdersRepository.GetAll(false);
 

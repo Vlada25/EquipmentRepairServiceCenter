@@ -2,13 +2,14 @@
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EquipmentRepairServiceCenter.Database.Repositories
 {
     public class OrdersRepository : RepositoryBase<Order>, IOrdersRepository
     {
-        public OrdersRepository(AppDbContext dbContext)
-            : base(dbContext) { }
+        public OrdersRepository(AppDbContext dbContext, IMemoryCache memoryCache)
+            : base(dbContext, memoryCache) { }
 
         public async Task Create(Order entity) => await CreateEntity(entity);
 
@@ -34,5 +35,23 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
                 .Include(e => e.Fault).ThenInclude(e => e.RepairingModel)
                 .Include(e => e.Client).Include(e => e.ServicedStore)
                 .Include(e => e.Employee).ToListAsync();
+
+        public async Task<IEnumerable<Order>> Get(int rowsCount, string cacheKey)
+        {
+            if (!memoryCache.TryGetValue(cacheKey, out IEnumerable<Order> entities))
+            {
+                entities = await dbContext.Orders.Take(rowsCount)
+                    .Include(e => e.Fault).ThenInclude(e => e.RepairingModel)
+                    .Include(e => e.Client).Include(e => e.ServicedStore)
+                    .Include(e => e.Employee).ToListAsync();
+
+                if (entities != null)
+                {
+                    memoryCache.Set(cacheKey, entities,
+                        new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(CachingTime)));
+                }
+            }
+            return entities;
+        }
     }
 }

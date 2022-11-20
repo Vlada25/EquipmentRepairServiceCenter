@@ -14,6 +14,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     {
         private readonly IFaultsService _faultsService;
         private readonly IRepairingModelsService _repairingModelsService;
+        private static int _rowsCount;
 
         public FaultsController(IFaultsService faultsService,
             IRepairingModelsService repairingModelsService)
@@ -25,9 +26,19 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var faults = await _faultsService.GetAll();
+            _rowsCount = 20;
+            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}");
 
             return View(faults);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMore()
+        {
+            _rowsCount += 20;
+            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}");
+
+            return View("GetAll", faults);
         }
 
         [HttpGet]

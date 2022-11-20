@@ -2,13 +2,14 @@
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EquipmentRepairServiceCenter.Database.Repositories
 {
     public class SparePartsRepository : RepositoryBase<SparePart>, ISparePartsRepository
     {
-        public SparePartsRepository(AppDbContext dbContext)
-            : base(dbContext) { }
+        public SparePartsRepository(AppDbContext dbContext, IMemoryCache memoryCache)
+            : base(dbContext, memoryCache) { }
 
         public async Task Create(SparePart entity) => await CreateEntity(entity);
 
@@ -22,5 +23,19 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
 
         public void Update(SparePart entity) =>
             UpdateEntity(entity);
+
+        public async Task<IEnumerable<SparePart>> Get(int rowsCount, string cacheKey)
+        {
+            if (!memoryCache.TryGetValue(cacheKey, out IEnumerable<SparePart> entities))
+            {
+                entities = await dbContext.SpareParts.Take(rowsCount).ToListAsync();
+                if (entities != null)
+                {
+                    memoryCache.Set(cacheKey, entities,
+                        new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromSeconds(CachingTime)));
+                }
+            }
+            return entities;
+        }
     }
 }
