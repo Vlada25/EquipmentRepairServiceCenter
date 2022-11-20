@@ -7,7 +7,7 @@
 <div>
     <h3 class="h3-above-table">Serviced Stores</h3>
 
-    <a class="a-create">Create</a>
+    <a href="/ServicedStores/Create" class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -28,8 +28,8 @@
                     <td>@servicedStore.Name</td>
                     <td>@servicedStore.Address</td>
                     <td>@servicedStore.PhoneNumber</td>
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td><a href="/ServicedStores/Update?id=@servicedStore.Id" class="ud-button">Update</a></td>
+                    <td><a href="/ServicedStores/Delete?id=@servicedStore.Id" class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>

@@ -1,4 +1,5 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentRepairServiceCenter.ASP.ViewModels
@@ -37,7 +38,10 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
         public string ServicedStore { get; set; }
 
 
+        [ValidateNever]
         public List<string> Positions { get; set; }
+
+        [ValidateNever]
         public List<ServicedStore> ServicedStores { get; set; }
     }
 }

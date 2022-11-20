@@ -1,5 +1,5 @@
 ﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
-using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

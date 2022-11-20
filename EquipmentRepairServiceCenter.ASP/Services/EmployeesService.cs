@@ -2,7 +2,7 @@
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.People;
-using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.Employee;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;

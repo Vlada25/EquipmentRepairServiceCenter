@@ -7,7 +7,7 @@
 <div>
     <h3 class="h3-above-table">Spare Parts</h3>
 
-    <a class="a-create">Create</a>
+    <a href="/SpareParts/Create" class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -30,8 +30,8 @@
                     <td>@sparePart.Functions</td>
                     <td>@sparePart.Price</td>
                     <td>@sparePart.EquipmentType</td>
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td><a href="/SpareParts/Update?id=@sparePart.Id" class="ud-button">Update</a></td>
+                    <td><a href="/SpareParts/Delete?id=@sparePart.Id" class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>

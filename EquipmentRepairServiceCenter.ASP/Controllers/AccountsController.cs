@@ -3,8 +3,10 @@ using EquipmentRepairServiceCenter.ASP.Services;
 using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
+using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
-using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Domain.Models.Users;
+using EquipmentRepairServiceCenter.DTO.Client;
 using EquipmentRepairServiceCenter.DTO.Employee;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
@@ -105,11 +107,95 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 return View();
             }
 
+            var userFound = await _userManager.FindByNameAsync(registerUser.UserName);
+
+            await _clientsService.Create(new ClientForCreationDto
+            {
+                Surname = registerUser.Surname,
+                Name = registerUser.Name,
+                MiddleName = registerUser.MiddleName,
+                UserId = Guid.Parse(userFound.Id)
+            });
+
             return RedirectToRoute(new { controller = "Accounts", action = "Login" });
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        public IActionResult RegisterUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterUser(RegisterUser registerUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var user = _mapper.Map<User>(registerUser);
+
+            var result = await _userManager.CreateAsync(user, registerUser.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+
+                ViewData["Message"] = ModelState;
+                return View();
+            }
+
+            return View("InfoPage");
+        }
+
+        [HttpGet]
+        public IActionResult RegisterClient()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterClient(RegisterUser registerUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            var user = _mapper.Map<User>(registerUser);
+
+            var result = await _userManager.CreateAsync(user, registerUser.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.TryAddModelError(error.Code, error.Description);
+                }
+
+                ViewData["Message"] = ModelState;
+                return View();
+            }
+
+            var userFound = await _userManager.FindByNameAsync(registerUser.UserName);
+
+            await _clientsService.Create(new ClientForCreationDto
+            {
+                Surname = registerUser.Surname,
+                Name = registerUser.Name,
+                MiddleName = registerUser.MiddleName,
+                UserId = Guid.Parse(userFound.Id)
+            });
+
+            return View("InfoPage");
+        }
+
+        [HttpGet]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterEmployee()
         {
             var positions = new List<string>();
@@ -126,12 +212,23 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterEmployee(RegisterEmployeeViewModel registerUser)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                var ms = ModelState;
+                var positions = new List<string>();
+                var servicedStores = await _servicedStoresService.GetAll();
+
+                foreach (int i in Enum.GetValues(typeof(Position)))
+                    positions.Add(EnumExtensions.GetDisplayName((Position)Enum.GetValues(typeof(Position)).GetValue(i)));
+
+                return View(new RegisterEmployeeViewModel
+                {
+                    Positions = positions,
+                    ServicedStores = servicedStores.ToList()
+                });
             }
 
             var user = _mapper.Map<User>(new RegisterUser

@@ -1,6 +1,6 @@
 ﻿using EquipmentRepairServiceCenter.ASP.Services;
 using EquipmentRepairServiceCenter.Database;
-using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

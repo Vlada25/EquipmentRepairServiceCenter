@@ -7,7 +7,7 @@
 <div>
     <h3 class="h3-above-table">Users</h3>
 
-    <a class="a-create">Create</a>
+    <a href="/Accounts/RegisterUser" class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -15,7 +15,6 @@
                 <th>Id</th>
                 <th>UserName</th>
                 <th>Email</th>
-                <th>Update</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -26,8 +25,7 @@
                     <td>@user.Id</td>
                     <td>@user.UserName</td>
                     <td>@user.Email</td>
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td><a href="/Users/Delete?id=@user.Id" class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>

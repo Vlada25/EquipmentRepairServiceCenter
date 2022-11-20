@@ -2,7 +2,7 @@
 using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.People;
-using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.Client;
 using EquipmentRepairServiceCenter.DTO.Employee;
 using EquipmentRepairServiceCenter.DTO.Fault;
@@ -26,7 +26,8 @@ namespace EquipmentRepairServiceCenter.Domain
                 .ForMember(e => e.Position, opt => opt.MapFrom(x => EnumExtensions.GetDisplayName(x.Position)));
             CreateMap<EmployeeForCreationDto, Employee>()
                 .ForMember(e => e.Position, opt => opt.MapFrom(x => EnumExtensions.SetPosition(x.Position, true)));
-            CreateMap<EmployeeForUpdateDto, Employee>();
+            CreateMap<EmployeeForUpdateDto, Employee>()
+                .ForMember(e => e.Position, opt => opt.MapFrom(x => EnumExtensions.SetPosition(x.Position, true)));
 
             CreateMap<RepairingModel, RepairingModelDto>()
                 .ForMember(rm => rm.Type, opt => opt.MapFrom(x => EnumExtensions.GetDisplayName(x.Type)));
@@ -46,7 +47,7 @@ namespace EquipmentRepairServiceCenter.Domain
             CreateMap<SparePart, SparePartDto>()
                 .ForMember(sp => sp.EquipmentType, opt => opt.MapFrom(x => EnumExtensions.GetDisplayName(x.EquipmentType)));
             CreateMap<SparePartForCreationDto, SparePart>()
-                .ForMember(sp => sp.EquipmentType, opt => opt.MapFrom(x => EnumExtensions.SetEquipmentType(x.EquipmentType, false)));
+                .ForMember(sp => sp.EquipmentType, opt => opt.MapFrom(x => EnumExtensions.SetEquipmentType(x.EquipmentType, true)));
             CreateMap<SparePartForUpdateDto, SparePart>();
 
             CreateMap<UsedSparePartForCreationDto, UsedSparePart>();

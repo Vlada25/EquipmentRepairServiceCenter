@@ -7,7 +7,7 @@
 <div>
     <h3 class="h3-above-table">Repairing Models</h3>
 
-    <a class="a-create">Create</a>
+    <a href="/RepairingModels/Create" class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -32,8 +32,8 @@
                     <td>@repairingModel.Specifications</td>
                     <td>@repairingModel.ParticularQualities</td>
                     <td><img src="@repairingModel.PhotoUrl" alt="@repairingModel.Name"/></td>
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td><a href="/RepairingModels/Update?id=@repairingModel.Id" class="ud-button">Update</a></td>
+                    <td><a href="/RepairingModels/Delete?id=@repairingModel.Id" class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>

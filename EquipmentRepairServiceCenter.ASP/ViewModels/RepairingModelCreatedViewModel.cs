@@ -1,5 +1,7 @@
 ﻿using EquipmentRepairServiceCenter.DTO.RepairingModel;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
@@ -21,10 +23,15 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
         public string ParticularQualities { get; set; }
 
 
+        [ValidateNever]
         public string PhotoUrl { get; set; }
 
 
+        [ValidateNever]
         public List<string> EquipmentTypes { get; set; }
+
+
+        [ValidateNever]
         public List<string> Manufacturers { get; set; }
     }
 }

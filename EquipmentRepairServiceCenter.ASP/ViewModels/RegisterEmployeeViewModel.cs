@@ -1,7 +1,10 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models;
+﻿using AutoMapper.Configuration.Annotations;
+using EquipmentRepairServiceCenter.Domain.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +37,9 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
         [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", ErrorMessage = "Incorrect email")]
         public string Email { get; set; }
 
+
         public string Position { get; set; }
+
 
         public string ServicedStore { get; set; }
 
@@ -51,8 +56,10 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
 
 
 
-
+        [ValidateNever]
         public List<string> Positions { get; set; }
+
+        [ValidateNever]
         public List<ServicedStore> ServicedStores { get; set; }
     }
 }

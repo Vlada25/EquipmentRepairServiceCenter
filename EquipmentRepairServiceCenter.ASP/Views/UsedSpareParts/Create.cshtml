@@ -1,0 +1,42 @@
+﻿@model UsedSparePartCreatedViewModel
+
+@{
+    ViewData["Title"] = "Used Spare Part";
+
+    var faults = Model.Faults
+        .Select(i => new SelectListItem() { 
+            Text = $"{i.Id}; {i.Name}", 
+            Value = $"{i.Id}; {i.Name}" });
+
+    var spareParts = Model.SpareParts
+        .Select(i => new SelectListItem()
+                {
+                    Text = $"{i.Id}; {i.Name}",
+                    Value = $"{i.Id}; {i.Name}"
+                });
+}
+
+<div style="margin-bottom: 50px;">
+    <h3>Used Spare Part Creation</h3>
+
+    <form class="creation-form" method="post" asp-action="Create">
+        <div class="field-container">
+            <label asp-for="Fault"></label>
+            <div>
+                <select class="select-props" asp-for="Fault" asp-items="@faults"></select>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="SparePart">Spare Part</label>
+            <div>
+                <select class="select-props" asp-for="SparePart" asp-items="@spareParts"></select>
+            </div>
+        </div>
+
+        <div class="action-btn-container">
+            <button class="action-btn" type="submit">Create</button>
+            <a class="back-btn" href="/UsedSpareParts/GetAll">Back</a>
+        </div>
+    </form>
+</div>

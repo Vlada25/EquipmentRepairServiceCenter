@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Models.People;
-using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.Client;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
@@ -74,7 +74,7 @@ namespace EquipmentRepairServiceCenter.ASP.Services
 
         public async Task<bool> Update(ClientForUpdateDto entityForUpdate)
         {
-            var entity = await _repositoryManager.OrdersRepository.GetById(entityForUpdate.Id, trackChanges: true);
+            var entity = await _repositoryManager.ClientsRepository.GetById(entityForUpdate.Id, trackChanges: true);
 
             if (entity == null)
             {
@@ -83,7 +83,7 @@ namespace EquipmentRepairServiceCenter.ASP.Services
 
             _mapper.Map(entityForUpdate, entity);
 
-            _repositoryManager.OrdersRepository.Update(entity);
+            _repositoryManager.ClientsRepository.Update(entity);
             await _repositoryManager.SaveAsync();
 
             return true;

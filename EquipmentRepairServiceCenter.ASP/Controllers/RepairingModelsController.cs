@@ -38,40 +38,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllForUpdate()
-        {
-            var repairingModels = await _repairingModelsService.GetAll();
-
-            return View(repairingModels);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllByProps_Update(string name)
-        {
-            var repairingModels = await _repairingModelsService.GetAll();
-
-            return View("GetAllForUpdate", repairingModels.Where(f =>
-                f.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllForDelete()
-        {
-            var repairingModels = await _repairingModelsService.GetAll();
-
-            return View(repairingModels);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllByProps_Delete(string name)
-        {
-            var repairingModels = await _repairingModelsService.GetAll();
-
-            return View("GetAllForDelete", repairingModels.Where(f =>
-                f.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList());
-        }
-
-        [HttpGet]
         public IActionResult Create()
         {
             List<string> eqTypes = new List<string>();
@@ -91,7 +57,16 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                List<string> eqTypes = new List<string>();
+
+                foreach (int i in Enum.GetValues(typeof(EquipmentType)))
+                    eqTypes.Add(EnumExtensions.GetDisplayName((EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(i)));
+
+                return View(new RepairingModelCreatedViewModel
+                {
+                    EquipmentTypes = eqTypes,
+                    Manufacturers = DbInitializer.Manufacturers.ToList()
+                });
             }
 
             await _repairingModelsService.Create(new RepairingModelForCreationDto
@@ -108,7 +83,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Employee")]
+        //[Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(Guid id)
         {
             var repairingModel = await _repairingModelsService.GetById(id);
@@ -123,15 +98,23 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Employee")]
-        public async Task<IActionResult> Update(RepairingModelForUpdateDto repairingModel)
+        //[Authorize(Roles = "Employee")]
+        public async Task<IActionResult> Update(RepairingModelForUpdateDto repairingModelUpdated)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                var repairingModel = await _repairingModelsService.GetById(repairingModelUpdated.Id);
+
+                return View(new RepairingModelForUpdateDto
+                {
+                    Id = repairingModelUpdated.Id,
+                    Specifications = repairingModel.Specifications,
+                    ParticularQualities = repairingModel.ParticularQualities,
+                    PhotoUrl = repairingModel.PhotoUrl
+                });
             }
 
-            bool isExists = await _repairingModelsService.Update(repairingModel);
+            bool isExists = await _repairingModelsService.Update(repairingModelUpdated);
 
             if (!isExists)
             {
@@ -142,11 +125,22 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             return View("InfoPage");
         }
 
+        //[Authorize(Roles = "Admin")]
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
-            bool isExists = await _repairingModelsService.Delete(id);
+            ViewData["Message"] = id.ToString();
+            Response.Cookies.Append("repairingModel_id", id.ToString());
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete()
+        {
+            Request.Cookies.TryGetValue("repairingModel_id", out string id);
+
+            bool isExists = await _repairingModelsService.Delete(Guid.Parse(id));
 
             if (!isExists)
             {

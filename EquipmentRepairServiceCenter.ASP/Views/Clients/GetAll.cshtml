@@ -3,7 +3,7 @@
 <div>
     <h3 class="h3-above-table">Clients</h3>
 
-    <a class="a-create">Create</a>
+    <a href="/Accounts/RegisterClient" class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -17,15 +17,15 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var employee in @Model)
+            @foreach (var client in @Model)
             {
                 <tr>
-                    <td>@employee.Id</td>
-                    <td>@employee.Surname</td>
-                    <td>@employee.Name</td>
-                    <td>@employee.MiddleName</td>
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td>@client.Id</td>
+                    <td>@client.Surname</td>
+                    <td>@client.Name</td>
+                    <td>@client.MiddleName</td>
+                    <td><a href="/Clients/Update?id=@client.Id" class="ud-button">Update</a></td>
+                    <td><a href="/Clients/Delete?id=@client.Id" class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>

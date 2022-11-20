@@ -2,7 +2,7 @@
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
-using EquipmentRepairServiceCenter.Domain.Models.User;
+using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.Fault;
 using EquipmentRepairServiceCenter.DTO.Order;
 using EquipmentRepairServiceCenter.DTO.RepairingModel;

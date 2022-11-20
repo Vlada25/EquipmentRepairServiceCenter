@@ -1,4 +1,5 @@
 ﻿using EquipmentRepairServiceCenter.DTO.RepairingModel;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace EquipmentRepairServiceCenter.ASP.ViewModels
@@ -23,6 +24,7 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
         public decimal Price { get; set; }
 
 
+        [ValidateNever]
         public List<RepairingModelDto> RepairingModels { get; set; }
     }
 }

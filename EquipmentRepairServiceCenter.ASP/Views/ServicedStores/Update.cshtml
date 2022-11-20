@@ -1,0 +1,39 @@
+﻿@model ServicedStoreForUpdateDto
+
+@{
+    ViewData["Title"] = "Serivced Store";
+}
+
+<div style="margin-bottom: 50px;">
+    <h3>Serivced Store Update</h3>
+
+    <form class="creation-form" method="post" asp-action="Update">
+        <div class="field-container">
+            <label asp-for="Id"></label>
+            <div>
+                <input class="input-props" asp-for="Id" readonly />
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Address"></label>
+            <div>
+                <input class="input-props" asp-for="Address" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Address"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <div>
+                <input class="input-props" asp-for="PhoneNumber" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="PhoneNumber"></span>
+            </div>
+        </div>
+
+        <div class="action-btn-container">
+            <button class="action-btn" type="submit">Update</button>
+            <a class="back-btn" href="/ServicedStores/GetAll">Back</a>
+        </div>
+    </form>
+</div>

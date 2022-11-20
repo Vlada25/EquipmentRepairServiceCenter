@@ -1,4 +1,4 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models.User;
+﻿using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

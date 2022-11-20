@@ -15,7 +15,7 @@
         <a class="a_addit" href="/Orders/GetFaultsByClient">Search by clients</a>
     </form>  
 
-    <a class="a-create">Create</a>
+    <a href="/Faults/Create" class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -38,8 +38,8 @@
                     <td><a href="/RepairingModels/GetById?id=@fault.RepairingModelId" style="text-decoration: underline;">@fault.RepairingModel.Name</a></td>
                     <td>@fault.RepairingMethods</td>
                     <td>@fault.Price</td>
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td><a href="/Faults/Update?id=@fault.Id" class="ud-button">Update</a></td>
+                    <td><a href="/Faults/Delete?id=@fault.Id" class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>

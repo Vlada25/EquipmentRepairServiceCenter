@@ -1,4 +1,5 @@
-﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
+﻿using EquipmentRepairServiceCenter.ASP.Services;
+using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Fault;
 using EquipmentRepairServiceCenter.Interfaces.Services;
@@ -46,54 +47,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllForUpdate()
-        {
-            var faults = await _faultsService.GetAll();
-
-            return View(faults);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllByProps_Update(string repairingModelName, string name, string repairingMethods)
-        {
-            var faults = await _faultsService.GetAll();
-
-            if (repairingModelName is null) repairingModelName = Guid.NewGuid().ToString();
-            if (name is null) name = Guid.NewGuid().ToString();
-            if (repairingMethods is null) repairingMethods = Guid.NewGuid().ToString();
-
-            return View("GetAllForUpdate", faults.Where(f =>
-                f.RepairingModel.Name.Contains(repairingModelName, StringComparison.OrdinalIgnoreCase) ||
-                f.Name.Contains(name, StringComparison.OrdinalIgnoreCase) ||
-                f.RepairingMethods.Contains(repairingMethods, StringComparison.OrdinalIgnoreCase))
-                .ToList());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllForDelete()
-        {
-            var faults = await _faultsService.GetAll();
-
-            return View(faults);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetAllByProps_Delete(string repairingModelName, string name, string repairingMethods)
-        {
-            var faults = await _faultsService.GetAll();
-
-            if (repairingModelName is null) repairingModelName = Guid.NewGuid().ToString();
-            if (name is null) name = Guid.NewGuid().ToString();
-            if (repairingMethods is null) repairingMethods = Guid.NewGuid().ToString();
-
-            return View("GetAllForDelete", faults.Where(f =>
-                f.RepairingModel.Name.Contains(repairingModelName, StringComparison.OrdinalIgnoreCase) ||
-                f.Name.Contains(name, StringComparison.OrdinalIgnoreCase) ||
-                f.RepairingMethods.Contains(repairingMethods, StringComparison.OrdinalIgnoreCase))
-                .ToList());
-        }
-
-        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var repModels = await _repairingModelsService.GetAll();
@@ -109,7 +62,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                var repModels = await _repairingModelsService.GetAll();
+
+                return View(new FaultCreatedViewModel
+                {
+                    RepairingModels = repModels.ToList()
+                });
             }
 
             Guid repModelId = Guid.Parse(fault.RepairingModel.Split(", ")[0]);
@@ -126,7 +84,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Employee")]
+        //[Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(Guid id)
         {
             var fault = await _faultsService.GetById(id);
@@ -140,15 +98,22 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Employee")]
-        public async Task<IActionResult> Update(FaultForUpdateDto fault)
+        //[Authorize(Roles = "Employee")]
+        public async Task<IActionResult> Update(FaultForUpdateDto faultUpdated)
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                var fault = await _faultsService.GetById(faultUpdated.Id);
+
+                return View(new FaultForUpdateDto
+                {
+                    Id = faultUpdated.Id,
+                    RepairingMethods = fault.RepairingMethods,
+                    Price = fault.Price
+                });
             }
 
-            bool isExists = await _faultsService.Update(fault);
+            bool isExists = await _faultsService.Update(faultUpdated);
 
             if (!isExists)
             {
@@ -159,10 +124,20 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
-            bool isExists = await _faultsService.Delete(id);
+            ViewData["Message"] = id.ToString();
+            Response.Cookies.Append("fault_id", id.ToString());
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete()
+        {
+            Request.Cookies.TryGetValue("fault_id", out string id);
+
+            bool isExists = await _faultsService.Delete(Guid.Parse(id));
 
             if (!isExists)
             {

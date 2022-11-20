@@ -1,0 +1,47 @@
+﻿@model ClientForUpdateDto
+
+@{
+    ViewData["Title"] = "Faults";
+}
+
+<div style="margin-bottom: 50px;">
+    <h3>Fault Update</h3>
+
+    <form class="creation-form" method="post" asp-action="Update">
+        <div class="field-container">
+            <label asp-for="Id"></label>
+            <div>
+                <input class="input-props" asp-for="Id" readonly />
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Surname"></label>
+            <div>
+                <input class="input-props" asp-for="Surname" type="text" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Surname"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Name"></label>
+            <div>
+                <input class="input-props" asp-for="Name" type="text" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Name"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="MiddleName">Middle Name</label>
+            <div>
+                <input class="input-props" asp-for="MiddleName" type="text"/>
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="MiddleName"></span>
+            </div>
+        </div>
+
+        <div class="action-btn-container">
+            <button class="action-btn" type="submit">Update</button>
+            <a class="back-btn" href="/Clients/GetAll">Back</a>
+        </div>
+    </form>
+</div>

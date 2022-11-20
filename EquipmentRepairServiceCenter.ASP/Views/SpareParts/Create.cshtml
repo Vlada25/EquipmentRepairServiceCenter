@@ -1,0 +1,50 @@
+﻿@model SparePartForCreationDto
+
+@{
+    ViewData["Title"] = "Spare Part";
+
+    var equipmentTypes = Model.EquipmentTypes
+        .Select(i => new SelectListItem() { Text = i, Value = i });
+}
+
+<div style="margin-bottom: 50px;">
+    <h3>Spare Part Creation</h3>
+
+    <form class="creation-form" method="post" asp-action="Create">
+        <div class="field-container">
+            <label asp-for="Name"></label>
+            <div>
+                <input class="input-props" asp-for="Name" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Name"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Functions"></label>
+            <div>
+                <textarea style="height: 130px; width: 350px;" class="input-props" asp-for="Functions"></textarea>
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Functions"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Price"></label>
+            <div>
+                <input class="input-props" asp-for="Price" type="number" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Price"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="EquipmentType">Equipment Type</label>
+            <div>
+                <select class="select-props" asp-for="EquipmentType" asp-items="@equipmentTypes"></select>
+            </div>
+        </div>
+
+        <div class="action-btn-container">
+            <button class="action-btn" type="submit">Create</button>
+            <a class="back-btn" href="/SpareParts/GetAll">Back</a>
+        </div>
+    </form>
+</div>

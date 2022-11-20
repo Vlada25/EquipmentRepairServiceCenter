@@ -7,7 +7,7 @@
 <div>
     <h3 class="h3-above-table">Used Spare Parts</h3>
 
-    <a class="a-create">Create</a>
+    <a href="/UsedSpareParts/Create" class="a-create">Create</a>
 
     <table class="table">
         <thead>
@@ -17,7 +17,6 @@
                 <th>Spare part functions</th>
                 <th>Name of fault</th>
                 <th>Price</th>
-                <th>Update</th>
                 <th>Delete</th>
             </tr>
         </thead>
@@ -30,11 +29,10 @@
                     <td>@usedSparePart.SparePart.Functions</td>
                     <td>@usedSparePart.Fault.Name</td>
                     <td>@usedSparePart.Fault.Price + @usedSparePart.SparePart.Price</td>
-                    <td><a class="ud-button">Update</a></td>
-                    <td><a class="ud-button">Delete</a></td>
+                    <td><a href="/UsedSpareParts/Delete?id=@usedSparePart.Id" class="ud-button">Delete</a></td>
                 </tr>
             }
         </tbody>
     </table>
-    <a class="back-btn" href="/Home/AdminsPage">Back</a>
+    <a class="back-btn" href="/UsedSpareParts/GetAll">Back</a>
 </div>

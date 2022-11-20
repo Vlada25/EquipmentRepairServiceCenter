@@ -1,4 +1,4 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models.User;
+﻿using EquipmentRepairServiceCenter.Domain.Models.Users;
 
 namespace EquipmentRepairServiceCenter.Interfaces
 {

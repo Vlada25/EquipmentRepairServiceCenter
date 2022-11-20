@@ -63,7 +63,7 @@
         </div>
 
         <div class="field-container">
-            <label asp-for="WorkExperienceInYears">Work Experience (years)<br/>(old work experience: @Model.WorkExperienceInYears)</label>
+            <label asp-for="WorkExperienceInYears">Work Experience (years)</label>
             <div>
                 <input class="input-props" asp-for="WorkExperienceInYears" type="number"/>
                 <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="WorkExperienceInYears"></span>
@@ -79,7 +79,7 @@
 
         <div class="action-btn-container">
             <button class="action-btn" type="submit">Update</button>
-            <a class="back-btn" href="/">Back</a>
+            <a class="back-btn" href="/Employees/GetAll">Back</a>
         </div>
     </form>
 </div>
