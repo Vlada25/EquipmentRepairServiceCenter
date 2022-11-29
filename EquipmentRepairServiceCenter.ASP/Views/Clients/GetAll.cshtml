@@ -6,6 +6,21 @@
     int index = 1;
 }
 
+<div id="dropdown" class="dropdown">
+    <button class="dropbtn">Menu</button>
+    <div class="dropdown-content">
+        <a href="/Clients/GetAll">Clients</a>
+        <a href="/Employees/GetAll">Employees</a>
+        <a href="/Faults/GetAll">Faults</a>
+        <a href="/Orders/GetAll">Orders</a>
+        <a href="/RepairingModels/GetAll">Repairing Models</a>
+        <a href="/ServicedStores/GetAll">Serviced Stores</a>
+        <a href="/SpareParts/GetAll">Spare Parts</a>
+        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
+        <a href="/Users/GetAll">Users</a>
+    </div>
+</div>
+
 <div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Clients</h3>
 
@@ -15,7 +30,6 @@
         <thead>
             <tr>
                 <th>Number</th>
-                <th>Id</th>
                 <th><a href="/Clients/Get?sortedFieldNumber=1">Surname 🠕🠗</a></th>
                 <th><a href="/Clients/Get?sortedFieldNumber=2">Name 🠕🠗</a></th>
                 <th>Middle Name</th>
@@ -28,7 +42,6 @@
             {
                 <tr>
                     <th>@index</th>
-                    <td>@client.Id</td>
                     <td>@client.Surname</td>
                     <td>@client.Name</td>
                     <td>@client.MiddleName</td>

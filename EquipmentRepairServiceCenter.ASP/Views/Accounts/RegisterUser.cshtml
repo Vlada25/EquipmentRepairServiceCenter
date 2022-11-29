@@ -1,5 +1,20 @@
 ﻿@model RegisterUser
 
+<div id="dropdown" class="dropdown">
+    <button class="dropbtn">Menu</button>
+    <div class="dropdown-content">
+        <a href="/Clients/GetAll">Clients</a>
+        <a href="/Employees/GetAll">Employees</a>
+        <a href="/Faults/GetAll">Faults</a>
+    <a href="/Orders/GetAll">Orders</a>
+        <a href="/RepairingModels/GetAll">Repairing Models</a>
+        <a href="/ServicedStores/GetAll">Serviced Stores</a>
+        <a href="/SpareParts/GetAll">Spare Parts</a>
+        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
+        <a href="/Users/GetAll">Users</a>
+    </div>
+</div>
+
 <div style="margin-bottom: 50px;">
     <h3>Registration</h3>
     @if (ViewData["Message"] != null)

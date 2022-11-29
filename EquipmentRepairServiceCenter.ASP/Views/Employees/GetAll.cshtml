@@ -7,6 +7,21 @@
     int workExp = ViewData["e_workExperience"] is null ? 0 : int.Parse(ViewData["e_workExperience"].ToString());
 }
 
+<div id="dropdown" class="dropdown">
+    <button class="dropbtn">Menu</button>
+    <div class="dropdown-content">
+        <a href="/Clients/GetAll">Clients</a>
+        <a href="/Employees/GetAll">Employees</a>
+        <a href="/Faults/GetAll">Faults</a>
+        <a href="/Orders/GetAll">Orders</a>
+        <a href="/RepairingModels/GetAll">Repairing Models</a>
+        <a href="/ServicedStores/GetAll">Serviced Stores</a>
+        <a href="/SpareParts/GetAll">Spare Parts</a>
+        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
+        <a href="/Users/GetAll">Users</a>
+    </div>
+</div>
+
 <div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Employees</h3>
 
@@ -24,7 +39,6 @@
         <thead>
             <tr>
                 <th>Number</th>
-                <th>Id</th>
                 <th>Surname</th>
                 <th>Name</th>
                 <th>Middle Name</th>
@@ -39,7 +53,6 @@
             {
                 <tr>
                     <td>@index</td>
-                    <td>@employee.Id</td>
                     <td>@employee.Surname</td>
                     <td>@employee.Name</td>
                     <td>@employee.MiddleName</td>

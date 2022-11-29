@@ -100,3 +100,48 @@
     border-radius: 5px;
     font-size: 120%;
 }
+
+.dropbtn {
+    width: 100px;
+    text-align: center;
+    padding: 7px 0 7px 0;
+    border: 1px solid #272773;
+    color: #272773;
+    background-color: #C9DFFF;
+    border-radius: 5px;
+    transition: all 0.3s;
+    font-size: 120%;
+}
+
+.dropdown {
+  position: absolute;
+  left: 47%;
+  top: 20px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #C9DFFF;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {
+    background-color: #272773;
+    color: white;
+}
