@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
@@ -8,19 +10,19 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
         public Guid Id { get; set; }
 
 
-        [Required(ErrorMessage = "Not specified repairing model name")]
+        [ValidateNever]
         public string RepairingModelName { get; set; }
 
 
-        [Required(ErrorMessage = "Not specified r.m. specifications")]
+        [ValidateNever]
         public string RepairingModelSpecifications { get; set; }
 
 
-        [Required(ErrorMessage = "Not specified r.m. particular qualities")]
+        [ValidateNever]
         public string RepairingModelParticularQualities { get; set; }
 
 
-        [Required(ErrorMessage = "Not specified name of fault")]
+        [ValidateNever]
         public string FaultName { get; set; }
 
 

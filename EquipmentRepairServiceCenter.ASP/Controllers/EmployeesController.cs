@@ -57,10 +57,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             var employees = await _employeesService.GetAll();
 
-            if (e_surname is null) e_surname = Guid.NewGuid().ToString();
-            if (e_name is null) e_name = Guid.NewGuid().ToString();
-            if (e_middleName is null) e_middleName = Guid.NewGuid().ToString();
-
             if (e_surname is not null)
                 Response.Cookies.Append("e_surname", e_surname);
             if (e_name is not null)
@@ -74,6 +70,10 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["e_name"] = Request.Cookies["e_name"];
             ViewData["e_middleName"] = Request.Cookies["e_middleName"];
             ViewData["e_workExperience"] = Request.Cookies["e_workExperience"];
+
+            if (e_surname is null) e_surname = Guid.NewGuid().ToString();
+            if (e_name is null) e_name = Guid.NewGuid().ToString();
+            if (e_middleName is null) e_middleName = Guid.NewGuid().ToString();
 
             return View("GetAll", employees.Where(e =>
                 e.Surname.Contains(e_surname, StringComparison.OrdinalIgnoreCase) ||

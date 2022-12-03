@@ -1,6 +1,7 @@
 ﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
+using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
 using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.Fault;
@@ -280,7 +281,34 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                var userName0 = _httpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+                var user0 = await _userManager.FindByNameAsync(userName0);
+                var userRoles = await _userManager.GetRolesAsync(user0);
+
+                if (userRoles.Contains("Employee"))
+                {
+                    return RedirectToRoute(new { controller = "Orders", action = "GetForEmployee" });
+                }
+
+                var employees = await _employeesService.GetAll();
+                var eqTypes = new List<string>();
+                var servicedStores = await _servicedStoresService.GetAll();
+
+                foreach (int i in Enum.GetValues(typeof(EquipmentType)))
+                    eqTypes.Add(EnumExtensions.GetDisplayName((EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(i)));
+
+                OrderCreatedViewModel orderCreated0 = new OrderCreatedViewModel
+                {
+                    Employees = employees.ToList(),
+                    EquipmentTypes = eqTypes,
+                    Manufacturers = DbInitializer.Manufacturers.ToList(),
+                    ServicedStores = servicedStores.ToList(),
+                };
+
+                return View(orderCreated);
             }
 
             var userName = _httpContext.User.Claims
@@ -358,7 +386,16 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                var order0 = await _ordersService.GetById(orderUpdated.Id);
+
+                return View(new OrderUpdatedViewModel
+                {
+                    Id = orderUpdated.Id,
+                    RepairingModelName = order0.Fault.RepairingModel.Name,
+                    RepairingModelSpecifications = order0.Fault.RepairingModel.Specifications,
+                    RepairingModelParticularQualities = order0.Fault.RepairingModel.ParticularQualities,
+                    FaultName = order0.Fault.Name
+                });
             }
 
             var order = await _ordersService.GetById(orderUpdated.Id);
@@ -402,6 +439,76 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            return View("InfoPage");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateForAdmin()
+        {
+            var employees = await _employeesService.GetAll();
+            var clients = await _clientsService.GetAll();
+            var faults = await _faultsService.GetAll();
+            var servicedStores = await _servicedStoresService.GetAll();
+
+            return View(new OrderAdminCreatedViewModel
+            {
+                Employees = employees.ToList(),
+                Clients = clients.ToList(),
+                Faults = faults.ToList(),
+                ServicedStores = servicedStores.ToList(),
+            });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateForAdmin(OrderAdminCreatedViewModel orderCreated)
+        {
+            if (!ModelState.IsValid)
+            {
+                var employees = await _employeesService.GetAll();
+                var clients = await _clientsService.GetAll();
+                var faults = await _faultsService.GetAll();
+                var servicedStores = await _servicedStoresService.GetAll();
+
+                return View(new OrderAdminCreatedViewModel
+                {
+                    Employees = employees.ToList(),
+                    Clients = clients.ToList(),
+                    Faults = faults.ToList(),
+                    ServicedStores = servicedStores.ToList(),
+                });
+            }
+
+            string[] servicedStoreInfo = orderCreated.ServicedStore.Split("; ");
+            var servicedStore = await _servicedStoresService.GetByNameAndAddress(
+                servicedStoreInfo[0], servicedStoreInfo[1]);
+
+            string[] employeeInfo = orderCreated.Employee.Split(", ");
+            string[] employeeFullName = employeeInfo[0].Split(' ');
+            var employee = await _employeesService.GetByFullNameAndPosition(
+                employeeFullName[0], employeeFullName[1], employeeFullName[2], employeeInfo[1]);
+
+            string[] clientInfo = orderCreated.Client.Split(": ");
+            var client = await _clientsService.GetByUserId(Guid.Parse(clientInfo[1]));
+
+            string[] faultInfo = orderCreated.Client.Split(": ");
+            var fault = await _faultsService.GetById(Guid.Parse(faultInfo[1]));
+
+            await _ordersService.Create(new OrderForCreationDto
+            {
+                OrderDate = DateTime.Now,
+                EquipmentSerialNumber = orderCreated.EquipmentSerialNumber,
+                EquipmentReturnDate = orderCreated.EquipmentReturnDate,
+                ClientId = client.Id,
+                FaultId = fault.Id,
+                ServicedStoreId = servicedStore.Id,
+                Guarantee = orderCreated.GuaranteePeriodInMonth == 0 ? false : true,
+                GuaranteePeriodInMonth = orderCreated.GuaranteePeriodInMonth,
+                Price = orderCreated.Price,
+                EmployeeId = employee.Id
+            });
 
             return View("InfoPage");
         }

@@ -54,10 +54,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             var faults = await _faultsService.GetAll();
 
-            if (f_repairingModelName is null) f_repairingModelName = Guid.NewGuid().ToString();
-            if (f_name is null) f_name = Guid.NewGuid().ToString();
-            if (f_repairingMethods is null) f_repairingMethods = Guid.NewGuid().ToString();
-
             if (f_repairingModelName is not null)
                 Response.Cookies.Append("f_repairingModelName", f_repairingModelName);
             if (f_name is not null)
@@ -68,6 +64,10 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["f_repairingModelName"] = Request.Cookies["f_repairingModelName"];
             ViewData["f_name"] = Request.Cookies["f_name"];
             ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
+
+            if (f_repairingModelName is null) f_repairingModelName = Guid.NewGuid().ToString();
+            if (f_name is null) f_name = Guid.NewGuid().ToString();
+            if (f_repairingMethods is null) f_repairingMethods = Guid.NewGuid().ToString();
 
             return View("GetAll", faults.Where(f =>
                 f.RepairingModel.Name.Contains(f_repairingModelName, StringComparison.OrdinalIgnoreCase) ||

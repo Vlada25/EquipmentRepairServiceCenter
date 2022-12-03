@@ -1,6 +1,8 @@
 ﻿using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Employee;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
@@ -23,10 +25,14 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
         public string RepairingModelParticularQualities { get; set; }
 
 
+        [ValidateNever]
         public string RepairingModelPhotoUrl { get; set; }
 
 
+        [ValidateNever]
         public List<string> EquipmentTypes { get; set; }
+
+        [ValidateNever]
         public List<string> Manufacturers { get; set; }
 
         // Fault
@@ -37,12 +43,16 @@ namespace EquipmentRepairServiceCenter.ASP.ViewModels
         [Required(ErrorMessage = "Not specified information about employee")]
         public string EmployeeInfo { get; set; }
 
+
+        [ValidateNever]
         public List<EmployeeDto> Employees { get; set; }
 
         // ServicedStore
         [Required(ErrorMessage = "Not specified serviced store")]
         public string ServicedStore { get; set; }
 
+
+        [ValidateNever]
         public List<ServicedStore> ServicedStores { get; set; }
     }
 }

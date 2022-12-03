@@ -47,7 +47,7 @@
                         @order.EquipmentSerialNumber
                         <br>
                         @if (order.Price == 0){
-                            <a href="/Orders/Update?orderId=@order.Id">(Fill additional info)</a>
+                            <a href="/Orders/Update?orderId=@order.Id" style="color: red">(Fill additional info)</a>
                         }
                     </td>
                     <td>@order.EquipmentReturnDate</td>

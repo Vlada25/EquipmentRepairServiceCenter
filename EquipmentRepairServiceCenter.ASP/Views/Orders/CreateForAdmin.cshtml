@@ -1,20 +1,28 @@
-﻿@model OrderCreatedViewModel
+﻿@model OrderAdminCreatedViewModel
 
 @{
     ViewData["Title"] = "Orders";
 
-    var employeesInfo = Model.Employees
+    var employees = Model.Employees
        .Select(i => new SelectListItem()
                {
                    Text = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}",
                    Value = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}"
                });
 
-    var equipmentTypes = Model.EquipmentTypes
-        .Select(i => new SelectListItem() { Text = i, Value = i });
+    var faults = Model.Faults
+        .Select(i => new SelectListItem() 
+                {
+                    Text = $"{i.Name}, {i.RepairingModel.Name}, Id: {i.Id}",
+                    Value = $"{i.Name}, {i.RepairingModel.Name}, Id: {i.Id}"
+                });
 
-    var manufacturers = Model.Manufacturers
-        .Select(i => new SelectListItem() { Text = i, Value = i });
+    var clients = Model.Clients
+        .Select(i => new SelectListItem()
+                {
+                    Text = $"{i.Surname} {i.Name} {i.MiddleName}, User id: {i.UserId}",
+                    Value = $"{i.Surname} {i.Name} {i.MiddleName},  User id: {i.UserId}"
+                });
 
     var servicedStores = Model.ServicedStores
         .Select(i => new SelectListItem()
@@ -27,57 +35,41 @@
 <div>
     <h3>Order</h3>
 
-    <form class="creation-form" method="post" asp-action="Create">
+    <form class="creation-form" method="post" asp-action="CreateForAdmin">
         <div class="field-container">
-            <label asp-for="RepairingModelType">Equipment Type</label>
+            <label asp-for="EquipmentSerialNumber">Equipment Serial Number</label>
             <div>
-                <select class="select-props" asp-for="RepairingModelType" asp-items="@equipmentTypes"></select>
+                <input class="input-props" asp-for="EquipmentSerialNumber" type="number"/>
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="EquipmentSerialNumber"></span>
             </div>
         </div>
 
         <div class="field-container">
-            <label asp-for="RepairingModelManufacturer">Equipment Manufacturer</label>
+            <label asp-for="EquipmentReturnDate">Equipment Return Date</label>
             <div>
-                <select class="select-props" asp-for="RepairingModelManufacturer" asp-items="@manufacturers"></select>
+                <input class="input-props" asp-for="EquipmentReturnDate" type="date"/>
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="EquipmentReturnDate"></span>
             </div>
         </div>
 
         <div class="field-container">
-            <label asp-for="RepairingModelSpecifications">Equipment Specifications</label>
+            <label asp-for="Client"></label>
             <div>
-                <input class="input-props" asp-for="RepairingModelSpecifications" />
-                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="RepairingModelSpecifications"></span>
+                <select class="select-props" asp-for="Client" asp-items="@clients"></select>
             </div>
         </div>
 
         <div class="field-container">
-            <label asp-for="RepairingModelParticularQualities">Equipment Particular Qualities</label>
+            <label asp-for="Employee"></label>
             <div>
-                <input class="input-props" asp-for="RepairingModelParticularQualities" />
-                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="RepairingModelParticularQualities"></span>
+                <select class="select-props" asp-for="Client" asp-items="@employees"></select>
             </div>
         </div>
 
         <div class="field-container">
-            <label asp-for="RepairingModelPhotoUrl">Photo Url</label>
+            <label asp-for="Fault"></label>
             <div>
-                <input class="input-props" asp-for="RepairingModelPhotoUrl" />
-                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="RepairingModelPhotoUrl"></span>
-            </div>
-        </div>
-
-        <div class="field-container">
-            <label asp-for="FaultName">Fault</label>
-            <div>
-                <input class="input-props" asp-for="FaultName" />
-                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="FaultName"></span>
-            </div>
-        </div>
-
-        <div class="field-container">
-            <label asp-for="EmployeeInfo">Employee</label>
-            <div>
-                <select class="select-props" asp-for="EmployeeInfo" asp-items="@employeesInfo"></select>
+                <select class="select-props" asp-for="Fault" asp-items="@faults"></select>
             </div>
         </div>
 
@@ -85,6 +77,22 @@
             <label asp-for="ServicedStore">Serviced Store</label>
             <div>
                 <select class="select-props" asp-for="ServicedStore" asp-items="@servicedStores"></select>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="GuaranteePeriodInMonth">Guarantee Period (months)</label>
+            <div>
+                <input class="input-props" asp-for="GuaranteePeriodInMonth" type="number" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="GuaranteePeriodInMonth"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Price"></label>
+            <div>
+                <input class="input-props" asp-for="Price" type="number" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Price"></span>
             </div>
         </div>
 
