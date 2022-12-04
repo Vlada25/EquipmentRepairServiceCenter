@@ -9,7 +9,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     public class ServicedStoresController : Controller
     {
         private readonly IServicedStoresService _servicedStoresService;
+
         private static int _rowsCount = 0;
+        private static int _cacheNumber = 0;
+        private static bool isNameAscending = true;
+        private static bool isAddressAscending = true;
 
         public ServicedStoresController(IServicedStoresService servicedStoresService)
         {
@@ -20,14 +24,48 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
-            return View(await _servicedStoresService.Get(_rowsCount, $"ServicedStores{_rowsCount}"));
+            return View(await _servicedStoresService.Get(_rowsCount, $"ServicedStores{_rowsCount}-{_cacheNumber}"));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
-            return View("GetAll", await _servicedStoresService.Get(_rowsCount, $"ServicedStores{_rowsCount}"));
+            return View("GetAll", await _servicedStoresService.Get(_rowsCount, $"ServicedStores{_rowsCount}-{_cacheNumber}"));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(int sortedFieldNumber)
+        {
+            var servicedStores = await _servicedStoresService.Get(_rowsCount, $"ServicedStores{_rowsCount}-{_cacheNumber}");
+
+            switch (sortedFieldNumber)
+            {
+                case 1:
+                    if (isNameAscending)
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", servicedStores.OrderBy(c => c.Name).ToList());
+                    }
+                    else
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", servicedStores.OrderByDescending(c => c.Name).ToList());
+                    }
+                case 2:
+                    if (isAddressAscending)
+                    {
+                        isAddressAscending = !isAddressAscending;
+                        return View("GetAll", servicedStores.OrderBy(c => c.Address).ToList());
+                    }
+                    else
+                    {
+                        isAddressAscending = !isAddressAscending;
+                        return View("GetAll", servicedStores.OrderByDescending(c => c.Address).ToList());
+                    }
+                default:
+                    return View("GetAll", servicedStores);
+            }
         }
 
         [HttpGet]
@@ -45,6 +83,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             }
 
             await _servicedStoresService.Create(servicedStore);
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }
@@ -84,6 +124,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 return View();
             }
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
@@ -107,6 +149,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }

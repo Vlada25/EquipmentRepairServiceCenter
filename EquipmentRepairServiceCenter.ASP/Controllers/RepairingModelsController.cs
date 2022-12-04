@@ -15,7 +15,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     public class RepairingModelsController : Controller
     {
         private readonly IRepairingModelsService _repairingModelsService;
+
         private static int _rowsCount = 0;
+        private static int _cacheNumber = 0;
+        private static bool isNameAscending = true;
+        private static bool isManufacturerAscending = true;
 
         public RepairingModelsController(IRepairingModelsService repairingModelsService)
         {
@@ -34,7 +38,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
-            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}");
+            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}-{_cacheNumber}");
 
             return View(repairingModels);
         }
@@ -43,9 +47,43 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
-            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}");
+            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}-{_cacheNumber}");
 
             return View("GetAll", repairingModels);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(int sortedFieldNumber)
+        {
+            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}-{_cacheNumber}");
+
+            switch (sortedFieldNumber)
+            {
+                case 1:
+                    if (isNameAscending)
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", repairingModels.OrderBy(c => c.Name).ToList());
+                    }
+                    else
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", repairingModels.OrderByDescending(c => c.Name).ToList());
+                    }
+                case 2:
+                    if (isManufacturerAscending)
+                    {
+                        isManufacturerAscending = !isManufacturerAscending;
+                        return View("GetAll", repairingModels.OrderBy(c => c.Manufacturer).ToList());
+                    }
+                    else
+                    {
+                        isManufacturerAscending = !isManufacturerAscending;
+                        return View("GetAll", repairingModels.OrderByDescending(c => c.Manufacturer).ToList());
+                    }
+                default:
+                    return View("GetAll", repairingModels);
+            }
         }
 
         [HttpGet]
@@ -90,11 +128,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 PhotoUrl = repairingModelCreated.PhotoUrl
             });
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(Guid id)
         {
             var repairingModel = await _repairingModelsService.GetById(id);
@@ -109,7 +148,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(RepairingModelForUpdateDto repairingModelUpdated)
         {
             if (!ModelState.IsValid)
@@ -133,10 +171,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 return View();
             }
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
-        //[Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Delete(Guid id)
         {
@@ -157,6 +196,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }

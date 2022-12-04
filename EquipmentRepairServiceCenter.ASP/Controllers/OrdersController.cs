@@ -16,7 +16,6 @@ using System.Security.Claims;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    //[Authorize]
     public class OrdersController : Controller
     {
         private readonly IOrdersService _ordersService;
@@ -29,6 +28,15 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         private readonly HttpContext _httpContext;
 
         private static int _rowsCount = 0;
+        private static int _cacheNumber = 0;
+        private static bool isDateAscending = true;
+        private static bool isSerialNumberAscending = true;
+        private static bool isClientAscending = true;
+        private static bool isFaultAscending = true;
+        private static bool isServicedStoreAscending = true;
+        private static bool isEmployeeAscending = true;
+        private static bool isPriceAscending = true;
+        private static bool isGuaranteeAscending = true;
 
         public OrdersController(IOrdersService ordersService,
             IClientsService clientsService,
@@ -56,18 +64,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["o_clientFio"] = Request.Cookies["o_clientFio"];
             ViewData["o_employeeFio"] = Request.Cookies["o_employeeFio"];
 
-            var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}");
-            var clients = await _clientsService.GetAll();
-            var employees = await _employeesService.GetAll();
-
-            OrdersClientsEmployeesViewModel ordersClients = new OrdersClientsEmployeesViewModel
-            {
-                Orders = orders.ToList(),
-                Clients = clients.ToList(),
-                Employees = employees.ToList()
-            };
-
-            return View(ordersClients);
+            return View(await GetAllViewModel());
         }
 
         [HttpGet]
@@ -77,18 +74,107 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["o_clientFio"] = Request.Cookies["o_clientFio"];
             ViewData["o_employeeFio"] = Request.Cookies["o_employeeFio"];
 
-            var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}");
-            var clients = await _clientsService.GetAll();
-            var employees = await _employeesService.GetAll();
+            return View("GetAll", await GetAllViewModel());
+        }
 
-            OrdersClientsEmployeesViewModel ordersClients = new OrdersClientsEmployeesViewModel
+        [HttpGet]
+        public async Task<IActionResult> Get(int sortedFieldNumber)
+        {
+            var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}-{_cacheNumber}");
+
+            switch (sortedFieldNumber)
             {
-                Orders = orders.ToList(),
-                Clients = clients.ToList(),
-                Employees = employees.ToList()
-            };
-
-            return View("GetAll", ordersClients);
+                case 1:
+                    if (isDateAscending)
+                    {
+                        isDateAscending = !isDateAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => c.OrderDate).ToList()));
+                    }
+                    else
+                    {
+                        isDateAscending = !isDateAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => c.OrderDate).ToList()));
+                    }
+                case 2:
+                    if (isSerialNumberAscending)
+                    {
+                        isSerialNumberAscending = !isSerialNumberAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => c.EquipmentSerialNumber).ToList()));
+                    }
+                    else
+                    {
+                        isSerialNumberAscending = !isSerialNumberAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => c.EquipmentSerialNumber).ToList()));
+                    }
+                case 3:
+                    if (isClientAscending)
+                    {
+                        isClientAscending = !isClientAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => $"{c.Client.Surname} {c.Client.Name} {c.Client.MiddleName}").ToList()));
+                    }
+                    else
+                    {
+                        isClientAscending = !isClientAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => $"{c.Client.Surname} {c.Client.Name} {c.Client.MiddleName}").ToList()));
+                    }
+                case 4:
+                    if (isFaultAscending)
+                    {
+                        isFaultAscending = !isFaultAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => $"{c.Fault.Name} {c.Fault.RepairingModel.Name}").ToList()));
+                    }
+                    else
+                    {
+                        isFaultAscending = !isFaultAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => $"{c.Fault.Name} {c.Fault.RepairingModel.Name}").ToList()));
+                    }
+                case 5:
+                    if (isServicedStoreAscending)
+                    {
+                        isServicedStoreAscending = !isServicedStoreAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => c.ServicedStore.Name).ToList()));
+                    }
+                    else
+                    {
+                        isServicedStoreAscending = !isServicedStoreAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => c.ServicedStore.Name).ToList()));
+                    }
+                case 6:
+                    if (isEmployeeAscending)
+                    {
+                        isEmployeeAscending = !isEmployeeAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => $"{c.Employee.Surname} {c.Employee.Name} {c.Employee.MiddleName}").ToList()));
+                    }
+                    else
+                    {
+                        isEmployeeAscending = !isEmployeeAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => $"{c.Employee.Surname} {c.Employee.Name} {c.Employee.MiddleName}").ToList()));
+                    }
+                case 7:
+                    if (isPriceAscending)
+                    {
+                        isPriceAscending = !isPriceAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => c.Price).ToList()));
+                    }
+                    else
+                    {
+                        isPriceAscending = !isPriceAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => c.Price).ToList()));
+                    }
+                case 8:
+                    if (isGuaranteeAscending)
+                    {
+                        isGuaranteeAscending = !isGuaranteeAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderBy(c => c.GuaranteePeriodInMonth).ToList()));
+                    }
+                    else
+                    {
+                        isGuaranteeAscending = !isGuaranteeAscending;
+                        return View("GetAll", await GetAllViewModel(orders.OrderByDescending(c => c.GuaranteePeriodInMonth).ToList()));
+                    }
+                default:
+                    return View("GetAll", orders);
+            }
         }
 
         [HttpGet]
@@ -265,15 +351,13 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             foreach (int i in Enum.GetValues(typeof(EquipmentType)))
                 eqTypes.Add(EnumExtensions.GetDisplayName((EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(i)));
 
-            OrderCreatedViewModel orderCreated = new OrderCreatedViewModel
+            return View(new OrderCreatedViewModel
             {
                 Employees = employees.ToList(),
                 EquipmentTypes = eqTypes,
                 Manufacturers = DbInitializer.Manufacturers.ToList(),
                 ServicedStores = servicedStores.ToList(),
-            };
-
-            return View(orderCreated);
+            });
         }
 
         [HttpPost]
@@ -300,15 +384,13 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 foreach (int i in Enum.GetValues(typeof(EquipmentType)))
                     eqTypes.Add(EnumExtensions.GetDisplayName((EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(i)));
 
-                OrderCreatedViewModel orderCreated0 = new OrderCreatedViewModel
+                return View(new OrderCreatedViewModel
                 {
                     Employees = employees.ToList(),
                     EquipmentTypes = eqTypes,
                     Manufacturers = DbInitializer.Manufacturers.ToList(),
                     ServicedStores = servicedStores.ToList(),
-                };
-
-                return View(orderCreated);
+                });
             }
 
             var userName = _httpContext.User.Claims
@@ -360,6 +442,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             };
 
             await _ordersService.Create(order);
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }
@@ -416,6 +500,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 GuaranteePeriodInMonth = orderUpdated.GuaranteeInMonth
             });
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
@@ -439,6 +525,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }
@@ -510,7 +598,84 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 EmployeeId = employee.Id
             });
 
+            _cacheNumber++;
+
             return View("InfoPage");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateForAdmin(Guid id)
+        {
+            var order = await _ordersService.GetById(id);
+
+            return View(new OrderAdminUpdatedViewModel
+            {
+                Id = id,
+                EquipmentReturnDate = order.EquipmentReturnDate,
+                Price = order.Price,
+                GuaranteePeriodInMonth = order.GuaranteePeriodInMonth
+            });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateForAdmin(OrderAdminUpdatedViewModel orderUpdated)
+        {
+            if (!ModelState.IsValid)
+            {
+                var order0 = await _ordersService.GetById(orderUpdated.Id);
+
+                return View(new OrderAdminUpdatedViewModel
+                {
+                    Id = orderUpdated.Id,
+                    EquipmentReturnDate = order0.EquipmentReturnDate,
+                    Price = order0.Price,
+                    GuaranteePeriodInMonth = order0.GuaranteePeriodInMonth
+                });
+            }
+
+            var order = await _ordersService.GetById(orderUpdated.Id);
+
+            await _ordersService.Update(new OrderForUpdateDto
+            {
+                Id = order.Id,
+                Price = orderUpdated.Price,
+                EquipmentReturnDate = orderUpdated.EquipmentReturnDate,
+                Guarantee = orderUpdated.GuaranteePeriodInMonth == 0 ? false : true,
+                GuaranteePeriodInMonth = orderUpdated.GuaranteePeriodInMonth
+            });
+
+            _cacheNumber++;
+
+            return View("InfoPage");
+        }
+
+        private async Task<OrdersClientsEmployeesViewModel> GetAllViewModel()
+        {
+            var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}-{_cacheNumber}");
+            var clients = await _clientsService.GetAll();
+            var employees = await _employeesService.GetAll();
+
+            return new OrdersClientsEmployeesViewModel
+            {
+                Orders = orders.ToList(),
+                Clients = clients.ToList(),
+                Employees = employees.ToList()
+            };
+        }
+
+        private async Task<OrdersClientsEmployeesViewModel> GetAllViewModel(List<Order> orders)
+        {
+            var clients = await _clientsService.GetAll();
+            var employees = await _employeesService.GetAll();
+
+            return new OrdersClientsEmployeesViewModel
+            {
+                Orders = orders,
+                Clients = clients.ToList(),
+                Employees = employees.ToList()
+            };
         }
     }
 }

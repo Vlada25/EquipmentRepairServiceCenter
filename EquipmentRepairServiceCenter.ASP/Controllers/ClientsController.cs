@@ -7,9 +7,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     public class ClientsController : Controller
     {
         private readonly IClientsService _clientsService;
+
         private static int _rowsCount = 0;
         private static bool isSurnameAscending = true;
         private static bool isNameAscending = true;
+        private static int _cacheNumber = 0;
 
         public ClientsController(IClientsService clientsService)
         {
@@ -20,7 +22,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
-            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}");
+            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}-{_cacheNumber}");
 
             return View(clients);
         }
@@ -29,7 +31,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
-            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}");
+            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}-{_cacheNumber}");
 
             return View("GetAll", clients);
         }
@@ -37,7 +39,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
-            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}");
+            var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}-{_cacheNumber}");
 
             switch (sortedFieldNumber)
             {
@@ -97,6 +99,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 return View();
             }
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
@@ -120,6 +124,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }

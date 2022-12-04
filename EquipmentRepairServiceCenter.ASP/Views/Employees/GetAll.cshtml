@@ -31,6 +31,7 @@
         <input class="input-props" type="text" name="e_middleName" placeholder="Middle name or part of middle name" value="@ViewData["e_middleName"]" />
         <input class="input-props" type="number" name="e_workExperience" placeholder="Work experience (years)" value="@workExp"/>
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
+        <a href="/Employees/ClearCookie" class="a-create">Clear</a>
     </form>  
 
     <a href="/Accounts/RegisterEmployee" class="a-create">Create</a>
@@ -39,8 +40,8 @@
         <thead>
             <tr>
                 <th>Number</th>
-                <th>Surname</th>
-                <th>Name</th>
+                <th><a href="/Employees/Get?sortedFieldNumber=1">Surname 🠕🠗</a></th>
+                <th><a href="/Employees/Get?sortedFieldNumber=2">Name 🠕🠗</a></th>
                 <th>Middle Name</th>
                 <th>Position</th>
                 <th>Work Experience (years)</th>

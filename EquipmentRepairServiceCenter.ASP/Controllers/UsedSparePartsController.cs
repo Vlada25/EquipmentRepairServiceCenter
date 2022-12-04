@@ -10,7 +10,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         private readonly IUsedSparePartsService _usedSparePartsService;
         private readonly IFaultsService _faultsService;
         private readonly ISparePartsService _sparePartsService;
+
         private static int _rowsCount = 0;
+        private static int _cacheNumber = 0;
+        private static bool isSparePartNameAscending = true;
+        private static bool isFaultNameAscending = true;
 
         public UsedSparePartsController(IUsedSparePartsService usedSparePartsService, 
             IFaultsService faultsService, 
@@ -25,14 +29,48 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
-            return View(await _usedSparePartsService.Get(_rowsCount, $"UsedSpareParts{_rowsCount}"));
+            return View(await _usedSparePartsService.Get(_rowsCount, $"UsedSpareParts{_rowsCount}-{_cacheNumber}"));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
-            return View("GetAll", await _usedSparePartsService.Get(_rowsCount, $"UsedSpareParts{_rowsCount}"));
+            return View("GetAll", await _usedSparePartsService.Get(_rowsCount, $"UsedSpareParts{_rowsCount}-{_cacheNumber}"));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(int sortedFieldNumber)
+        {
+            var usedSpareParts = await _usedSparePartsService.Get(_rowsCount, $"UsedServicedStores{_rowsCount}-{_cacheNumber}");
+
+            switch (sortedFieldNumber)
+            {
+                case 1:
+                    if (isSparePartNameAscending)
+                    {
+                        isSparePartNameAscending = !isSparePartNameAscending;
+                        return View("GetAll", usedSpareParts.OrderBy(c => c.SparePart.Name).ToList());
+                    }
+                    else
+                    {
+                        isSparePartNameAscending = !isSparePartNameAscending;
+                        return View("GetAll", usedSpareParts.OrderByDescending(c => c.SparePart.Name).ToList());
+                    }
+                case 2:
+                    if (isFaultNameAscending)
+                    {
+                        isFaultNameAscending = !isFaultNameAscending;
+                        return View("GetAll", usedSpareParts.OrderBy(c => c.Fault.Name).ToList());
+                    }
+                    else
+                    {
+                        isFaultNameAscending = !isFaultNameAscending;
+                        return View("GetAll", usedSpareParts.OrderByDescending(c => c.Fault.Name).ToList());
+                    }
+                default:
+                    return View("GetAll", usedSpareParts);
+            }
         }
 
         [HttpGet]
@@ -69,6 +107,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 SparePartId = Guid.Parse(usedSparePartCreated.SparePart.Split(';')[0]),
             });
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
@@ -92,6 +132,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }

@@ -60,15 +60,15 @@
         <thead>
             <tr>
                 <th>Number</th>
-                <th>Order Date</th>
-                <th>Equipment Serial Number</th>
+                <th><a href="/Orders/Get?sortedFieldNumber=1">Order Date 🠕🠗</a></th>
+                <th><a href="/Orders/Get?sortedFieldNumber=2">Equipment Serial Number 🠕🠗</a></th>
                 <th>Equipment Return Date</th>
-                <th>Client</th>
-                <th>Fault</th>
-                <th>Serviced Store</th>
-                <th>Employee</th>
-                <th>Price</th>
-                <th>Guarantee (months)</th>
+                <th><a href="/Orders/Get?sortedFieldNumber=3">Client 🠕🠗</a></th>
+                <th><a href="/Orders/Get?sortedFieldNumber=4">Fault 🠕🠗</a></th>
+                <th><a href="/Orders/Get?sortedFieldNumber=5">Serviced Store 🠕🠗</a></th>
+                <th><a href="/Orders/Get?sortedFieldNumber=6">Employee 🠕🠗</a></th>
+                <th><a href="/Orders/Get?sortedFieldNumber=7">Price 🠕🠗</a></th>
+                <th><a href="/Orders/Get?sortedFieldNumber=8">Guarantee (months) 🠕🠗</a></th>
                 <th>Update</th>
                 <th>Delete</th>
             </tr>
@@ -94,7 +94,7 @@
                     {
                         <td>-</td>
                     }
-                    <td><a href="/Orders/Update?id=@order.Id" class="ud-button">Update</a></td>
+                    <td><a href="/Orders/UpdateForAdmin?id=@order.Id" class="ud-button">Update</a></td>
                     <td><a href="/Orders/Delete?id=@order.Id" class="ud-button">Delete</a></td>
                 </tr>
 

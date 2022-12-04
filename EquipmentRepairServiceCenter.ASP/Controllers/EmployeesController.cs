@@ -15,7 +15,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     {
         private readonly IEmployeesService _employeesService;
         private readonly IServicedStoresService _servicedStoresService;
+
         private static int _rowsCount = 0;
+        private static int _cacheNumber = 0;
+        private static bool isSurnameAscending = true;
+        private static bool isNameAscending = true;
 
         public EmployeesController(IEmployeesService employeesService,
             IServicedStoresService servicedStoresService)
@@ -33,7 +37,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["e_middleName"] = Request.Cookies["e_middleName"];
             ViewData["e_workExperience"] = Request.Cookies["e_workExperience"];
 
-            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}");
+            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}-{_cacheNumber}");
 
             return View(employees);
         }
@@ -47,9 +51,58 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["e_middleName"] = Request.Cookies["e_middleName"];
             ViewData["e_workExperience"] = Request.Cookies["e_workExperience"];
 
-            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}");
+            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}-{_cacheNumber}");
 
             return View("GetAll", employees);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ClearCookie()
+        {
+            _rowsCount = 20;
+            
+            Response.Cookies.Delete("e_surname");
+            Response.Cookies.Delete("e_name");
+            Response.Cookies.Delete("e_middleName");
+            Response.Cookies.Delete("e_workExperience");
+
+            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}-{_cacheNumber}");
+
+            return View("GetAll", employees);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(int sortedFieldNumber)
+        {
+            var employees = await _employeesService.Get(_rowsCount, $"Employees{_rowsCount}-{_cacheNumber}");
+
+            switch (sortedFieldNumber)
+            {
+                case 1:
+                    if (isNameAscending)
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", employees.OrderBy(c => c.Name).ToList());
+                    }
+                    else
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", employees.OrderByDescending(c => c.Name).ToList());
+                    }
+                case 2:
+                    if (isSurnameAscending)
+                    {
+                        isSurnameAscending = !isSurnameAscending;
+                        return View("GetAll", employees.OrderBy(c => c.Surname).ToList());
+                    }
+                    else
+                    {
+                        isSurnameAscending = !isSurnameAscending;
+                        return View("GetAll", employees.OrderByDescending(c => c.Surname).ToList());
+                    }
+                default:
+                    return View("GetAll", employees);
+            }
         }
 
         [HttpGet]
@@ -154,6 +207,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 return View();
             }
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
@@ -177,6 +232,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }

@@ -1,5 +1,62 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model OrderAdminUpdatedViewModel
+
 @{
+    ViewData["Title"] = "Orders";
 }
+
+<div id="dropdown" class="dropdown">
+    <button class="dropbtn">Menu</button>
+    <div class="dropdown-content">
+        <a href="/Clients/GetAll">Clients</a>
+        <a href="/Employees/GetAll">Employees</a>
+        <a href="/Faults/GetAll">Faults</a>
+        <a href="/Orders/GetAll">Orders</a>
+        <a href="/RepairingModels/GetAll">Repairing Models</a>
+        <a href="/ServicedStores/GetAll">Serviced Stores</a>
+        <a href="/SpareParts/GetAll">Spare Parts</a>
+        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
+        <a href="/Users/GetAll">Users</a>
+    </div>
+</div>
+
+<div>
+    <h3>Order</h3>
+
+    <form class="creation-form" method="post" asp-action="UpdateForAdmin">
+        <div class="field-container">
+            <label>Id</label>
+            <input class="input-props" type="text" name="id" value="@Model.Id" readonly />
+            <br>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="EquipmentReturnDate">Equipment Return Date</label>
+            <div>
+                <input class="input-props" asp-for="EquipmentReturnDate" type="date" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="EquipmentReturnDate"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="GuaranteePeriodInMonth">Guarantee Period (months)</label>
+            <div>
+                <input class="input-props" asp-for="GuaranteePeriodInMonth" type="number" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="GuaranteePeriodInMonth"></span>
+            </div>
+        </div>
+
+        <div class="field-container">
+            <label asp-for="Price">Price (old value: @Model.Price)</label>
+            <div>
+                <input class="input-props" asp-for="Price" type="number" />
+                <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="Price"></span>
+            </div>
+        </div>
+
+        <div class="action-btn-container">
+            <button class="action-btn" type="submit">Submit</button>
+        </div>
+    </form>
+
+    <a class="back-btn" href="/Home/Index">Back</a>
+</div>

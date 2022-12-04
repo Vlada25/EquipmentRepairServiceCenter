@@ -14,7 +14,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     {
         private readonly IFaultsService _faultsService;
         private readonly IRepairingModelsService _repairingModelsService;
+
         private static int _rowsCount;
+        private static int _cacheNumber = 0;
+        private static bool isRepModelAscending = true;
+        private static bool isNameAscending = true;
+        private static bool isPriceAscending = true;
 
         public FaultsController(IFaultsService faultsService,
             IRepairingModelsService repairingModelsService)
@@ -31,7 +36,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["f_name"] = Request.Cookies["f_name"];
             ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
 
-            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}");
+            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
 
             return View(faults);
         }
@@ -44,9 +49,54 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["f_name"] = Request.Cookies["f_name"];
             ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
 
-            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}");
+            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
 
             return View("GetAll", faults);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get(int sortedFieldNumber)
+        {
+            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
+
+            switch (sortedFieldNumber)
+            {
+                case 1:
+                    if (isNameAscending)
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", faults.OrderBy(c => c.Name).ToList());
+                    }
+                    else
+                    {
+                        isNameAscending = !isNameAscending;
+                        return View("GetAll", faults.OrderByDescending(c => c.Name).ToList());
+                    }
+                case 2:
+                    if (isRepModelAscending)
+                    {
+                        isRepModelAscending = !isRepModelAscending;
+                        return View("GetAll", faults.OrderBy(c => c.RepairingModel.Name).ToList());
+                    }
+                    else
+                    {
+                        isRepModelAscending = !isRepModelAscending;
+                        return View("GetAll", faults.OrderByDescending(c => c.RepairingModel.Name).ToList());
+                    }
+                case 3:
+                    if (isPriceAscending)
+                    {
+                        isPriceAscending = !isPriceAscending;
+                        return View("GetAll", faults.OrderBy(c => c.Price).ToList());
+                    }
+                    else
+                    {
+                        isPriceAscending = !isPriceAscending;
+                        return View("GetAll", faults.OrderByDescending(c => c.Price).ToList());
+                    }
+                default:
+                    return View("GetAll", faults);
+            }
         }
 
         [HttpGet]
@@ -110,11 +160,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 Price = fault.Price
             });
 
+            _cacheNumber++;
+
             return View("InfoPage");
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(Guid id)
         {
             var fault = await _faultsService.GetById(id);
@@ -128,7 +179,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Employee")]
         public async Task<IActionResult> Update(FaultForUpdateDto faultUpdated)
         {
             if (!ModelState.IsValid)
@@ -149,6 +199,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }
@@ -173,6 +225,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 return View();
             }
+
+            _cacheNumber++;
 
             return View("InfoPage");
         }
