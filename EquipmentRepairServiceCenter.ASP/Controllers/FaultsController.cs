@@ -55,6 +55,20 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ClearCookie()
+        {
+            _rowsCount = 20;
+
+            Response.Cookies.Delete("f_repairingModelName");
+            Response.Cookies.Delete("f_name");
+            Response.Cookies.Delete("f_repairingMethods");
+
+            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
+
+            return View("GetAll", faults);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
             var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");

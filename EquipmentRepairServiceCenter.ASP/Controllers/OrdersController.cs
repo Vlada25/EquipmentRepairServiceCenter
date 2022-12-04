@@ -78,6 +78,17 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ClearCookie()
+        {
+            _rowsCount = 20;
+
+            Response.Cookies.Delete("o_clientFio");
+            Response.Cookies.Delete("o_employeeFio");
+
+            return View("GetAll", await GetAllViewModel());
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
             var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}-{_cacheNumber}");

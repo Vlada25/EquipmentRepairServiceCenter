@@ -51,7 +51,9 @@
         <select class="select-props" name="o_employeeFio" asp-items="@employeesInfo">
             <option selected>@employee</option>
         </select>
+
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
+        <a href="/Orders/ClearCookie" class="a-create">Clear</a>
     </form>  
 
     <a href="/Orders/CreateForAdmin" class="a-create">Create</a>
