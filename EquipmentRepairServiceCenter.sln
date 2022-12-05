@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.Domain", "EquipmentRepairServiceCenter.Domain\EquipmentRepairServiceCenter.Domain.csproj", "{283D19E8-0781-4C70-8BCD-BC3D43616888}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.Domain", "EquipmentRepairServiceCenter.Domain\EquipmentRepairServiceCenter.Domain.csproj", "{283D19E8-0781-4C70-8BCD-BC3D43616888}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.Database", "EquipmentRepairServiceCenter.Database\EquipmentRepairServiceCenter.Database.csproj", "{A2B16776-F6A5-4D42-B4DE-CE34EDB64B56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.Database", "EquipmentRepairServiceCenter.Database\EquipmentRepairServiceCenter.Database.csproj", "{A2B16776-F6A5-4D42-B4DE-CE34EDB64B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.DTO", "EquipmentRepairServiceCenter.DTO\EquipmentRepairServiceCenter.DTO.csproj", "{2208C254-43E9-457E-BD13-6143B95C3100}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.DTO", "EquipmentRepairServiceCenter.DTO\EquipmentRepairServiceCenter.DTO.csproj", "{2208C254-43E9-457E-BD13-6143B95C3100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.Interfaces", "EquipmentRepairServiceCenter.Interfaces\EquipmentRepairServiceCenter.Interfaces.csproj", "{2021F44E-078A-4F32-96AA-1B8E62AC8D8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.Interfaces", "EquipmentRepairServiceCenter.Interfaces\EquipmentRepairServiceCenter.Interfaces.csproj", "{2021F44E-078A-4F32-96AA-1B8E62AC8D8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.ASP", "EquipmentRepairServiceCenter.ASP\EquipmentRepairServiceCenter.ASP.csproj", "{8ACECFEC-D096-432B-802A-A3AF51D7DC1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.ASP", "EquipmentRepairServiceCenter.ASP\EquipmentRepairServiceCenter.ASP.csproj", "{8ACECFEC-D096-432B-802A-A3AF51D7DC1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.UnitTests", "EquipmentRepairServiceCenter.UnitTests\EquipmentRepairServiceCenter.UnitTests.csproj", "{0C906863-3209-40CD-9A47-6F7F6AD14F20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.UnitTests", "EquipmentRepairServiceCenter.UnitTests\EquipmentRepairServiceCenter.UnitTests.csproj", "{0C906863-3209-40CD-9A47-6F7F6AD14F20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.API", "EquipmentRepairServiceCenter.API\EquipmentRepairServiceCenter.API.csproj", "{73266C03-052F-4D28-8545-83B3C130D215}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{0C906863-3209-40CD-9A47-6F7F6AD14F20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C906863-3209-40CD-9A47-6F7F6AD14F20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C906863-3209-40CD-9A47-6F7F6AD14F20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73266C03-052F-4D28-8545-83B3C130D215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73266C03-052F-4D28-8545-83B3C130D215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73266C03-052F-4D28-8545-83B3C130D215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73266C03-052F-4D28-8545-83B3C130D215}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
