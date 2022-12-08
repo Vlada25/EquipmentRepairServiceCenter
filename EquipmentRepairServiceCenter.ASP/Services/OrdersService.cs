@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Models;
+using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.DTO.Order;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
@@ -64,6 +65,9 @@ namespace EquipmentRepairServiceCenter.ASP.Services
 
         public async Task<IEnumerable<Order>> GetAll() =>
             await _repositoryManager.OrdersRepository.GetAll(false);
+
+        public async Task<IEnumerable<Order>> GetByClientId(Guid clientId) =>
+            await _repositoryManager.OrdersRepository.GetByClientId(clientId);
 
         public async Task<IEnumerable<Order>> GetByEmployeeId(Guid employeeId) =>
             await _repositoryManager.OrdersRepository.GetByEmployeeId(employeeId);

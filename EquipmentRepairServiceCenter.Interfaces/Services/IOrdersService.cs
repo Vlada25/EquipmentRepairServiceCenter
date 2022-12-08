@@ -8,6 +8,7 @@ namespace EquipmentRepairServiceCenter.Interfaces.Services
         Task<IEnumerable<Order>> GetAll();
         Task<IEnumerable<Order>> Get(int rowsCount, string cacheKey);
         Task<IEnumerable<Order>> GetByEmployeeId(Guid employeeId);
+        Task<IEnumerable<Order>> GetByClientId(Guid clientId);
         Task<Order> GetById(Guid id);
         Task<Order> Create(OrderForCreationDto entityForCreation);
         Task CreateMany();

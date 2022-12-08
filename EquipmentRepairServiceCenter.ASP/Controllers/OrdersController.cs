@@ -206,6 +206,23 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetForClient()
+        {
+            var userName = _httpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var client = await _clientsService.GetByUserId(Guid.Parse(user.Id));
+
+            var orders = await _ordersService.GetByClientId(client.Id);
+
+            return View(orders);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetForEmployeeSearch(DateTime dateTime, string status)
         {
             var userName = _httpContext.User.Claims
@@ -343,18 +360,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var userName = _httpContext.User.Claims
-                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
-                .Select(claim => claim.Value).SingleOrDefault();
-
-            var user = await _userManager.FindByNameAsync(userName);
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            if (userRoles.Contains("Employee"))
-            {
-                return RedirectToRoute(new { controller = "Orders", action = "GetForEmployee" });
-            }
-
             var employees = await _employeesService.GetAll();
             var eqTypes = new List<string>();
             var servicedStores = await _servicedStoresService.GetAll();
@@ -376,18 +381,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var userName0 = _httpContext.User.Claims
-                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
-                .Select(claim => claim.Value).SingleOrDefault();
-
-                var user0 = await _userManager.FindByNameAsync(userName0);
-                var userRoles = await _userManager.GetRolesAsync(user0);
-
-                if (userRoles.Contains("Employee"))
-                {
-                    return RedirectToRoute(new { controller = "Orders", action = "GetForEmployee" });
-                }
-
                 var employees = await _employeesService.GetAll();
                 var eqTypes = new List<string>();
                 var servicedStores = await _servicedStoresService.GetAll();
@@ -438,7 +431,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 Price = 0
             });
 
-            var order = new OrderForCreationDto
+            await _ordersService.Create(new OrderForCreationDto
             {
                 OrderDate = DateTime.Now,
                 EquipmentSerialNumber = new Random((int)DateTime.Now.Ticks).Next(1000000, 10000000),
@@ -450,13 +443,11 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 GuaranteePeriodInMonth = 0,
                 Price = 0,
                 EmployeeId = employee.Id
-            };
-
-            await _ordersService.Create(order);
+            });
 
             _cacheNumber++;
 
-            return View("InfoPage");
+            return View("GetAll", await GetAllViewModel());
         }
 
         [HttpGet]
@@ -513,13 +504,14 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             _cacheNumber++;
 
-            return View("InfoPage");
+            return View("GetAll", await GetAllViewModel());
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            ViewData["Message"] = id.ToString();
+            var entity = await _ordersService.GetById(id);
+            ViewData["Message"] = $"{entity.EquipmentSerialNumber}";
             Response.Cookies.Append("order_id", id.ToString());
 
             return View();

@@ -21,6 +21,7 @@ namespace EquipmentRepairServiceCenter.ASP.Services
         public async Task<ServicedStore> Create(ServicedStoreForCreationDto entityForCreation)
         {
             var entity = _mapper.Map<ServicedStore>(entityForCreation);
+            entity.Id = Guid.NewGuid();
 
             await _repositoryManager.ServicedStoresRepository.Create(entity);
             await _repositoryManager.SaveAsync();

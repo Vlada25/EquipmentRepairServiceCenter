@@ -10,6 +10,8 @@
        .ToList();
 
     string client = ViewData["f_clientFio"] is null ? "Client" : ViewData["f_clientFio"].ToString();
+
+    int index = 1;
 }
 
 <div id="dropdown" class="dropdown">
@@ -40,25 +42,31 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Number</th>
                 <th>Name</th>
                 <th>Repairing Model</th>
                 <th>Repairing Methods</th>
                 <th>Price</th>
                 <th>Client</th>
+                <th>Update</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var order in @Model.Orders)
             {
                 <tr>
-                    <td>@order.Fault.Id</td>
+                    <td>@index</td>
                     <td>@order.Fault.Name</td>
                     <td>@order.Fault.RepairingModel.Name</td>
                     <td>@order.Fault.RepairingMethods</td>
                     <td>@order.Fault.Price</td>
                     <td>@order.Client.Surname @order.Client.Name @order.Client.MiddleName</td>
+                    <td><a href="/Faults/Update?id=@order.Fault.Id" class="ud-button">Update</a></td>
+                    <td><a href="/Faults/Delete?id=@order.Fault.Id" class="ud-button">Delete</a></td>
                 </tr>
+
+                index++;
             }
         </tbody>
     </table>

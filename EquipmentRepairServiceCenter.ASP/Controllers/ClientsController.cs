@@ -105,9 +105,10 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            ViewData["Message"] = id.ToString();
+            var entity = await _clientsService.GetById(id);
+            ViewData["Message"] = $"{entity.Surname} {entity.Name} {entity.MiddleName}";
             Response.Cookies.Append("client_id", id.ToString());
 
             return View();

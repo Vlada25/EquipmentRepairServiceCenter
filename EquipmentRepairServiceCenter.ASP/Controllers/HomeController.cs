@@ -8,8 +8,8 @@ using System.Security.Claims;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    public class HomeController : Controller // TODO: sorting
-    { // TODO: confirm removing
+    public class HomeController : Controller 
+    { 
         private readonly HttpContext _httpContext;
         private readonly UserManager<User> _userManager;
         private readonly IEmployeesService _employeesService;
@@ -40,7 +40,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             {
                 var employee = await _employeesService.GetByUserId(Guid.Parse(user.Id));
 
-                return View(new ExpandedUserViewModel
+                return View("EmployeesPage", new ExpandedUserViewModel
                 {
                     UserName = userName,
                     Email = user.Email,
@@ -70,12 +70,6 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         public IActionResult StartPage()
-        {
-            return View();
-        }
-
-        //[Authorize(Roles = "Admin")]
-        public IActionResult AdminsPage()
         {
             return View();
         }

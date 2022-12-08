@@ -1,24 +1,9 @@
-﻿@model OrdersClientsEmployeesViewModel
+﻿@model List<Order>
 
 @{
     ViewData["Title"] = "Orders";
 
-    var clientsFio = Model.Clients
-       .Select(i => new SelectListItem() 
-       { Text = $"{i.Surname} {i.Name} {i.MiddleName}", 
-         Value = $"{i.Surname} {i.Name} {i.MiddleName}" })
-       .ToList();
-
-    var employeesInfo = Model.Employees
-       .Select(i => new SelectListItem() 
-       { Text = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}", 
-         Value = $"{i.Surname} {i.Name} {i.MiddleName}, {i.Position}" })
-       .ToList();
-
     int index = 1;
-
-    string client = ViewData["o_clientFio"] is null ? "Client" : ViewData["o_clientFio"].ToString();
-    string employee = ViewData["o_employeeFio"] is null ? "Employee" : ViewData["o_employeeFio"].ToString();
 }
 
 <div id="dropdown" class="dropdown">
@@ -39,25 +24,6 @@
 <div style="padding-bottom: 30px;">
     <h3 class="h3-above-table">Orders</h3>
 
-    <form class="getting-form" asp-action="GetAllByProps" method="get">
-        <div class="date-container">
-            <span>Order date:</span>
-            <input type="date" name="o_dateTime" style="margin-left: 15px;"/>
-        </div>
-   
-        <select class="select-props" name="o_clientFio" asp-items="@clientsFio">
-            <option selected>@client</option>
-        </select>
-        <select class="select-props" name="o_employeeFio" asp-items="@employeesInfo">
-            <option selected>@employee</option>
-        </select>
-
-        <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
-        <a href="/Orders/ClearCookie" class="a-create">Clear</a>
-    </form>  
-
-    <a href="/Orders/CreateForAdmin" class="a-create">Create</a>
-
     <table class="table">
         <thead>
             <tr>
@@ -71,12 +37,10 @@
                 <th><a href="/Orders/Get?sortedFieldNumber=6">Employee 🠕🠗</a></th>
                 <th><a href="/Orders/Get?sortedFieldNumber=7">Price 🠕🠗</a></th>
                 <th><a href="/Orders/Get?sortedFieldNumber=8">Guarantee (months) 🠕🠗</a></th>
-                <th>Update</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var order in @Model.Orders)
+            @foreach (var order in @Model)
             {
                 <tr>
                     <td>@index</td>
@@ -96,8 +60,6 @@
                     {
                         <td>-</td>
                     }
-                    <td><a href="/Orders/UpdateForAdmin?id=@order.Id" class="ud-button">Update</a></td>
-                    <td><a href="/Orders/Delete?id=@order.Id" class="ud-button">Delete</a></td>
                 </tr>
 
                 index++;
@@ -105,6 +67,5 @@
         </tbody>
     </table>
 
-    <a href="/Orders/GetMore" class="a-create">Show 20 more entries</a>
     <a class="back-btn" href="/Home/Index">Back</a>
 </div>

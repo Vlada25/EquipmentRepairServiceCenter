@@ -1,5 +1,6 @@
 ﻿using EquipmentRepairServiceCenter.Database.Repositories.Base;
 using EquipmentRepairServiceCenter.Domain.Models;
+using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -53,5 +54,11 @@ namespace EquipmentRepairServiceCenter.Database.Repositories
             }
             return entities;
         }
+
+        public async Task<IEnumerable<Order>> GetByClientId(Guid clientId) =>
+            await GetByCondition(e => e.ClientId.Equals(clientId), false)
+                .Include(e => e.Fault).ThenInclude(e => e.RepairingModel)
+                .Include(e => e.Client).Include(e => e.ServicedStore)
+                .Include(e => e.Employee).ToListAsync();
     }
 }
