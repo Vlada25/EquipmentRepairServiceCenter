@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Models;
-using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.DTO.Order;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;

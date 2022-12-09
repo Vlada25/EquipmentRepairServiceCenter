@@ -1,13 +1,6 @@
-﻿using AutoMapper.Configuration.Annotations;
-using EquipmentRepairServiceCenter.Domain.Models;
+﻿using EquipmentRepairServiceCenter.Domain.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {

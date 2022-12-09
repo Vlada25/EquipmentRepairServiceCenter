@@ -1,11 +1,8 @@
-﻿using EquipmentRepairServiceCenter.ASP.Services;
-using EquipmentRepairServiceCenter.ASP.ViewModels;
+﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
-using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.Employee;
 using EquipmentRepairServiceCenter.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
@@ -60,7 +57,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> ClearCookie()
         {
             _rowsCount = 20;
-            
+
             Response.Cookies.Delete("e_surname");
             Response.Cookies.Delete("e_name");
             Response.Cookies.Delete("e_middleName");

@@ -16,8 +16,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         private static bool isSparePartNameAscending = true;
         private static bool isFaultNameAscending = true;
 
-        public UsedSparePartsController(IUsedSparePartsService usedSparePartsService, 
-            IFaultsService faultsService, 
+        public UsedSparePartsController(IUsedSparePartsService usedSparePartsService,
+            IFaultsService faultsService,
             ISparePartsService sparePartsService)
         {
             _usedSparePartsService = usedSparePartsService;

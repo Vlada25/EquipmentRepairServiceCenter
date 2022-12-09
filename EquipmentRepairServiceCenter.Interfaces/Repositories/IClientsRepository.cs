@@ -1,5 +1,4 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models;
-using EquipmentRepairServiceCenter.Domain.Models.People;
+﻿using EquipmentRepairServiceCenter.Domain.Models.People;
 
 namespace EquipmentRepairServiceCenter.Interfaces.Repositories
 {

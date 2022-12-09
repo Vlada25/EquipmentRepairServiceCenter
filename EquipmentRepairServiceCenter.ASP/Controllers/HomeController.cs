@@ -8,8 +8,8 @@ using System.Security.Claims;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    public class HomeController : Controller 
-    { 
+    public class HomeController : Controller
+    {
         private readonly HttpContext _httpContext;
         private readonly UserManager<User> _userManager;
         private readonly IEmployeesService _employeesService;

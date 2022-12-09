@@ -447,7 +447,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             _cacheNumber++;
 
-            return View("GetAll", await GetAllViewModel());
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
         [HttpGet]
@@ -504,7 +504,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             _cacheNumber++;
 
-            return View("GetAll", await GetAllViewModel());
+            return RedirectToRoute(new { controller = "Home", action = "Index" });
         }
 
         [HttpGet]

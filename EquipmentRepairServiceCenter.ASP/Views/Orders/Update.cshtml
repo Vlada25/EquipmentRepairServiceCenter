@@ -26,8 +26,8 @@
         <div class="field-container">
             <label>Repairing Model:</label>
             <label>&nbsp;&nbsp;Name: @Model.RepairingModelName</label>
-            <label>&nbsp;&nbsp;Specifications: @Model.RepairingModelName</label>
-            <label>&nbsp;&nbsp;Particular Qualities: @Model.RepairingModelName</label>
+            <label>&nbsp;&nbsp;Specifications: @Model.RepairingModelSpecifications</label>
+            <label>&nbsp;&nbsp;Particular Qualities: @Model.RepairingModelParticularQualities</label>
             <br />
             <label>Fault Name: @Model.FaultName</label>
             <br />
@@ -42,7 +42,7 @@
         <div class="field-container">
             <label asp-for="RepairingMethods">Repairing Methods</label>
             <div>
-                <input class="input-props" asp-for="RepairingMethods" />
+                <textarea style="height: 130px; width: 350px;" class="input-props" asp-for="RepairingMethods"></textarea>
                 <span class="error-mes-span" style="color: red; font-size: 90%;" asp-validation-for="RepairingMethods"></span>
             </div>
         </div>

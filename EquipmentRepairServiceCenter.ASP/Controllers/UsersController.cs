@@ -1,5 +1,4 @@
-﻿using EquipmentRepairServiceCenter.ASP.Services;
-using EquipmentRepairServiceCenter.Interfaces.Services;
+﻿using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers

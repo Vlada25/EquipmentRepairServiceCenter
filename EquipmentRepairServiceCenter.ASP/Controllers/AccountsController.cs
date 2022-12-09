@@ -1,19 +1,15 @@
 ﻿using AutoMapper;
-using EquipmentRepairServiceCenter.ASP.Services;
 using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
-using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
 using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.Client;
 using EquipmentRepairServiceCenter.DTO.Employee;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {

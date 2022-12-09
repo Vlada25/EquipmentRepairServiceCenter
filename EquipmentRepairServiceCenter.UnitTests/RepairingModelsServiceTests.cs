@@ -3,15 +3,10 @@ using EquipmentRepairServiceCenter.ASP.Services;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
-using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.DTO.RepairingModel;
 using EquipmentRepairServiceCenter.Interfaces;
-using EquipmentRepairServiceCenter.Interfaces.Repositories;
-using EquipmentRepairServiceCenter.Interfaces.Services;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
-using System;
 using Xunit;
 
 namespace EquipmentRepairServiceCenter.UnitTests
@@ -119,6 +114,20 @@ namespace EquipmentRepairServiceCenter.UnitTests
             result.Should().HaveCount(0);
         }
 
+        [Fact]
+        public async Task GetAll_DatabaseError_ThrowsExcepion()
+        {
+            // Arrange
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetAll(false))
+                .ThrowsAsync(new Exception());
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            Func<Task> result = () => service.GetAll();
+
+            // Assert
+            await result.Should().ThrowAsync<Exception>();
+        }
 
         [Fact]
         public async Task GetById_RepairingModelExists_ReturnsRepairingModelDto()
@@ -154,6 +163,21 @@ namespace EquipmentRepairServiceCenter.UnitTests
 
             // Assert
             result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetById_DatabaseError_ThrowsExcepion()
+        {
+            // Arrange
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetById(It.IsAny<Guid>(), false))
+                .ThrowsAsync(new Exception());
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            Func<Task> result = () => service.GetById(Guid.NewGuid());
+
+            // Assert
+            await result.Should().ThrowAsync<Exception>();
         }
 
 
@@ -203,6 +227,134 @@ namespace EquipmentRepairServiceCenter.UnitTests
 
             // Act
             Func<Task> result = () => service.Create(null);
+
+            // Assert
+            await result.Should().ThrowAsync<Exception>();
+        }
+
+        [Fact]
+        public async Task Create_DatabaseError_ThrowsExcepion()
+        {
+            // Arrange
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.Create(null))
+                .ThrowsAsync(new Exception());
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            Func<Task> result = () => service.Create(null);
+
+            // Assert
+            await result.Should().ThrowAsync<Exception>();
+        }
+
+        [Fact]
+        public async Task Update_RepairingModelValid_ReturnsTrue()
+        {
+            // Arrange
+            RepairingModel repairingModel = new RepairingModel
+            {
+                Name = "Fridge Atlant",
+                Type = EquipmentType.Refrigerator,
+                Manufacturer = "Atlant",
+
+            };
+
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetById(repairingModel.Id, true))
+                .ReturnsAsync(repairingModel);
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.Update(repairingModel));
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            var result = await service.Update(new RepairingModelForUpdateDto());
+
+            // Assert
+            result.Should().Be(true);
+        }
+
+
+        [Fact]
+        public async Task Update_RepairingModelIsNull_ReturnsFalse()
+        {
+            // Arrange
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetById(It.IsAny<Guid>(), true))
+                .ReturnsAsync((RepairingModel)null);
+
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            var result = await service.Update(new RepairingModelForUpdateDto());
+
+            // Assert
+            result.Should().Be(false);
+        }
+
+        [Fact]
+        public async Task Update_DatabaseError_ThrowsExcepion()
+        {
+            // Arrange
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetById(It.IsAny<Guid>(), true))
+                .ThrowsAsync(new Exception());
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            Func<Task> result = () => service.Update(null);
+
+            // Assert
+            await result.Should().ThrowAsync<Exception>();
+        }
+
+        [Fact]
+        public async Task Delete_RepairingModelValid_ReturnsTrue()
+        {
+            // Arrange
+            RepairingModel repairingModel = new RepairingModel
+            {
+                Name = "Fridge Atlant",
+                Type = EquipmentType.Refrigerator,
+                Manufacturer = "Atlant",
+
+            };
+
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetById(repairingModel.Id, false))
+                .ReturnsAsync(repairingModel);
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.Delete(repairingModel));
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            var result = await service.Delete(repairingModel.Id);
+
+            // Assert
+            result.Should().Be(true);
+        }
+
+
+        [Fact]
+        public async Task Delete_RepairingModelIsNull_ReturnsFalse()
+        {
+            // Arrange
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetById(It.IsAny<Guid>(), false))
+                .ReturnsAsync((RepairingModel)null);
+
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            var result = await service.Delete(Guid.NewGuid());
+
+            // Assert
+            result.Should().Be(false);
+        }
+
+        [Fact]
+        public async Task Delete_DatabaseError_ThrowsException()
+        {
+            // Arrange
+            _repositoryManager.Setup(r => r.RepairingModelsRepository.GetById(It.IsAny<Guid>(), false))
+                .ThrowsAsync(new Exception());
+
+            var service = new RepairingModelsService(_repositoryManager.Object, _mapper);
+
+            // Act
+            Func<Task> result = () => service.Delete(It.IsAny<Guid>());
 
             // Assert
             await result.Should().ThrowAsync<Exception>();

@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Domain.Models.Users;
 using EquipmentRepairServiceCenter.DTO.User;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace EquipmentRepairServiceCenter.ASP.Services
 {

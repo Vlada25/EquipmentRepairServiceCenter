@@ -1,5 +1,4 @@
 ﻿using EquipmentRepairServiceCenter.Database.Repositories.Base;
-using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.People;
 using EquipmentRepairServiceCenter.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;

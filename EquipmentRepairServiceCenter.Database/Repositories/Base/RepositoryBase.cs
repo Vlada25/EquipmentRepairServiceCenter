@@ -11,7 +11,7 @@ namespace EquipmentRepairServiceCenter.Database.Repositories.Base
         protected readonly IMemoryCache memoryCache;
         protected const int CachingTime = 300;
 
-        public RepositoryBase(AppDbContext dbContext, 
+        public RepositoryBase(AppDbContext dbContext,
             IMemoryCache memoryCache)
         {
             this.dbContext = dbContext;

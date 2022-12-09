@@ -1,6 +1,4 @@
-﻿using EquipmentRepairServiceCenter.ASP.Services;
-using EquipmentRepairServiceCenter.DTO.RepairingModel;
-using EquipmentRepairServiceCenter.DTO.ServicedStore;
+﻿using EquipmentRepairServiceCenter.DTO.ServicedStore;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 

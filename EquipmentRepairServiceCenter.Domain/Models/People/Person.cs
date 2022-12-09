@@ -1,6 +1,4 @@
-﻿using EquipmentRepairServiceCenter.Domain.Models.Users;
-
-namespace EquipmentRepairServiceCenter.Domain.Models.People
+﻿namespace EquipmentRepairServiceCenter.Domain.Models.People
 {
     public abstract class Person
     {

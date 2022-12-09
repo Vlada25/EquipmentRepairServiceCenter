@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace EquipmentRepairServiceCenter.ASP.ViewModels
+﻿namespace EquipmentRepairServiceCenter.ASP.ViewModels
 {
     public class ExpandedUserViewModel
     {

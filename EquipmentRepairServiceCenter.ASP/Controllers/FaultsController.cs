@@ -1,9 +1,6 @@
-﻿using EquipmentRepairServiceCenter.ASP.Services;
-using EquipmentRepairServiceCenter.ASP.ViewModels;
-using EquipmentRepairServiceCenter.Domain.Models;
+﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.DTO.Fault;
 using EquipmentRepairServiceCenter.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
