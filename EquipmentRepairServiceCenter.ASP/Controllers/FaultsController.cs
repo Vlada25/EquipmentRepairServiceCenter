@@ -1,12 +1,13 @@
 ﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.DTO.Fault;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "Admin,Employee")]
     public class FaultsController : Controller
     {
         private readonly IFaultsService _faultsService;

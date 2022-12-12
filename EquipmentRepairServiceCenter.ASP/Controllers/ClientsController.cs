@@ -1,5 +1,6 @@
 ﻿using EquipmentRepairServiceCenter.DTO.Client;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
@@ -19,6 +20,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
@@ -28,6 +30,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
@@ -37,6 +40,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
             var clients = await _clientsService.Get(_rowsCount, $"Clients{_rowsCount}-{_cacheNumber}");
@@ -71,6 +75,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id)
         {
             var client = await _clientsService.GetById(id);
@@ -85,6 +90,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(ClientForUpdateDto clientForUpdate)
         {
             if (!ModelState.IsValid)
@@ -105,6 +111,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var entity = await _clientsService.GetById(id);
@@ -115,6 +122,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete()
         {
             Request.Cookies.TryGetValue("client_id", out string id);

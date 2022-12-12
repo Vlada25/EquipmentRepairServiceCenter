@@ -8,6 +8,7 @@ using EquipmentRepairServiceCenter.DTO.Client;
 using EquipmentRepairServiceCenter.DTO.Employee;
 using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -191,7 +192,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterEmployee()
         {
             var positions = new List<string>();
@@ -208,7 +209,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> RegisterEmployee(RegisterEmployeeViewModel registerUser)
         {
             if (!ModelState.IsValid)

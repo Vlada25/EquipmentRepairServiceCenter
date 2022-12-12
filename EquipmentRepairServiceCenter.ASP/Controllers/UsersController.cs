@@ -1,8 +1,11 @@
 ﻿using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly IUsersService _usersService;

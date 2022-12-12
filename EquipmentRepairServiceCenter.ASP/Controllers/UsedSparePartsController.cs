@@ -1,10 +1,13 @@
 ﻿using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.DTO.UsedSparePart;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
+    [Authorize(Roles = "Admin,Employee")]
     public class UsedSparePartsController : Controller
     {
         private readonly IUsedSparePartsService _usedSparePartsService;

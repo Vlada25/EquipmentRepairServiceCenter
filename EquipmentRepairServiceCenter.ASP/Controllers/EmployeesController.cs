@@ -3,11 +3,12 @@ using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
 using EquipmentRepairServiceCenter.DTO.Employee;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class EmployeesController : Controller
     {
         private readonly IEmployeesService _employeesService;

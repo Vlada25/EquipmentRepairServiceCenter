@@ -1,9 +1,12 @@
 ﻿using EquipmentRepairServiceCenter.DTO.ServicedStore;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
+    [Authorize(Roles = "Admin,Employee")]
     public class ServicedStoresController : Controller
     {
         private readonly IServicedStoresService _servicedStoresService;

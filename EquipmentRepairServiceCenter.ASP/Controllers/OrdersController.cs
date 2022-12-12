@@ -58,6 +58,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetAll()
         {
             _rowsCount = 20;
@@ -68,6 +69,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
@@ -78,6 +80,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> ClearCookie()
         {
             _rowsCount = 20;
@@ -89,6 +92,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
             var orders = await _ordersService.Get(_rowsCount, $"Orders{_rowsCount}-{_cacheNumber}");
@@ -189,6 +193,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetForEmployee()
         {
             var userName = _httpContext.User.Claims
@@ -206,6 +211,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetForClient()
         {
             var userName = _httpContext.User.Claims
@@ -223,6 +229,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetForEmployeeSearch(DateTime dateTime, string status)
         {
             var userName = _httpContext.User.Claims
@@ -246,6 +253,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetFaultsByClient()
         {
             var orders = await _ordersService.GetAll();
@@ -261,6 +269,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetFaultsByClientFio(string clientFio)
         {
             var orders = await _ordersService.GetAll();
@@ -296,6 +305,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetAllByProps(DateTime o_dateTime, string o_clientFio, string o_employeeFio)
         {
             var orders = await _ordersService.GetAll();
@@ -358,6 +368,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create()
         {
             var employees = await _employeesService.GetAll();
@@ -377,6 +388,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Create(OrderCreatedViewModel orderCreated)
         {
             if (!ModelState.IsValid)
@@ -451,7 +463,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Update(Guid orderId)
         {
             var order = await _ordersService.GetById(orderId);
@@ -467,7 +479,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Update(OrderUpdatedViewModel orderUpdated)
         {
             if (!ModelState.IsValid)
@@ -508,6 +520,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var entity = await _ordersService.GetById(id);
@@ -518,6 +531,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Delete()
         {
             Request.Cookies.TryGetValue("order_id", out string id);
