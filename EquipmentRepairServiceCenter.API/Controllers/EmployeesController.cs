@@ -8,7 +8,7 @@ using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentRepairServiceCenter.ASP.Controllers
+namespace EquipmentRepairServiceCenter.API.Controllers
 {
     //[Authorize(Roles = "Admin")]
     public class EmployeesController : ControllerBase

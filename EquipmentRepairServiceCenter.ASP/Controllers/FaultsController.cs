@@ -3,6 +3,8 @@ using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Fault;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Flurl.Http;
+using Flurl.Http.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -14,6 +16,8 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
     {
         private readonly IFaultsService _faultsService;
         private readonly IRepairingModelsService _repairingModelsService;
+        private readonly IFlurlClient _flurlClient;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         private static int _rowsCount;
         private static int _cacheNumber = 0;
@@ -22,7 +26,9 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         private static bool isPriceAscending = true;
 
         public FaultsController(IFaultsService faultsService,
-            IRepairingModelsService repairingModelsService)
+            IRepairingModelsService repairingModelsService,
+            IFlurlClientFactory flurlClientFactory,
+            IHttpContextAccessor httpContextAccessor)
         {
             _faultsService = faultsService;
             _repairingModelsService = repairingModelsService;

@@ -2,7 +2,7 @@
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentRepairServiceCenter.ASP.Controllers
+namespace EquipmentRepairServiceCenter.API.Controllers
 {
     public class UsersController : ControllerBase
     {

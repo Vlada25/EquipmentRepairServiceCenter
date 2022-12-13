@@ -5,7 +5,7 @@ using EquipmentRepairServiceCenter.DTO.SparePart;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EquipmentRepairServiceCenter.ASP.Controllers
+namespace EquipmentRepairServiceCenter.API.Controllers
 {
     public class SparePartsController : ControllerBase
     {

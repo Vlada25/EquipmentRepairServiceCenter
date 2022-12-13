@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
-namespace EquipmentRepairServiceCenter.ASP.Controllers
+namespace EquipmentRepairServiceCenter.API.Controllers
 {
     public class AccountsController : ControllerBase
     {

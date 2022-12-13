@@ -1,6 +1,7 @@
 using AutoMapper;
 using EquipmentRepairServiceCenter.ASP.Extensions;
 using EquipmentRepairServiceCenter.Domain;
+using Flurl.Http.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddControllers(config =>
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureSqlContext(builder.Configuration);
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IFlurlClientFactory, PerBaseUrlFlurlClientFactory>();
 
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();

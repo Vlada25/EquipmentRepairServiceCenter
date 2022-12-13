@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCente
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.UnitTests", "EquipmentRepairServiceCenter.UnitTests\EquipmentRepairServiceCenter.UnitTests.csproj", "{0C906863-3209-40CD-9A47-6F7F6AD14F20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EquipmentRepairServiceCenter.API", "EquipmentRepairServiceCenter.API\EquipmentRepairServiceCenter.API.csproj", "{73266C03-052F-4D28-8545-83B3C130D215}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.API", "EquipmentRepairServiceCenter.API\EquipmentRepairServiceCenter.API.csproj", "{73266C03-052F-4D28-8545-83B3C130D215}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

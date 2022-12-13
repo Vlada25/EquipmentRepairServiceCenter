@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Security.Claims;
 
-namespace EquipmentRepairServiceCenter.ASP.Controllers
+namespace EquipmentRepairServiceCenter.API.Controllers
 {
     public class OrdersController : ControllerBase
     {
