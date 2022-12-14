@@ -6,7 +6,7 @@ using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    [Authorize(Roles = "Admin,Employee")]
+    [Authorize(Roles = "Admin")]
     public class ServicedStoresController : Controller
     {
         private readonly IServicedStoresService _servicedStoresService;

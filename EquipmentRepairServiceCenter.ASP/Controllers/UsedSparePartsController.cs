@@ -7,7 +7,7 @@ using System.Data;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    [Authorize(Roles = "Admin,Employee")]
+    [Authorize(Roles = "Admin")]
     public class UsedSparePartsController : Controller
     {
         private readonly IUsedSparePartsService _usedSparePartsService;

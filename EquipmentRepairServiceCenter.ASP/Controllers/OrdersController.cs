@@ -193,6 +193,137 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> SortForClients(int sortedFieldNumber)
+        {
+            var userName = _httpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var client = await _clientsService.GetByUserId(Guid.Parse(user.Id));
+            var orders = await _ordersService.GetByClientId(client.Id);
+
+            switch (sortedFieldNumber)
+            {
+                case 1:
+                    if (isDateAscending)
+                    {
+                        isDateAscending = !isDateAscending;
+                        return View("GetForClient", orders.OrderBy(c => c.OrderDate).ToList());
+                    }
+                    else
+                    {
+                        isDateAscending = !isDateAscending;
+                        return View("GetForClient", orders.OrderByDescending(c => c.OrderDate).ToList());
+                    }
+                case 2:
+                    if (isSerialNumberAscending)
+                    {
+                        isSerialNumberAscending = !isSerialNumberAscending;
+                        return View("GetForClient", orders.OrderBy(c => c.EquipmentSerialNumber).ToList());
+                    }
+                    else
+                    {
+                        isSerialNumberAscending = !isSerialNumberAscending;
+                        return View("GetForClient", orders.OrderByDescending(c => c.EquipmentSerialNumber).ToList());
+                    }
+                case 4:
+                    if (isFaultAscending)
+                    {
+                        isFaultAscending = !isFaultAscending;
+                        return View("GetForClient", orders.OrderBy(c => $"{c.Fault.Name} {c.Fault.RepairingModel.Name}").ToList());
+                    }
+                    else
+                    {
+                        isFaultAscending = !isFaultAscending;
+                        return View("GetForClient", orders.OrderByDescending(c => $"{c.Fault.Name} {c.Fault.RepairingModel.Name}").ToList());
+                    }
+                case 5:
+                    if (isServicedStoreAscending)
+                    {
+                        isServicedStoreAscending = !isServicedStoreAscending;
+                        return View("GetForClient", orders.OrderBy(c => c.ServicedStore.Name).ToList());
+                    }
+                    else
+                    {
+                        isServicedStoreAscending = !isServicedStoreAscending;
+                        return View("GetForClient", orders.OrderByDescending(c => c.ServicedStore.Name).ToList());
+                    }
+                case 6:
+                    if (isEmployeeAscending)
+                    {
+                        isEmployeeAscending = !isEmployeeAscending;
+                        return View("GetForClient", orders.OrderBy(c => $"{c.Employee.Surname} {c.Employee.Name} {c.Employee.MiddleName}").ToList());
+                    }
+                    else
+                    {
+                        isEmployeeAscending = !isEmployeeAscending;
+                        return View("GetForClient", orders.OrderByDescending(c => $"{c.Employee.Surname} {c.Employee.Name} {c.Employee.MiddleName}").ToList());
+                    }
+                case 7:
+                    if (isPriceAscending)
+                    {
+                        isPriceAscending = !isPriceAscending;
+                        return View("GetForClient", orders.OrderBy(c => c.Price).ToList());
+                    }
+                    else
+                    {
+                        isPriceAscending = !isPriceAscending;
+                        return View("GetForClient", orders.OrderByDescending(c => c.Price).ToList());
+                    }
+                case 8:
+                    if (isGuaranteeAscending)
+                    {
+                        isGuaranteeAscending = !isGuaranteeAscending;
+                        return View("GetForClient", orders.OrderBy(c => c.GuaranteePeriodInMonth).ToList());
+                    }
+                    else
+                    {
+                        isGuaranteeAscending = !isGuaranteeAscending;
+                        return View("GetForClient", orders.OrderByDescending(c => c.GuaranteePeriodInMonth).ToList());
+                    }
+                default:
+                    return View("GetForClient", orders);
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> SortForEmployees(int sortedFieldNumber)
+        {
+            var userName = _httpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var employee = await _employeesService.GetByUserId(Guid.Parse(user.Id));
+
+            var orders = await _ordersService.GetByEmployeeId(employee.Id);
+
+            switch (sortedFieldNumber)
+            {
+                case 1:
+                    if (isDateAscending)
+                    {
+                        isDateAscending = !isDateAscending;
+                        return View("GetForEmployee", orders.OrderBy(c => c.OrderDate).ToList());
+                    }
+                    else
+                    {
+                        isDateAscending = !isDateAscending;
+                        return View("GetForEmployee", orders.OrderByDescending(c => c.OrderDate).ToList());
+                    }
+                default:
+                    return View("GetForEmployee", orders);
+            }
+        }
+
+        [HttpGet]
         [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> GetForEmployee()
         {
@@ -368,7 +499,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             var employees = await _employeesService.GetAll();
@@ -388,7 +519,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize]
         public async Task<IActionResult> Create(OrderCreatedViewModel orderCreated)
         {
             if (!ModelState.IsValid)

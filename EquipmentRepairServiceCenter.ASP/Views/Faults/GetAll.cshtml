@@ -1,23 +1,45 @@
-﻿@model List<Fault>
+﻿@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@model List<Fault>
+
+@inject IHttpContextAccessor httpContextAccessor;
+@inject UserManager<User> userManager;
 
 @{
     ViewData["Title"] = "Faults";
 
     int index = 1;
+
+    var userName = httpContextAccessor.HttpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+    var user = await userManager.FindByNameAsync(userName);
+    var userRoles = await userManager.GetRolesAsync(user);
 }
 
 <div id="dropdown" class="dropdown">
     <button class="dropbtn">Menu</button>
     <div class="dropdown-content">
-        <a href="/Clients/GetAll">Clients</a>
-        <a href="/Employees/GetAll">Employees</a>
-        <a href="/Faults/GetAll">Faults</a>
-        <a href="/Orders/GetAll">Orders</a>
-        <a href="/RepairingModels/GetAll">Repairing Models</a>
-        <a href="/ServicedStores/GetAll">Serviced Stores</a>
-        <a href="/SpareParts/GetAll">Spare Parts</a>
-        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
-        <a href="/Users/GetAll">Users</a>
+        @if (userRoles.Contains("Employee"))
+        {
+            <a href="/Faults/GetAll">Faults</a>
+            <a href="/Orders/GetAllEmployee">Orders</a>
+            <a href="/RepairingModels/GetAll">Repairing Models</a>
+            <a href="/SpareParts/GetAll">Spare Parts</a>
+        }
+        else
+        {
+            <a href="/Clients/GetAll">Clients</a>
+            <a href="/Employees/GetAll">Employees</a>
+            <a href="/Faults/GetAll">Faults</a>
+            <a href="/Orders/GetAll">Orders</a>
+            <a href="/RepairingModels/GetAll">Repairing Models</a>
+            <a href="/ServicedStores/GetAll">Serviced Stores</a>
+            <a href="/SpareParts/GetAll">Spare Parts</a>
+            <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
+            <a href="/Users/GetAll">Users</a>
+        }
     </div>
 </div>
 
@@ -29,7 +51,10 @@
         <input class="input-props" type="text" name="f_name" placeholder="Fault name or part of fault name" value="@ViewData["f_name"]" />
         <input class="input-props" type="text" name="f_repairingMethods" placeholder="Part of srring of repairing methods" value="@ViewData["f_repairingMethods"]" />
         <button style="margin-top: 10px" class="action-btn" type="submit">Search</button>
-        <a class="a_addit" href="/Orders/GetFaultsByClient">Search by clients</a>
+        @if (!userRoles.Contains("Employee"))
+        {
+            <a class="a_addit" href="/Orders/GetFaultsByClient">Search by clients</a>
+        }
         <a href="/Faults/ClearCookie" class="a-create">Clear</a>
     </form>  
 

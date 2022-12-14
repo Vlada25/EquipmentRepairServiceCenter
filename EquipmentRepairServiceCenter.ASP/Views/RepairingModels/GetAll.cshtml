@@ -1,23 +1,45 @@
-﻿@model List<RepairingModelDto>
+﻿@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@model List<RepairingModelDto>
+
+@inject IHttpContextAccessor httpContextAccessor;
+@inject UserManager<User> userManager;
 
 @{
     ViewData["Title"] = "Repairing Models";
 
     int index = 1;
+
+    var userName = httpContextAccessor.HttpContext.User.Claims
+                .Where(claim => claim.Type.Equals(ClaimTypes.Name))
+                .Select(claim => claim.Value).SingleOrDefault();
+
+    var user = await userManager.FindByNameAsync(userName);
+    var userRoles = await userManager.GetRolesAsync(user);
 }
 
 <div id="dropdown" class="dropdown">
     <button class="dropbtn">Menu</button>
     <div class="dropdown-content">
-        <a href="/Clients/GetAll">Clients</a>
-        <a href="/Employees/GetAll">Employees</a>
-        <a href="/Faults/GetAll">Faults</a>
-        <a href="/Orders/GetAll">Orders</a>
-        <a href="/RepairingModels/GetAll">Repairing Models</a>
-        <a href="/ServicedStores/GetAll">Serviced Stores</a>
-        <a href="/SpareParts/GetAll">Spare Parts</a>
-        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
-        <a href="/Users/GetAll">Users</a>
+        @if (userRoles.Contains("Employee"))
+        {
+            <a href="/Faults/GetAll">Faults</a>
+            <a href="/Orders/GetAllEmployee">Orders</a>
+            <a href="/RepairingModels/GetAll">Repairing Models</a>
+            <a href="/SpareParts/GetAll">Spare Parts</a>
+        }
+        else
+        {
+            <a href="/Clients/GetAll">Clients</a>
+            <a href="/Employees/GetAll">Employees</a>
+            <a href="/Faults/GetAll">Faults</a>
+            <a href="/Orders/GetAll">Orders</a>
+            <a href="/RepairingModels/GetAll">Repairing Models</a>
+            <a href="/ServicedStores/GetAll">Serviced Stores</a>
+            <a href="/SpareParts/GetAll">Spare Parts</a>
+            <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
+            <a href="/Users/GetAll">Users</a>
+        }
     </div>
 </div>
 

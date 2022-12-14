@@ -24,12 +24,6 @@
     </div>
 
     <script>
-        function confirmRemoving() {
-            const isOk = confirm('Do you really want to delete the object?');
-            if (!isOk) {
-                document.querySelector('.del-text').textContent = '';
-            } 
-        }
         let signOutBtn = document.querySelector('.sign-out-btn');
         let backBtn = document.querySelector('.back-btn');
         let pathName = document.location.pathname;
@@ -40,7 +34,6 @@
         else {
             signOutBtn.style.display = 'block';
             backBtn.style.right = '160px';
-            dd.style.display = 'block';
         }
     </script>
 </body>

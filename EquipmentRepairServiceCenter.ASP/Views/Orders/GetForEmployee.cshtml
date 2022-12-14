@@ -7,15 +7,10 @@
 <div id="dropdown" class="dropdown">
     <button class="dropbtn">Menu</button>
     <div class="dropdown-content">
-        <a href="/Clients/GetAll">Clients</a>
-        <a href="/Employees/GetAll">Employees</a>
         <a href="/Faults/GetAll">Faults</a>
-        <a href="/Orders/GetAll">Orders</a>
+        <a href="/Orders/GetAllEmployee">Orders</a>
         <a href="/RepairingModels/GetAll">Repairing Models</a>
-        <a href="/ServicedStores/GetAll">Serviced Stores</a>
         <a href="/SpareParts/GetAll">Spare Parts</a>
-        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
-        <a href="/Users/GetAll">Users</a>
     </div>
 </div>
 
@@ -42,7 +37,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Order Date</th>
+                <th><a href="/Orders/SortForEmployees?sortedFieldNumber=1">Order Date 🠕🠗</a></th>
                 <th>Equipment Serial Number</th>
                 <th>Equipment Return Date</th>
                 <th>Client</th>
