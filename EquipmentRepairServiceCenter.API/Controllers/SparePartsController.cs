@@ -3,10 +3,13 @@ using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
 using EquipmentRepairServiceCenter.DTO.SparePart;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EquipmentRepairServiceCenter.API.Controllers
 {
+    [Authorize]
+    [Route("api/sparePart")]
     public class SparePartsController : ControllerBase
     {
         private readonly ISparePartsService _sparePartsService;
@@ -29,14 +32,20 @@ namespace EquipmentRepairServiceCenter.API.Controllers
             return Ok(await _sparePartsService.Get(_rowsCount, $"SpareParts{_rowsCount}-{_cacheNumber}"));
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            return Ok(await _sparePartsService.GetById(id));
+        }
+
+        [HttpGet("getMore")]
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
             return Ok(await _sparePartsService.Get(_rowsCount, $"SpareParts{_rowsCount}-{_cacheNumber}"));
         }
 
-        [HttpGet]
+        [HttpGet("sort")]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
             var spareParts = await _sparePartsService.Get(_rowsCount, $"ServicedStores{_rowsCount}-{_cacheNumber}");

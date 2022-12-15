@@ -1,84 +1,53 @@
 ﻿using EquipmentRepairServiceCenter.ASP.Services;
 using EquipmentRepairServiceCenter.Domain.Extensions;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
+using EquipmentRepairServiceCenter.DTO.RepairingModel;
 using EquipmentRepairServiceCenter.DTO.SparePart;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Flurl.Http;
+using Flurl.Http.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
+    [Authorize]
     public class SparePartsController : Controller
     {
-        private readonly ISparePartsService _sparePartsService;
+        private readonly IFlurlClient _flurlClient;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        private static int _rowsCount = 0;
-        private static int _cacheNumber = 0;
-        private static bool isNameAscending = true;
-        private static bool isPriceAscending = true;
-        private static bool isEqTypeAscending = true;
-
-        public SparePartsController(ISparePartsService sparePartsService)
+        public SparePartsController(IFlurlClientFactory flurlClientFactory,
+            IHttpContextAccessor httpContextAccessor)
         {
-            _sparePartsService = sparePartsService;
+            _flurlClient = flurlClientFactory.Get("https://localhost:7017/api/spareParts/");
+            _contextAccessor = httpContextAccessor;
+
+            var token = _contextAccessor.HttpContext.Request.Cookies["X-Access-Token"];
+
+            if (token != null)
+            {
+                _flurlClient.WithOAuthBearerToken(token);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            _rowsCount = 20;
-            return View(await _sparePartsService.Get(_rowsCount, $"SpareParts{_rowsCount}-{_cacheNumber}"));
+            return View(await _flurlClient.Request().GetJsonAsync<List<SparePartDto>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMore()
         {
-            _rowsCount += 20;
-            return View("GetAll", await _sparePartsService.Get(_rowsCount, $"SpareParts{_rowsCount}-{_cacheNumber}"));
+            return View("GetAll", await _flurlClient.Request().GetJsonAsync<List<SparePartDto>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
-            var spareParts = await _sparePartsService.Get(_rowsCount, $"ServicedStores{_rowsCount}-{_cacheNumber}");
-
-            switch (sortedFieldNumber)
-            {
-                case 1:
-                    if (isNameAscending)
-                    {
-                        isNameAscending = !isNameAscending;
-                        return View("GetAll", spareParts.OrderBy(c => c.Name).ToList());
-                    }
-                    else
-                    {
-                        isNameAscending = !isNameAscending;
-                        return View("GetAll", spareParts.OrderByDescending(c => c.Name).ToList());
-                    }
-                case 2:
-                    if (isPriceAscending)
-                    {
-                        isPriceAscending = !isPriceAscending;
-                        return View("GetAll", spareParts.OrderBy(c => c.Price).ToList());
-                    }
-                    else
-                    {
-                        isPriceAscending = !isPriceAscending;
-                        return View("GetAll", spareParts.OrderByDescending(c => c.Price).ToList());
-                    }
-                case 3:
-                    if (isEqTypeAscending)
-                    {
-                        isEqTypeAscending = !isEqTypeAscending;
-                        return View("GetAll", spareParts.OrderBy(c => c.EquipmentType).ToList());
-                    }
-                    else
-                    {
-                        isEqTypeAscending = !isEqTypeAscending;
-                        return View("GetAll", spareParts.OrderByDescending(c => c.EquipmentType).ToList());
-                    }
-                default:
-                    return View("GetAll", spareParts);
-            }
+            return View("GetAll", await _flurlClient.Request($"sort?sortedFieldNumber={sortedFieldNumber}").GetJsonAsync<List<SparePartDto>>());
         }
 
         [HttpGet]
@@ -111,9 +80,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            await _sparePartsService.Create(sparePartForCreation);
-
-            _cacheNumber++;
+            await _flurlClient.Request().PostJsonAsync(sparePartForCreation);
 
             return View("InfoPage");
         }
@@ -121,7 +88,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            var sparePart = await _sparePartsService.GetById(id);
+            var sparePart = await _flurlClient.Request($"/{id}").GetJsonAsync<SparePartDto>();
 
             return View(new SparePartForUpdateDto
             {
@@ -136,7 +103,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var sparePart = await _sparePartsService.GetById(sparePartForUpdate.Id);
+                var sparePart = await _flurlClient.Request($"/{sparePartForUpdate}").GetJsonAsync<SparePartDto>();
 
                 return View(new SparePartForUpdateDto
                 {
@@ -146,14 +113,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            bool isExists = await _sparePartsService.Update(sparePartForUpdate);
+            var result = await _flurlClient.Request().PutJsonAsync(sparePartForUpdate);
 
-            if (!isExists)
+            if (result.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 return View();
             }
-
-            _cacheNumber++;
 
             return View("InfoPage");
         }
@@ -172,14 +137,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             Request.Cookies.TryGetValue("sparePart_id", out string id);
 
-            bool isExists = await _sparePartsService.Delete(Guid.Parse(id));
+            var result = await _flurlClient.Request($"/{id}").DeleteAsync();
 
-            if (!isExists)
+            if (result.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 return View();
             }
-
-            _cacheNumber++;
 
             return View("InfoPage");
         }

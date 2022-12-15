@@ -9,11 +9,12 @@ using System.Data;
 
 namespace EquipmentRepairServiceCenter.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
+    [Route("api/faults")]
+
     public class FaultsController : ControllerBase
     {
         private readonly IFaultsService _faultsService;
-        private readonly IRepairingModelsService _repairingModelsService;
 
         private static int _rowsCount;
         private static int _cacheNumber = 0;
@@ -21,11 +22,9 @@ namespace EquipmentRepairServiceCenter.API.Controllers
         private static bool isNameAscending = true;
         private static bool isPriceAscending = true;
 
-        public FaultsController(IFaultsService faultsService,
-            IRepairingModelsService repairingModelsService)
+        public FaultsController(IFaultsService faultsService)
         {
             _faultsService = faultsService;
-            _repairingModelsService = repairingModelsService;
         }
 
         [HttpGet]
@@ -38,7 +37,15 @@ namespace EquipmentRepairServiceCenter.API.Controllers
             return Ok(faults);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var fault = await _faultsService.GetById(id);
+
+            return Ok(fault);
+        }
+
+        [HttpGet("getMore")]
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
@@ -48,7 +55,7 @@ namespace EquipmentRepairServiceCenter.API.Controllers
             return Ok(faults);
         }
 
-        [HttpGet]
+        [HttpGet("sort")]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
             var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
@@ -93,7 +100,7 @@ namespace EquipmentRepairServiceCenter.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("search")]
         public async Task<IActionResult> GetAllByProps(string f_repairingModelName, string f_name, string f_repairingMethods)
         {
             var faults = await _faultsService.GetAll();

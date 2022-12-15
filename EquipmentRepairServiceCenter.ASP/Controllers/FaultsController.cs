@@ -2,128 +2,80 @@
 using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Fault;
+using EquipmentRepairServiceCenter.DTO.RepairingModel;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using System.Data;
+using System.Net;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class FaultsController : Controller
     {
-        private readonly IFaultsService _faultsService;
-        private readonly IRepairingModelsService _repairingModelsService;
         private readonly IFlurlClient _flurlClient;
+        private readonly IFlurlClient _flurlClientForRepairingModels;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        private static int _rowsCount;
-        private static int _cacheNumber = 0;
-        private static bool isRepModelAscending = true;
-        private static bool isNameAscending = true;
-        private static bool isPriceAscending = true;
-
-        public FaultsController(IFaultsService faultsService,
-            IRepairingModelsService repairingModelsService,
-            IFlurlClientFactory flurlClientFactory,
+        public FaultsController(IFlurlClientFactory flurlClientFactory,
             IHttpContextAccessor httpContextAccessor)
         {
-            _faultsService = faultsService;
-            _repairingModelsService = repairingModelsService;
+            _flurlClient = flurlClientFactory.Get("https://localhost:7017/api/faults/");
+            _flurlClientForRepairingModels = flurlClientFactory.Get("https://localhost:7017/api/repairingModels/");
+            _contextAccessor = httpContextAccessor;
+
+            var token = _contextAccessor.HttpContext.Request.Cookies["X-Access-Token"];
+
+            if (token != null)
+            {
+                _flurlClient.WithOAuthBearerToken(token);
+                _flurlClientForRepairingModels.WithOAuthBearerToken(token);
+            } 
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            _rowsCount = 20;
             ViewData["f_repairingModelName"] = Request.Cookies["f_repairingModelName"];
             ViewData["f_name"] = Request.Cookies["f_name"];
             ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
 
-            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
-
-            return View(faults);
+            return View(await _flurlClient.Request().GetJsonAsync<List<Fault>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMore()
         {
-            _rowsCount += 20;
             ViewData["f_repairingModelName"] = Request.Cookies["f_repairingModelName"];
             ViewData["f_name"] = Request.Cookies["f_name"];
             ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
 
-            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
-
-            return View("GetAll", faults);
+            return View("GetAll", await _flurlClient.Request("getMore").GetJsonAsync<List<Fault>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> ClearCookie()
         {
-            _rowsCount = 20;
-
             Response.Cookies.Delete("f_repairingModelName");
             Response.Cookies.Delete("f_name");
             Response.Cookies.Delete("f_repairingMethods");
 
-            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
-
-            return View("GetAll", faults);
+            return View("GetAll", await _flurlClient.Request().GetJsonAsync<List<Fault>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
-            var faults = await _faultsService.Get(_rowsCount, $"Faults{_rowsCount}-{_cacheNumber}");
-
-            switch (sortedFieldNumber)
-            {
-                case 1:
-                    if (isNameAscending)
-                    {
-                        isNameAscending = !isNameAscending;
-                        return View("GetAll", faults.OrderBy(c => c.Name).ToList());
-                    }
-                    else
-                    {
-                        isNameAscending = !isNameAscending;
-                        return View("GetAll", faults.OrderByDescending(c => c.Name).ToList());
-                    }
-                case 2:
-                    if (isRepModelAscending)
-                    {
-                        isRepModelAscending = !isRepModelAscending;
-                        return View("GetAll", faults.OrderBy(c => c.RepairingModel.Name).ToList());
-                    }
-                    else
-                    {
-                        isRepModelAscending = !isRepModelAscending;
-                        return View("GetAll", faults.OrderByDescending(c => c.RepairingModel.Name).ToList());
-                    }
-                case 3:
-                    if (isPriceAscending)
-                    {
-                        isPriceAscending = !isPriceAscending;
-                        return View("GetAll", faults.OrderBy(c => c.Price).ToList());
-                    }
-                    else
-                    {
-                        isPriceAscending = !isPriceAscending;
-                        return View("GetAll", faults.OrderByDescending(c => c.Price).ToList());
-                    }
-                default:
-                    return View("GetAll", faults);
-            }
+            return View("GetAll", await _flurlClient.Request($"sort?sortedFieldNumber={sortedFieldNumber}").GetJsonAsync<List<Fault>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllByProps(string f_repairingModelName, string f_name, string f_repairingMethods)
         {
-            var faults = await _faultsService.GetAll();
-
             if (f_repairingModelName is not null)
                 Response.Cookies.Append("f_repairingModelName", f_repairingModelName);
             if (f_name is not null)
@@ -135,21 +87,14 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
             ViewData["f_name"] = Request.Cookies["f_name"];
             ViewData["f_repairingMethods"] = Request.Cookies["f_repairingMethods"];
 
-            if (f_repairingModelName is null) f_repairingModelName = Guid.NewGuid().ToString();
-            if (f_name is null) f_name = Guid.NewGuid().ToString();
-            if (f_repairingMethods is null) f_repairingMethods = Guid.NewGuid().ToString();
-
-            return View("GetAll", faults.Where(f =>
-                f.RepairingModel.Name.Contains(f_repairingModelName, StringComparison.OrdinalIgnoreCase) ||
-                f.Name.Contains(f_name, StringComparison.OrdinalIgnoreCase) ||
-                f.RepairingMethods.Contains(f_repairingMethods, StringComparison.OrdinalIgnoreCase))
-                .ToList());
+            return View("GetAll", await _flurlClient.Request($"GetAllByProps?f_repairingModelName={f_repairingModelName}&f_name={f_name}&f_repairingMethods={f_repairingMethods}")
+                .GetJsonAsync<List<Fault>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var repModels = await _repairingModelsService.GetAll();
+            var repModels = await _flurlClientForRepairingModels.Request().GetJsonAsync<List<RepairingModelDto>>();
 
             return View(new FaultCreatedViewModel
             {
@@ -162,7 +107,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var repModels = await _repairingModelsService.GetAll();
+                var repModels = await _flurlClientForRepairingModels.Request().GetJsonAsync<List<RepairingModelDto>>();
 
                 return View(new FaultCreatedViewModel
                 {
@@ -170,17 +115,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            Guid repModelId = Guid.Parse(fault.RepairingModel.Split(", ")[0]);
-
-            await _faultsService.Create(new FaultForCreationDto
-            {
-                Name = fault.Name,
-                RepairingModelId = repModelId,
-                RepairingMethods = fault.RepairingMethods,
-                Price = fault.Price
-            });
-
-            _cacheNumber++;
+            await _flurlClient.Request("Create/").PostJsonAsync(fault);
 
             return View("InfoPage");
         }
@@ -188,7 +123,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            var fault = await _faultsService.GetById(id);
+            var fault = await _flurlClient.Request($"/{id}").GetJsonAsync<Fault>();
 
             return View(new FaultForUpdateDto
             {
@@ -203,7 +138,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var fault = await _faultsService.GetById(faultUpdated.Id);
+                var fault = await _flurlClient.Request($"/{faultUpdated.Id}").GetJsonAsync<Fault>();
 
                 return View(new FaultForUpdateDto
                 {
@@ -213,14 +148,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            bool isExists = await _faultsService.Update(faultUpdated);
+            var result = await _flurlClient.Request().PutJsonAsync(faultUpdated);
 
-            if (!isExists)
+            if (result.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 return View();
             }
-
-            _cacheNumber++;
 
             return View("InfoPage");
         }
@@ -239,14 +172,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             Request.Cookies.TryGetValue("fault_id", out string id);
 
-            bool isExists = await _faultsService.Delete(Guid.Parse(id));
+            var result = await _flurlClient.Request($"/{id}").DeleteAsync();
 
-            if (!isExists)
+            if (result.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 return View();
             }
-
-            _cacheNumber++;
 
             return View("InfoPage");
         }

@@ -11,7 +11,8 @@ using System.Data;
 
 namespace EquipmentRepairServiceCenter.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
+    [Route("api/repairingModels")]
     public class RepairingModelsController : ControllerBase
     {
         private readonly IRepairingModelsService _repairingModelsService;
@@ -26,7 +27,7 @@ namespace EquipmentRepairServiceCenter.API.Controllers
             _repairingModelsService = repairingModelsService;
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var repairingModel = await _repairingModelsService.GetById(id);
@@ -43,7 +44,7 @@ namespace EquipmentRepairServiceCenter.API.Controllers
             return Ok(repairingModels);
         }
 
-        [HttpGet]
+        [HttpGet("getMore")]
         public async Task<IActionResult> GetMore()
         {
             _rowsCount += 20;
@@ -52,7 +53,7 @@ namespace EquipmentRepairServiceCenter.API.Controllers
             return Ok(repairingModels);
         }
 
-        [HttpGet]
+        [HttpGet("sort")]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
             var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}-{_cacheNumber}");

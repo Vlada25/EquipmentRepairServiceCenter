@@ -2,88 +2,61 @@
 using EquipmentRepairServiceCenter.ASP.ViewModels;
 using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Domain.Extensions;
+using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.Domain.Models.Enums;
 using EquipmentRepairServiceCenter.DTO.RepairingModel;
 using EquipmentRepairServiceCenter.Interfaces.Services;
+using Flurl.Http;
+using Flurl.Http.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Net;
 
 namespace EquipmentRepairServiceCenter.ASP.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class RepairingModelsController : Controller
     {
-        private readonly IRepairingModelsService _repairingModelsService;
+        private readonly IFlurlClient _flurlClient;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        private static int _rowsCount = 0;
-        private static int _cacheNumber = 0;
-        private static bool isNameAscending = true;
-        private static bool isManufacturerAscending = true;
-
-        public RepairingModelsController(IRepairingModelsService repairingModelsService)
+        public RepairingModelsController(IFlurlClientFactory flurlClientFactory,
+            IHttpContextAccessor httpContextAccessor)
         {
-            _repairingModelsService = repairingModelsService;
+            _flurlClient = flurlClientFactory.Get("https://localhost:7017/api/repairingModels/");
+            _contextAccessor = httpContextAccessor;
+
+            var token = _contextAccessor.HttpContext.Request.Cookies["X-Access-Token"];
+
+            if (token != null)
+            {
+                _flurlClient.WithOAuthBearerToken(token);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var repairingModel = await _repairingModelsService.GetById(id);
-
-            return View(repairingModel);
+            return View(await _flurlClient.Request($"/{id}").GetJsonAsync<RepairingModelDto>());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            _rowsCount = 20;
-            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}-{_cacheNumber}");
-
-            return View(repairingModels);
+            return View(await _flurlClient.Request().GetJsonAsync<List<RepairingModelDto>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMore()
         {
-            _rowsCount += 20;
-            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}-{_cacheNumber}");
-
-            return View("GetAll", repairingModels);
+            return View("GetAll", await _flurlClient.Request().GetJsonAsync<List<RepairingModelDto>>());
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int sortedFieldNumber)
         {
-            var repairingModels = await _repairingModelsService.Get(_rowsCount, $"RepairingModels{_rowsCount}-{_cacheNumber}");
-
-            switch (sortedFieldNumber)
-            {
-                case 1:
-                    if (isNameAscending)
-                    {
-                        isNameAscending = !isNameAscending;
-                        return View("GetAll", repairingModels.OrderBy(c => c.Name).ToList());
-                    }
-                    else
-                    {
-                        isNameAscending = !isNameAscending;
-                        return View("GetAll", repairingModels.OrderByDescending(c => c.Name).ToList());
-                    }
-                case 2:
-                    if (isManufacturerAscending)
-                    {
-                        isManufacturerAscending = !isManufacturerAscending;
-                        return View("GetAll", repairingModels.OrderBy(c => c.Manufacturer).ToList());
-                    }
-                    else
-                    {
-                        isManufacturerAscending = !isManufacturerAscending;
-                        return View("GetAll", repairingModels.OrderByDescending(c => c.Manufacturer).ToList());
-                    }
-                default:
-                    return View("GetAll", repairingModels);
-            }
+            return View("GetAll", await _flurlClient.Request($"sort?sortedFieldNumber={sortedFieldNumber}").GetJsonAsync<List<RepairingModelDto>>());
         }
 
         [HttpGet]
@@ -118,17 +91,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            await _repairingModelsService.Create(new RepairingModelForCreationDto
-            {
-                Name = repairingModelCreated.Type + " " + repairingModelCreated.Manufacturer,
-                Type = repairingModelCreated.Type,
-                Manufacturer = repairingModelCreated.Manufacturer,
-                Specifications = repairingModelCreated.Specifications,
-                ParticularQualities = repairingModelCreated.ParticularQualities,
-                PhotoUrl = repairingModelCreated.PhotoUrl
-            });
-
-            _cacheNumber++;
+            await _flurlClient.Request().PostJsonAsync(repairingModelCreated);
 
             return View("InfoPage");
         }
@@ -136,7 +99,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
-            var repairingModel = await _repairingModelsService.GetById(id);
+            var repairingModel = await _flurlClient.Request($"/{id}").GetJsonAsync<RepairingModelDto>();
 
             return View(new RepairingModelForUpdateDto
             {
@@ -152,7 +115,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var repairingModel = await _repairingModelsService.GetById(repairingModelUpdated.Id);
+                var repairingModel = await _flurlClient.Request($"/{repairingModelUpdated.Id}").GetJsonAsync<RepairingModelDto>();
 
                 return View(new RepairingModelForUpdateDto
                 {
@@ -163,15 +126,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            bool isExists = await _repairingModelsService.Update(repairingModelUpdated);
+            var result = await _flurlClient.Request().PutJsonAsync(repairingModelUpdated);
 
-            if (!isExists)
+            if (result.StatusCode == (int)HttpStatusCode.NotFound)
             {
-                ViewData["Message"] = "Repairing model not found!";
                 return View();
             }
-
-            _cacheNumber++;
 
             return View("InfoPage");
         }
@@ -190,14 +150,12 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             Request.Cookies.TryGetValue("repairingModel_id", out string id);
 
-            bool isExists = await _repairingModelsService.Delete(Guid.Parse(id));
+            var result = await _flurlClient.Request($"/{id}").DeleteAsync();
 
-            if (!isExists)
+            if (result.StatusCode == (int)HttpStatusCode.NotFound)
             {
                 return View();
             }
-
-            _cacheNumber++;
 
             return View("InfoPage");
         }
