@@ -4,21 +4,6 @@
     ViewData["Title"] = "Orders";
 }
 
-<div id="dropdown" class="dropdown">
-    <button class="dropbtn">Menu</button>
-    <div class="dropdown-content">
-        <a href="/Clients/GetAll">Clients</a>
-        <a href="/Employees/GetAll">Employees</a>
-        <a href="/Faults/GetAll">Faults</a>
-        <a href="/Orders/GetAll">Orders</a>
-        <a href="/RepairingModels/GetAll">Repairing Models</a>
-        <a href="/ServicedStores/GetAll">Serviced Stores</a>
-        <a href="/SpareParts/GetAll">Spare Parts</a>
-        <a href="/UsedSpareParts/GetAll">Used Spare Parts</a>
-        <a href="/Users/GetAll">Users</a>
-    </div>
-</div>
-
 <div>
     <h3>Order</h3>
 
@@ -31,12 +16,6 @@
             <br />
             <label>Fault Name: @Model.FaultName</label>
             <br />
-        </div>
-        
-        <div class="field-container">
-            <label>Id</label>
-                <input class="input-props" type="text" name="id" value="@Model.Id" readonly />
-            <br>
         </div>
         
         <div class="field-container">

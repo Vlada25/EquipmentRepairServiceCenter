@@ -29,6 +29,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
         private static int _rowsCount = 0;
         private static int _cacheNumber = 0;
+        private static Guid _currentId;
         private static bool isDateAscending = true;
         private static bool isSerialNumberAscending = true;
         private static bool isClientAscending = true;
@@ -598,6 +599,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         public async Task<IActionResult> Update(Guid orderId)
         {
             var order = await _ordersService.GetById(orderId);
+            _currentId = orderId;
 
             return View(new OrderUpdatedViewModel
             {
@@ -615,7 +617,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var order0 = await _ordersService.GetById(orderUpdated.Id);
+                var order0 = await _ordersService.GetById(_currentId);
 
                 return View(new OrderUpdatedViewModel
                 {
@@ -627,7 +629,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            var order = await _ordersService.GetById(orderUpdated.Id);
+            var order = await _ordersService.GetById(_currentId);
 
             await _faultsService.Update(new FaultForUpdateDto
             {
@@ -638,7 +640,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             await _ordersService.Update(new OrderForUpdateDto
             {
-                Id = order.Id,
+                Id = _currentId,
                 Price = orderUpdated.Price,
                 EquipmentReturnDate = order.OrderDate.AddDays(orderUpdated.RepairingTimeInDays),
                 Guarantee = orderUpdated.GuaranteeInMonth == 0 ? false : true,
@@ -647,7 +649,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
 
             _cacheNumber++;
 
-            return RedirectToRoute(new { controller = "Home", action = "Index" });
+            return RedirectToRoute(new { controller = "Orders", action = "GetForEmployee" });
         }
 
         [HttpGet]
