@@ -1,0 +1,57 @@
+﻿@page "/faultsdata"
+
+<PageTitle>Faults page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.Domain.Models;
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject IFaultsService FaultsService
+
+<h1>Faults</h1>
+
+@if (faults == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Repairing Model</th>
+                <th>Repairing Methods</th>
+                <th>Price</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var fault in faults)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@fault.Name</td>
+                    <td>@fault.RepairingModel.Name</td>
+                    <td>@fault.RepairingMethods</td>
+                    <td>@fault.Price</td>
+                    <td><a href="/Faults/Update?id=@fault.Id" class="ud-button">Update</a></td>
+                    <td><a href="/Faults/Delete?id=@fault.Id" class="ud-button">Delete</a></td>
+                </tr>
+
+                index++;
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Fault>? faults;
+    private int index = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        faults = await FaultsService.GetAll();
+    }
+}
