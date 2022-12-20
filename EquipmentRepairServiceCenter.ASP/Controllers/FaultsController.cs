@@ -115,7 +115,7 @@ namespace EquipmentRepairServiceCenter.ASP.Controllers
                 });
             }
 
-            await _flurlClient.Request("Create/").PostJsonAsync(fault);
+            await _flurlClient.Request().PostJsonAsync(fault);
 
             return View("InfoPage");
         }
