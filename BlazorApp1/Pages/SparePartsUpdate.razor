@@ -1,0 +1,85 @@
+﻿@page "/sparePartsCreation"
+
+<PageTitle>Spare parts page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.ASP.ViewModels;
+@using EquipmentRepairServiceCenter.DTO.SparePart;
+@using EquipmentRepairServiceCenter.Domain.Models;
+@using EquipmentRepairServiceCenter.Domain;
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject ISparePartsService SparePartsService
+@inject NavigationManager NavigationManager
+
+<h2>Spare Parts Update</h2>
+
+<EditForm Model="@sparePart" OnValidSubmit="SaveSparePart">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="sparePart.Name" />
+        </div>
+        <ValidationMessage For="@(() => sparePart.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Functions" class="form-label">Functions</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="sparePart.Functions" />
+        </div>
+        <ValidationMessage For="@(() => sparePart.Functions)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Price" class="form-label">Price</label>
+        <div class="col-md-4">
+            <InputNumber class="form-control" @bind-Value="sparePart.Price" />
+        </div>
+        <ValidationMessage For="@(() => sparePart.Price)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Type" class="form-label">Type</label>
+        <div class="col-md-4">
+            <select class="form-control" @bind="sparePart.EquipmentType">
+                @if (sparePart?.EquipmentTypes != null)
+                {
+                    @foreach (var item in sparePart.EquipmentTypes)
+                    {
+                                <option value="@item">@item</option>
+                    }
+                }
+            </select>
+        </div>
+        <ValidationMessage For="@(() => sparePart.EquipmentType)" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private SparePartForCreationDto sparePart = new SparePartForCreationDto
+        {
+            EquipmentTypes = DbInitializer.GetEquipmentTypes()
+        };
+
+    private async Task SaveSparePart()
+    {
+        await SparePartsService.Create(sparePart);
+
+        Cancel();
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/spareParts");
+    }
+}

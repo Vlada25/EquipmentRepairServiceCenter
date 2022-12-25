@@ -1,12 +1,10 @@
 using AutoMapper;
 using BlazorApp1.Data;
-using EquipmentRepairServiceCenter.Interfaces.Services;
-using EquipmentRepairServiceCenter.Interfaces;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.EntityFrameworkCore;
-using EquipmentRepairServiceCenter.Domain;
 using EquipmentRepairServiceCenter.Database;
+using EquipmentRepairServiceCenter.Domain;
+using EquipmentRepairServiceCenter.Interfaces;
+using EquipmentRepairServiceCenter.Interfaces.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(opts =>
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IFaultsService, FaultsService>();
+builder.Services.AddScoped<IRepairingModelsService, RepairingModelsService>();
+builder.Services.AddScoped<ISparePartsService, SparePartsService>();
 
 var mappingConfig = new MapperConfiguration(mc =>
 {

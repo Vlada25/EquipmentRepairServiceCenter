@@ -1,5 +1,62 @@
-﻿<h3>RepairingModelsPage</h3>
+﻿@page "/repairingModels"
+
+<PageTitle>Reapirind models page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.DTO.RepairingModel;
+@using EquipmentRepairServiceCenter.Domain.Models;
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject IRepairingModelsService RepairingModelsService
+
+<h2>Repairing Models</h2>
+
+<a href="/repairingModels/create">Create</a>
+<br /><br />
+
+@if (reapiringModels == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Specifications</th>
+                <th>ParticularQualities</th>
+                <th>Photo</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var repairingModel in reapiringModels)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@repairingModel.Name</td>
+                    <td>@repairingModel.Manufacturer</td>
+                    <td>@repairingModel.Specifications</td>
+                    <td>@repairingModel.ParticularQualities</td>
+                    <td><img src="@repairingModel.PhotoUrl" alt="@repairingModel.Name" style="width: 100px;"/></td>
+                    <td><a href="/RepairingModels/Update?id=@repairingModel.Id" class="ud-button">Update</a></td>
+                    <td><a href="/RepairingModels/Delete?id=@repairingModel.Id" class="ud-button">Delete</a></td>
+                </tr>
+                index++;
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private IEnumerable<RepairingModelDto>? reapiringModels;
+    private int index = 1;
 
+    protected override async Task OnInitializedAsync()
+    {
+        reapiringModels = await RepairingModelsService.GetAll();
+    }
 }

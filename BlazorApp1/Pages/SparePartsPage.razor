@@ -1,5 +1,62 @@
-﻿<h3>SparePartsPage</h3>
+﻿@page "/spareParts"
+
+<PageTitle>Spare parts page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.DTO.SparePart;
+@using EquipmentRepairServiceCenter.Domain.Models;
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject ISparePartsService SparePartsService
+
+<h2>Spare Parts</h2>
+
+<a href="/spareParts/create">Create</a>
+<br />
+<br />
+
+@if (spareParts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>Name</th>
+                <th>Functions</th>
+                <th>Price</th>
+                <th>Equipment Type</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sparePart in spareParts)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@sparePart.Name</td>
+                    <td>@sparePart.Functions</td>
+                    <td>@sparePart.Price</td>
+                    <td>@sparePart.EquipmentType</td>
+                    <td><a href="/SpareParts/Update?id=@sparePart.Id" class="ud-button">Update</a></td>
+                    <td><a href="/SpareParts/Delete?id=@sparePart.Id" class="ud-button">Delete</a></td>
+                </tr>
+
+                index++;
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private IEnumerable<SparePartDto>? spareParts;
+    private int index = 1;
 
+    protected override async Task OnInitializedAsync()
+    {
+        spareParts = await SparePartsService.GetAll();
+    }
 }

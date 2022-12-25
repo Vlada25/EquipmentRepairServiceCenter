@@ -411,6 +411,16 @@ namespace EquipmentRepairServiceCenter.Domain
             },
         };
 
+        public static List<string> GetEquipmentTypes()
+        {
+            List<string> eqTypes = new List<string>();
+
+            foreach (int i in Enum.GetValues(typeof(EquipmentType)))
+                eqTypes.Add(EnumExtensions.GetDisplayName((EquipmentType)Enum.GetValues(typeof(EquipmentType)).GetValue(i)));
+
+            return eqTypes;
+        }
+
         public static void Initialize()
         {
             Faults = new List<Fault>();

@@ -1,0 +1,105 @@
+﻿@page "/faults/create"
+
+<PageTitle>Faults page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.ASP.ViewModels;
+@using EquipmentRepairServiceCenter.DTO.Fault;
+@using EquipmentRepairServiceCenter.DTO.RepairingModel;
+@using EquipmentRepairServiceCenter.Domain.Models;
+@using EquipmentRepairServiceCenter.Domain;
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject IFaultsService FaultsService
+@inject IRepairingModelsService RepairingModelsService
+@inject NavigationManager NavigationManager
+
+<h2>Faults Creation</h2>
+
+<EditForm Model="@fault" OnValidSubmit="SaveFault">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="fault.Name" />
+        </div>
+        <ValidationMessage For="@(() => fault.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Type" class="form-label">Type</label>
+        <div class="col-md-4">
+            <select class="form-control" @bind="fault.RepairingModel">
+                @if (repModels != null)
+                {
+                    @foreach (var item in repModels)
+                    {
+                        var str = $"{item.Name}, {item.Id}";
+                        <option value="@str">@str</option>
+                    }
+                }
+            </select>
+        </div>
+        <ValidationMessage For="@(() => fault.RepairingModel)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="RepairingMethods" class="form-label">Repairing Methods</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="fault.RepairingMethods" />
+        </div>
+        <ValidationMessage For="@(() => fault.RepairingMethods)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Price" class="form-label">Price</label>
+        <div class="col-md-4">
+            <InputNumber class="form-control" @bind-Value="fault.Price" />
+        </div>
+        <ValidationMessage For="@(() => fault.Price)" />
+    </div>
+
+    
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    private List<RepairingModelDto> repModels;
+    private FaultCreatedViewModel fault = new();
+
+    private async Task SaveFault()
+    {
+        Guid repModelId = Guid.Parse(fault.RepairingModel.Split(", ")[1]);
+
+        await FaultsService.Create(new FaultForCreationDto
+        {
+            Name = fault.Name,
+            RepairingModelId = repModelId,
+            RepairingMethods = fault.RepairingMethods,
+            Price = fault.Price
+        });
+
+        Cancel();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var models = await RepairingModelsService.GetAll();
+        repModels = models.ToList();
+    }
+
+    private async Task<List<RepairingModelDto>> GetRepModels()
+    {
+        var models = await RepairingModelsService.GetAll();
+        return models.ToList();
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/faults");
+    }
+}

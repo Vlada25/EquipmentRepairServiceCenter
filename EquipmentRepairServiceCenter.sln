@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCente
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EquipmentRepairServiceCenter.UnitTests", "EquipmentRepairServiceCenter.UnitTests\EquipmentRepairServiceCenter.UnitTests.csproj", "{0C906863-3209-40CD-9A47-6F7F6AD14F20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp1", "BlazorApp1\BlazorApp1.csproj", "{F01E9A53-F85E-475F-A954-9E67C936A556}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp1", "BlazorApp1\BlazorApp1.csproj", "{F01E9A53-F85E-475F-A954-9E67C936A556}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿@page "/faultsdata"
+﻿@page "/faults"
 
 <PageTitle>Faults page</PageTitle>
 
@@ -7,7 +7,11 @@
 @using EquipmentRepairServiceCenter.Interfaces.Services;
 @inject IFaultsService FaultsService
 
-<h1>Faults</h1>
+<h2>Faults</h2>
+
+<a href="/faults/create">Create</a>
+<br />
+<br />
 
 @if (faults == null)
 {

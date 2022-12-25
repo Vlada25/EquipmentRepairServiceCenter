@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Domain.Models;
 using EquipmentRepairServiceCenter.DTO.Fault;
+using EquipmentRepairServiceCenter.Interfaces;
 using EquipmentRepairServiceCenter.Interfaces.Services;
 
 namespace BlazorApp1.Data

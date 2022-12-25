@@ -1,0 +1,109 @@
+﻿@page "/repairingModels/create"
+
+<PageTitle>Reapirind models page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.ASP.ViewModels;
+@using EquipmentRepairServiceCenter.DTO.RepairingModel;
+@using EquipmentRepairServiceCenter.Domain.Models;
+@using EquipmentRepairServiceCenter.Domain;
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject IRepairingModelsService RepairingModelsService
+@inject NavigationManager NavigationManager
+
+<h2>Repairing Model Creation</h2>
+
+<EditForm Model="@repairingModel" OnValidSubmit="SaveRepairingModel">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="Type" class="form-label">Type</label>
+        <div class="col-md-4">
+            <select class="form-control" @bind="repairingModel.Type">
+                @if (repairingModel?.EquipmentTypes != null)
+                {
+                    @foreach (var item in repairingModel.EquipmentTypes)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                }
+            </select>
+        </div>
+        <ValidationMessage For="@(() => repairingModel.Type)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Manufacturer" class="form-label">Manufacturer</label>
+        <div class="col-md-4">
+            <select class="form-control" @bind="repairingModel.Manufacturer">
+                @if (repairingModel?.Manufacturers != null)
+                {
+                    @foreach (var item in repairingModel.Manufacturers)
+                    {
+                        <option value="@item">@item</option>
+                    }
+                }
+            </select>
+        </div>
+        <ValidationMessage For="@(() => repairingModel.Manufacturer)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Specifications" class="form-label">Specifications</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="repairingModel.Specifications" />
+        </div>
+        <ValidationMessage For="@(() => repairingModel.Specifications)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="ParticularQualities" class="form-label">Particular Qualities</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="repairingModel.ParticularQualities" />
+        </div>
+        <ValidationMessage For="@(() => repairingModel.ParticularQualities)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="PhotoUrl" class="form-label">Photo Url</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="repairingModel.PhotoUrl" />
+        </div>
+        <ValidationMessage For="@(() => repairingModel.PhotoUrl)" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code {
+    
+
+    private RepairingModelCreatedViewModel repairingModel = new RepairingModelCreatedViewModel
+    {
+        EquipmentTypes = DbInitializer.GetEquipmentTypes(),
+        Manufacturers = DbInitializer.Manufacturers.ToList()
+    };
+
+
+    private async Task SaveRepairingModel()
+    {
+        await RepairingModelsService.Create(new RepairingModelForCreationDto
+        {
+            Name = repairingModel.Type + " " + repairingModel.Manufacturer,
+            Type = repairingModel.Type,
+            Manufacturer = repairingModel.Manufacturer,
+            Specifications = repairingModel.Specifications,
+            ParticularQualities = repairingModel.ParticularQualities,
+            PhotoUrl = repairingModel.PhotoUrl
+        });
+
+        Cancel();
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/repairingModels");
+    }
+}
