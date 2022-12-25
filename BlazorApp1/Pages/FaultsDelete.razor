@@ -1,0 +1,45 @@
+﻿@page "/faults/delete/{id}"
+
+<PageTitle>Faults page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject IFaultsService FaultsService
+@inject NavigationManager NavigationManager
+
+<h2>Fault Delete</h2>
+<br />
+<div class="form-group">
+    <h4>Do you want to delete fault @name?</h4>
+</div>
+<br />
+<div class="form-group">
+    <input type="submit" value="Delete" @onclick="(async () => await DeleteFault())" class="btn btn-danger" />
+    <input type="submit" value="Cancel" @onclick="(() => Cancel())" class="btn btn-warning" />
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private string name;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var entity = await FaultsService.GetById(Guid.Parse(id));
+
+        name = entity.Name;
+    }
+
+    private async Task DeleteFault()
+    {
+        await FaultsService.Delete(Guid.Parse(id));
+
+        Cancel();
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/faults");
+    }
+}

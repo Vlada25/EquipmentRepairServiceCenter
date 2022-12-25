@@ -1,19 +1,17 @@
-﻿@page "/faults/create"
+﻿@page "/faults/update/{id}"
 
 <PageTitle>Faults page</PageTitle>
 
 @using BlazorApp1.Data
 @using EquipmentRepairServiceCenter.ASP.ViewModels;
 @using EquipmentRepairServiceCenter.DTO.Fault;
-@using EquipmentRepairServiceCenter.DTO.RepairingModel;
 @using EquipmentRepairServiceCenter.Domain.Models;
 @using EquipmentRepairServiceCenter.Domain;
 @using EquipmentRepairServiceCenter.Interfaces.Services;
 @inject IFaultsService FaultsService
-@inject IRepairingModelsService RepairingModelsService
 @inject NavigationManager NavigationManager
 
-<h2>Faults Creation</h2>
+<h2>Faults Update</h2>
 
 <EditForm Model="@fault" OnValidSubmit="SaveFault">
     <DataAnnotationsValidator />
@@ -24,23 +22,6 @@
             <InputText class="form-control" @bind-Value="fault.Name" />
         </div>
         <ValidationMessage For="@(() => fault.Name)" />
-    </div>
-
-    <div class="mb-3">
-        <label for="Type" class="form-label">Type</label>
-        <div class="col-md-4">
-            <select class="form-control" @bind="fault.RepairingModel">
-                @if (repModels != null)
-                {
-                    @foreach (var item in repModels)
-                    {
-                        var str = $"{item.Name}, {item.Id}";
-                        <option value="@str">@str</option>
-                    }
-                }
-            </select>
-        </div>
-        <ValidationMessage For="@(() => fault.RepairingModel)" />
     </div>
 
     <div class="mb-3">
@@ -59,7 +40,7 @@
         <ValidationMessage For="@(() => fault.Price)" />
     </div>
 
-    
+
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Save</button>
@@ -68,28 +49,26 @@
 </EditForm>
 
 @code {
-    private List<RepairingModelDto> repModels;
-    private FaultCreatedViewModel fault = new();
+    [Parameter]
+    public string id { get; set; }
+
+    private FaultForUpdateDto fault = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var entity = await FaultsService.GetById(Guid.Parse(id));
+
+        fault.Name = entity.Name;
+        fault.Price = entity.Price;
+        fault.RepairingMethods = entity.RepairingMethods;
+    }
 
     private async Task SaveFault()
     {
-        Guid repModelId = Guid.Parse(fault.RepairingModel.Split(", ")[1]);
-
-        await FaultsService.Create(new FaultForCreationDto
-        {
-            Name = fault.Name,
-            RepairingModelId = repModelId,
-            RepairingMethods = fault.RepairingMethods,
-            Price = fault.Price
-        });
+        fault.Id = Guid.Parse(id);
+        await FaultsService.Update(fault);
 
         Cancel();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var models = await RepairingModelsService.GetAll();
-        repModels = models.ToList();
     }
 
     private void Cancel()

@@ -42,8 +42,8 @@ else
                     <td>@repairingModel.Specifications</td>
                     <td>@repairingModel.ParticularQualities</td>
                     <td><img src="@repairingModel.PhotoUrl" alt="@repairingModel.Name" style="width: 100px;"/></td>
-                    <td><a href="/RepairingModels/Update?id=@repairingModel.Id" class="ud-button">Update</a></td>
-                    <td><a href="/RepairingModels/Delete?id=@repairingModel.Id" class="ud-button">Delete</a></td>
+                    <td><a href="/repairingModels/update/@repairingModel.Id">Update</a></td>
+                    <td><a href="/repairingModels/delete/@repairingModel.Id">Delete</a></td>
                 </tr>
                 index++;
             }

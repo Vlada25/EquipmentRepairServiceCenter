@@ -1,0 +1,45 @@
+﻿@page "/repairingModels/delete/{id}"
+
+<PageTitle>Repairing models page</PageTitle>
+
+@using BlazorApp1.Data
+@using EquipmentRepairServiceCenter.Interfaces.Services;
+@inject IRepairingModelsService RepairingModelsService
+@inject NavigationManager NavigationManager
+
+<h2>Repairing Model Delete</h2>
+<br />
+<div class="form-group">
+    <h4>Do you want to delete repairing model @name?</h4>
+</div>
+<br />
+<div class="form-group">
+    <input type="submit" value="Delete" @onclick="(async () => await DeleteRepairingModel())" class="btn btn-danger" />
+    <input type="submit" value="Cancel" @onclick="(() => Cancel())" class="btn btn-warning" />
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    private string name;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var entity = await RepairingModelsService.GetById(Guid.Parse(id));
+
+        name = entity.Name;
+    }
+
+    private async Task DeleteRepairingModel()
+    {
+        await RepairingModelsService.Delete(Guid.Parse(id));
+
+        Cancel();
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/repairingModels");
+    }
+}
